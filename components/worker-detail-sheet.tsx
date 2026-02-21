@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/drawer"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import {
   Table,
@@ -137,7 +136,7 @@ export function WorkerDetailDrawer({
 
         <Separator />
 
-        <ScrollArea className="flex-1">
+        <div className="flex-1 overflow-y-auto min-h-0">
           {loading ? (
             <div className="flex items-center justify-center py-20">
               <div className="flex flex-col items-center gap-3">
@@ -221,7 +220,7 @@ export function WorkerDetailDrawer({
             </Table>
             </div>
           )}
-        </ScrollArea>
+        </div>
 
         {!loading && details.length > 0 && (
           <>

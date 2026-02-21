@@ -33,23 +33,18 @@ export function LeaderboardHeader({ memberCount = 0, viewMode = "daily", dataDat
           <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10">
             <Trophy className="size-5 text-primary" />
           </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground lg:text-3xl text-balance">
-              Tablero SIM-PCR
-            </h1>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {viewMode === "daily"
-                ? <>
-                    {`Desempeño del día — ${displayDate}`}
-                    {isStale && (
-                      <span className="ml-2 rounded-full bg-warning/15 px-2 py-0.5 text-xs font-medium text-warning-foreground">
-                        último dato disponible
-                      </span>
-                    )}
-                  </>
-                : `Desempeño semanal — Semana ${week}, ${now.getFullYear()}`}
-            </p>
-          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {viewMode === "daily"
+              ? <>
+                  {`Desempeño del día — ${displayDate}`}
+                  {isStale && (
+                    <span className="ml-2 rounded-full bg-warning/15 px-2 py-0.5 text-xs font-medium text-warning-foreground">
+                      último dato disponible
+                    </span>
+                  )}
+                </>
+              : `Desempeño semanal — Semana ${week}, ${now.getFullYear()}`}
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-2.5">

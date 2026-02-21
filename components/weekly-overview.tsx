@@ -337,7 +337,7 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
                 {
                   label: "Surtidores",
                   current: weeklySummary.activeWorkers,
-                  previous: weeklySummary.activeWorkers,
+                  previous: weeklySummary.prevActiveWorkers,
                   fmt: (v: number) => String(v),
                 },
               ].map(({ label, current, previous, fmt }) => (

@@ -133,7 +133,7 @@ export default function Page() {
           </div>
         </header>
 
-        <div className="mx-auto w-full max-w-7xl px-4 py-8 md:px-6 lg:px-8 lg:py-10">
+        <div className="w-full px-4 py-8 md:px-6 lg:px-8 lg:py-10">
           <div className="flex flex-col gap-10">
             <LeaderboardHeader memberCount={members.length} viewMode={viewMode} dataDate={dataDate} />
 

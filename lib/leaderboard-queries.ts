@@ -214,6 +214,7 @@ export type WeeklyTeamSummary = {
   prevTeamTotalUE: number
   prevAvgUEPerWorker: number
   prevAvgEfficiency: number
+  prevActiveWorkers: number
 }
 
 export async function getWeeklyTeamSummary(): Promise<WeeklyTeamSummary | null> {
@@ -223,7 +224,7 @@ export async function getWeeklyTeamSummary(): Promise<WeeklyTeamSummary | null> 
   const prevWeek = currentWeek > 1 ? currentWeek - 1 : 52
   const prevYear = currentWeek > 1 ? currentYear : currentYear - 1
 
-  const [teamResult, skuResult, prevResult, workerResult] = await Promise.all([
+  const [teamResult, skuResult, prevResult, workerResult, prevWorkerResult] = await Promise.all([
     supabase
       .from('team_performance_weekly')
       .select('team_total_ue, active_workers, total_routes_completed, avg_ue_per_worker')
@@ -239,7 +240,7 @@ export async function getWeeklyTeamSummary(): Promise<WeeklyTeamSummary | null> 
 
     supabase
       .from('team_performance_weekly')
-      .select('team_total_ue, avg_ue_per_worker')
+      .select('team_total_ue, avg_ue_per_worker, active_workers')
       .eq('year', prevYear)
       .eq('week_number', prevWeek)
       .single(),
@@ -249,6 +250,12 @@ export async function getWeeklyTeamSummary(): Promise<WeeklyTeamSummary | null> 
       .select('efficiency_score')
       .eq('year', currentYear)
       .eq('week_number', currentWeek),
+
+    supabase
+      .from('performance_weekly')
+      .select('efficiency_score')
+      .eq('year', prevYear)
+      .eq('week_number', prevWeek),
   ])
 
   if (!teamResult.data) return null
@@ -262,6 +269,11 @@ export async function getWeeklyTeamSummary(): Promise<WeeklyTeamSummary | null> 
   const efficiencies = (workerResult.data ?? []).map((r) => Number(r.efficiency_score ?? 0))
   const avgEfficiency = efficiencies.length > 0
     ? Math.round(efficiencies.reduce((s, v) => s + v, 0) / efficiencies.length)
+    : 0
+
+  const prevEfficiencies = (prevWorkerResult.data ?? []).map((r) => Number(r.efficiency_score ?? 0))
+  const prevAvgEfficiency = prevEfficiencies.length > 0
+    ? Math.round(prevEfficiencies.reduce((s, v) => s + v, 0) / prevEfficiencies.length)
     : 0
 
   return {
@@ -278,7 +290,8 @@ export async function getWeeklyTeamSummary(): Promise<WeeklyTeamSummary | null> 
     avgEfficiency,
     prevTeamTotalUE: parseFloat(prevResult.data?.team_total_ue ?? 0),
     prevAvgUEPerWorker: parseFloat(prevResult.data?.avg_ue_per_worker ?? 0),
-    prevAvgEfficiency: 0,
+    prevAvgEfficiency,
+    prevActiveWorkers: Number(prevResult.data?.active_workers ?? 0),
   }
 }
 
