@@ -97,9 +97,9 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
 
             <Collapsible defaultOpen className="group/collapsible">
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Marcador">
+                <SidebarMenuButton tooltip="Almacén">
                   <Package />
-                  <span>Marcador</span>
+                  <span>Almacén</span>
                 </SidebarMenuButton>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuAction className="data-[state=open]:rotate-90">
@@ -203,7 +203,13 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 </CollapsibleContent>
               </SidebarMenuItem>
             </Collapsible>
+          </SidebarMenu>
+        </SidebarGroup>
 
+        {/* Ventas */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Ventas</SidebarGroupLabel>
+          <SidebarMenu>
             <Collapsible className="group/collapsible">
               <SidebarMenuItem>
                 <SidebarMenuButton tooltip="Autoservicio">
