@@ -1,35 +1,36 @@
-import type { Metadata } from 'next'
-import { Outfit, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import { TooltipProvider } from '@/components/ui/tooltip'
-import './globals.css'
+import type { Metadata } from "next"
+import { Outfit, Geist_Mono } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { Providers } from "@/components/providers"
+import "./globals.css"
 
 const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-outfit",
-});
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+})
+const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: 'Leaderboard Dashboard',
-  description: 'Track team performance, daily progress, and resource utilization',
-  generator: 'v0.app',
+  title: "Leaderboard Dashboard",
+  description: "Track team performance, daily progress, and resource utilization",
+  generator: "v0.app",
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
+        url: "/icon-light-32x32.png",
+        media: "(prefers-color-scheme: light)",
       },
       {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
+        url: "/icon-dark-32x32.png",
+        media: "(prefers-color-scheme: dark)",
       },
       {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: "/icon.svg",
+        type: "image/svg+xml",
       },
     ],
-    apple: '/apple-icon.png',
+    apple: "/apple-icon.png",
   },
 }
 
@@ -41,9 +42,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={outfit.variable}>
       <body className="font-sans antialiased">
-        <TooltipProvider>
-          {children}
-        </TooltipProvider>
+        <Providers>
+          <TooltipProvider>
+            {children}
+          </TooltipProvider>
+        </Providers>
         <Analytics />
       </body>
     </html>
