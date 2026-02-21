@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Outfit, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Providers } from "@/components/providers"
 import "./globals.css"
@@ -43,9 +44,11 @@ export default function RootLayout({
     <html lang="en" className={outfit.variable}>
       <body className="font-sans antialiased">
         <Providers>
-          <TooltipProvider>
-            {children}
-          </TooltipProvider>
+          <NuqsAdapter>
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
+          </NuqsAdapter>
         </Providers>
         <Analytics />
       </body>
