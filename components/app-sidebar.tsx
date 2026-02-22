@@ -37,11 +37,7 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -67,12 +63,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" tooltip="Leaderboard SIM-PCR">
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                 <Trophy className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">Leaderboard</span>
-                <span className="truncate text-xs text-muted-foreground">Sprint 24</span>
+                <span className="text-muted-foreground truncate text-xs">Sprint 24</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -163,10 +159,14 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton><span>Miembros</span></SidebarMenuSubButton>
+                      <SidebarMenuSubButton>
+                        <span>Miembros</span>
+                      </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton><span>Roles</span></SidebarMenuSubButton>
+                      <SidebarMenuSubButton>
+                        <span>Roles</span>
+                      </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
                 </CollapsibleContent>
@@ -194,10 +194,14 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton><span>Stock</span></SidebarMenuSubButton>
+                      <SidebarMenuSubButton>
+                        <span>Stock</span>
+                      </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton><span>Movimientos</span></SidebarMenuSubButton>
+                      <SidebarMenuSubButton>
+                        <span>Movimientos</span>
+                      </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
                 </CollapsibleContent>
@@ -225,10 +229,14 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton><span>Punto de Venta</span></SidebarMenuSubButton>
+                      <SidebarMenuSubButton>
+                        <span>Punto de Venta</span>
+                      </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton><span>Pedidos</span></SidebarMenuSubButton>
+                      <SidebarMenuSubButton>
+                        <span>Pedidos</span>
+                      </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
                 </CollapsibleContent>
@@ -250,10 +258,14 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton><span>Rutas</span></SidebarMenuSubButton>
+                      <SidebarMenuSubButton>
+                        <span>Rutas</span>
+                      </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton><span>Entregas</span></SidebarMenuSubButton>
+                      <SidebarMenuSubButton>
+                        <span>Entregas</span>
+                      </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
                 </CollapsibleContent>
@@ -288,10 +300,14 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton><span>Rendimiento</span></SidebarMenuSubButton>
+                      <SidebarMenuSubButton>
+                        <span>Rendimiento</span>
+                      </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton><span>Tendencias</span></SidebarMenuSubButton>
+                      <SidebarMenuSubButton>
+                        <span>Tendencias</span>
+                      </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
                 </CollapsibleContent>
@@ -339,13 +355,13 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarFallback className="rounded-lg bg-primary/10 text-xs font-bold text-primary">
+                    <AvatarFallback className="bg-primary/10 text-primary rounded-lg text-xs font-bold">
                       SC
                     </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">Alejandro RL</span>
-                    <span className="truncate text-xs text-muted-foreground">Ingeniero Líder</span>
+                    <span className="text-muted-foreground truncate text-xs">Ingeniero Líder</span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
                 </SidebarMenuButton>
@@ -359,13 +375,15 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarFallback className="rounded-lg bg-primary/10 text-xs font-bold text-primary">
+                      <AvatarFallback className="bg-primary/10 text-primary rounded-lg text-xs font-bold">
                         SC
                       </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">Alejandro RL</span>
-                      <span className="truncate text-xs text-muted-foreground">Ingeniero Líder</span>
+                      <span className="text-muted-foreground truncate text-xs">
+                        Ingeniero Líder
+                      </span>
                     </div>
                   </div>
                 </DropdownMenuLabel>

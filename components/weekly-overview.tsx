@@ -34,7 +34,7 @@ import type { WeeklyTeamSummary, DailyTrend } from "@/lib/leaderboard-queries"
 // ─── Delta badge ──────────────────────────────────────────────────────────────
 
 function DeltaBadge({ current, previous }: { current: number; previous: number }) {
-  if (previous === 0) return <span className="text-xs text-muted-foreground">—</span>
+  if (previous === 0) return <span className="text-muted-foreground text-xs">—</span>
   const pct = ((current - previous) / previous) * 100
   const abs = Math.abs(pct).toFixed(1)
   if (pct > 0.5)
@@ -45,12 +45,12 @@ function DeltaBadge({ current, previous }: { current: number; previous: number }
     )
   if (pct < -0.5)
     return (
-      <span className="inline-flex items-center gap-0.5 text-xs font-medium text-destructive">
+      <span className="text-destructive inline-flex items-center gap-0.5 text-xs font-medium">
         <TrendingDown className="size-3" />-{abs}%
       </span>
     )
   return (
-    <span className="inline-flex items-center gap-0.5 text-xs font-medium text-muted-foreground">
+    <span className="text-muted-foreground inline-flex items-center gap-0.5 text-xs font-medium">
       <Minus className="size-3" />
       {abs}%
     </span>
@@ -76,23 +76,23 @@ function KpiCard({
 }) {
   return (
     <Card className="rounded-2xl">
-      <CardHeader className="pb-1 pt-5 px-5">
+      <CardHeader className="px-5 pt-5 pb-1">
         <div className="flex items-center justify-between">
-          <CardDescription className="text-xs uppercase tracking-wide">{label}</CardDescription>
-          <div className="flex size-7 items-center justify-center rounded-lg bg-primary/8 text-primary">
+          <CardDescription className="text-xs tracking-wide uppercase">{label}</CardDescription>
+          <div className="bg-primary/8 text-primary flex size-7 items-center justify-center rounded-lg">
             <Icon className="size-3.5" />
           </div>
         </div>
       </CardHeader>
-      <CardContent className="px-5 pb-5 pt-1">
+      <CardContent className="px-5 pt-1 pb-5">
         <div className="flex items-baseline gap-1.5">
-          <span className="text-2xl font-bold text-foreground">{value}</span>
-          {unit && <span className="text-sm text-muted-foreground">{unit}</span>}
+          <span className="text-foreground text-2xl font-bold">{value}</span>
+          {unit && <span className="text-muted-foreground text-sm">{unit}</span>}
         </div>
         {current !== undefined && previous !== undefined && (
           <div className="mt-1.5 flex items-center gap-1.5">
             <DeltaBadge current={current} previous={previous} />
-            <span className="text-[10px] text-muted-foreground">vs sem. anterior</span>
+            <span className="text-muted-foreground text-[10px]">vs sem. anterior</span>
           </div>
         )}
       </CardContent>
@@ -103,50 +103,72 @@ function KpiCard({
 // ─── Podium card ──────────────────────────────────────────────────────────────
 
 const podiumStyles: Record<number, { ring: string; badge: string; label: string }> = {
-  1: { ring: "ring-2 ring-amber-400/60", badge: "bg-amber-100 text-amber-700 border-amber-300", label: "🥇" },
-  2: { ring: "ring-2 ring-slate-300/80", badge: "bg-slate-100 text-slate-600 border-slate-300", label: "🥈" },
-  3: { ring: "ring-2 ring-orange-300/60", badge: "bg-orange-100 text-orange-600 border-orange-300", label: "🥉" },
+  1: {
+    ring: "ring-2 ring-amber-400/60",
+    badge: "bg-amber-100 text-amber-700 border-amber-300",
+    label: "🥇",
+  },
+  2: {
+    ring: "ring-2 ring-slate-300/80",
+    badge: "bg-slate-100 text-slate-600 border-slate-300",
+    label: "🥈",
+  },
+  3: {
+    ring: "ring-2 ring-orange-300/60",
+    badge: "bg-orange-100 text-orange-600 border-orange-300",
+    label: "🥉",
+  },
 }
 
 function PodiumCard({ member }: { member: TeamMember }) {
-  const style = podiumStyles[member.rank] ?? { ring: "", badge: "bg-muted text-muted-foreground border-border", label: `#${member.rank}` }
+  const style = podiumStyles[member.rank] ?? {
+    ring: "",
+    badge: "bg-muted text-muted-foreground border-border",
+    label: `#${member.rank}`,
+  }
   return (
     <Card className={`rounded-2xl ${style.ring}`}>
       <CardContent className="flex flex-col items-center gap-3 px-5 py-5">
         <div className="relative">
-          <Avatar className="size-14 border-2 border-muted">
-            <AvatarFallback className="bg-secondary text-sm font-bold text-secondary-foreground">
+          <Avatar className="border-muted size-14 border-2">
+            <AvatarFallback className="bg-secondary text-secondary-foreground text-sm font-bold">
               {member.avatar}
             </AvatarFallback>
           </Avatar>
-          <span className="absolute -bottom-1 -right-1 text-base leading-none">{style.label}</span>
+          <span className="absolute -right-1 -bottom-1 text-base leading-none">{style.label}</span>
         </div>
         <div className="text-center">
-          <p className="text-sm font-semibold text-foreground leading-tight">{member.name}</p>
-          <p className="text-[11px] text-muted-foreground">{member.role}</p>
+          <p className="text-foreground text-sm leading-tight font-semibold">{member.name}</p>
+          <p className="text-muted-foreground text-[11px]">{member.role}</p>
         </div>
         <Separator className="opacity-20" />
         <div className="grid w-full grid-cols-2 gap-2 text-center">
           <div>
-            <p className="text-xs text-muted-foreground">UE</p>
-            <p className="font-mono text-sm font-bold text-foreground">{member.score.toLocaleString("es-MX", { maximumFractionDigits: 0 })}</p>
+            <p className="text-muted-foreground text-xs">UE</p>
+            <p className="text-foreground font-mono text-sm font-bold">
+              {member.score.toLocaleString("es-MX", { maximumFractionDigits: 0 })}
+            </p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Efic.</p>
-            <p className="font-mono text-sm font-bold text-foreground">{member.efficiency}%</p>
+            <p className="text-muted-foreground text-xs">Efic.</p>
+            <p className="text-foreground font-mono text-sm font-bold">{member.efficiency}%</p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Folios</p>
-            <p className="font-mono text-sm font-bold text-foreground">{(member.foliosCompleted ?? 0).toLocaleString()}</p>
+            <p className="text-muted-foreground text-xs">Folios</p>
+            <p className="text-foreground font-mono text-sm font-bold">
+              {(member.foliosCompleted ?? 0).toLocaleString()}
+            </p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">SKUs</p>
-            <p className="font-mono text-sm font-bold text-foreground">{(member.distinctSkus ?? 0).toLocaleString()}</p>
+            <p className="text-muted-foreground text-xs">SKUs</p>
+            <p className="text-foreground font-mono text-sm font-bold">
+              {(member.distinctSkus ?? 0).toLocaleString()}
+            </p>
           </div>
         </div>
         {member.streak > 0 && (
-          <Badge variant="outline" className="gap-1 rounded-full border-border text-[10px]">
-            <Flame className="size-2.5 text-primary" />
+          <Badge variant="outline" className="border-border gap-1 rounded-full text-[10px]">
+            <Flame className="text-primary size-2.5" />
             {member.streak}d racha
           </Badge>
         )}
@@ -160,14 +182,18 @@ function PodiumCard({ member }: { member: TeamMember }) {
 function ChartTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null
   return (
-    <div className="rounded-xl border border-border/60 bg-background px-3 py-2 shadow-lg text-xs">
-      <p className="font-semibold text-foreground mb-1">{label}</p>
+    <div className="border-border/60 bg-background rounded-xl border px-3 py-2 text-xs shadow-lg">
+      <p className="text-foreground mb-1 font-semibold">{label}</p>
       <p className="text-muted-foreground">
-        UE: <span className="font-mono font-bold text-foreground">{Number(payload[0]?.value ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 0 })}</span>
+        UE:{" "}
+        <span className="text-foreground font-mono font-bold">
+          {Number(payload[0]?.value ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 0 })}
+        </span>
       </p>
       {payload[1] && (
         <p className="text-muted-foreground">
-          Surtidores: <span className="font-mono font-bold text-foreground">{payload[1].value}</span>
+          Surtidores:{" "}
+          <span className="text-foreground font-mono font-bold">{payload[1].value}</span>
         </p>
       )}
     </div>
@@ -191,21 +217,22 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
   if (!weeklySummary && members.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <BarChart3 className="size-10 text-muted-foreground/40 mb-3" />
-        <p className="text-sm text-muted-foreground">No hay datos semanales disponibles aún.</p>
-        <p className="text-xs text-muted-foreground/60 mt-1">Los datos aparecerán una vez que el ETL procese la semana actual.</p>
+        <BarChart3 className="text-muted-foreground/40 mb-3 size-10" />
+        <p className="text-muted-foreground text-sm">No hay datos semanales disponibles aún.</p>
+        <p className="text-muted-foreground/60 mt-1 text-xs">
+          Los datos aparecerán una vez que el ETL procese la semana actual.
+        </p>
       </div>
     )
   }
 
   return (
     <section className="flex flex-col gap-8" aria-labelledby="weekly-overview-heading">
-
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <BarChart3 className="size-4 text-primary" />
-          <h2 id="weekly-overview-heading" className="text-base font-semibold text-foreground">
+          <BarChart3 className="text-primary size-4" />
+          <h2 id="weekly-overview-heading" className="text-foreground text-base font-semibold">
             Resumen Semanal
           </h2>
           {weeklySummary && (
@@ -215,7 +242,7 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
           )}
         </div>
         {weeklySummary && (
-          <span className="text-xs text-muted-foreground">
+          <span className="text-muted-foreground text-xs">
             {weeklySummary.activeWorkers} surtidores activos
           </span>
         )}
@@ -244,13 +271,17 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
           />
           <KpiCard
             label="Peso Total"
-            value={weeklySummary.totalWeightKg.toLocaleString("es-MX", { maximumFractionDigits: 0 })}
+            value={weeklySummary.totalWeightKg.toLocaleString("es-MX", {
+              maximumFractionDigits: 0,
+            })}
             unit="kg"
             icon={Weight}
           />
           <KpiCard
             label="Volumen Total"
-            value={weeklySummary.totalVolumeM3.toLocaleString("es-MX", { maximumFractionDigits: 1 })}
+            value={weeklySummary.totalVolumeM3.toLocaleString("es-MX", {
+              maximumFractionDigits: 1,
+            })}
             unit="m³"
             icon={Package}
           />
@@ -259,27 +290,36 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
 
       {/* Daily Trend Chart + WoW Comparison */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-
         {/* Bar chart — takes 2/3 width on lg */}
         <Card className="rounded-2xl lg:col-span-2">
           <CardHeader className="px-5 pt-5 pb-2">
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="text-sm font-semibold">UE por Día</CardTitle>
-                <CardDescription className="text-xs">Producción diaria del equipo esta semana</CardDescription>
+                <CardDescription className="text-xs">
+                  Producción diaria del equipo esta semana
+                </CardDescription>
               </div>
-              <BarChart3 className="size-4 text-muted-foreground" />
+              <BarChart3 className="text-muted-foreground size-4" />
             </div>
           </CardHeader>
           <CardContent className="px-5 pb-5">
             {dailyTrend.length === 0 ? (
-              <div className="flex h-40 items-center justify-center text-xs text-muted-foreground">
+              <div className="text-muted-foreground flex h-40 items-center justify-center text-xs">
                 Sin datos de tendencia diaria
               </div>
             ) : (
               <ResponsiveContainer width="100%" height={180}>
-                <BarChart data={dailyTrend} barSize={32} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                <BarChart
+                  data={dailyTrend}
+                  barSize={32}
+                  margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
+                >
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--border))"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="label"
                     tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
@@ -290,14 +330,21 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
                     tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
                     axisLine={false}
                     tickLine={false}
-                    tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v}
+                    tickFormatter={(v) => (v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v)}
                   />
-                  <RechartsTooltip content={<ChartTooltip />} cursor={{ fill: "hsl(var(--muted))", radius: 6 }} />
+                  <RechartsTooltip
+                    content={<ChartTooltip />}
+                    cursor={{ fill: "hsl(var(--muted))", radius: 6 }}
+                  />
                   <Bar dataKey="teamUE" radius={[6, 6, 0, 0]}>
                     {dailyTrend.map((entry, i) => (
                       <Cell
                         key={i}
-                        fill={entry.teamUE === maxUE ? "hsl(var(--primary))" : "hsl(var(--primary) / 0.35)"}
+                        fill={
+                          entry.teamUE === maxUE
+                            ? "hsl(var(--primary))"
+                            : "hsl(var(--primary) / 0.35)"
+                        }
                       />
                     ))}
                   </Bar>
@@ -312,9 +359,12 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
           <Card className="rounded-2xl">
             <CardHeader className="px-5 pt-5 pb-2">
               <CardTitle className="text-sm font-semibold">Semana vs Anterior</CardTitle>
-              <CardDescription className="text-xs">Sem. {weeklySummary.currentWeek} vs Sem. {weeklySummary.currentWeek > 1 ? weeklySummary.currentWeek - 1 : 52}</CardDescription>
+              <CardDescription className="text-xs">
+                Sem. {weeklySummary.currentWeek} vs Sem.{" "}
+                {weeklySummary.currentWeek > 1 ? weeklySummary.currentWeek - 1 : 52}
+              </CardDescription>
             </CardHeader>
-            <CardContent className="px-5 pb-5 flex flex-col gap-4">
+            <CardContent className="flex flex-col gap-4 px-5 pb-5">
               {[
                 {
                   label: "UE Total",
@@ -342,9 +392,11 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
                 },
               ].map(({ label, current, previous, fmt }) => (
                 <div key={label} className="flex items-center justify-between gap-2">
-                  <span className="text-xs text-muted-foreground">{label}</span>
+                  <span className="text-muted-foreground text-xs">{label}</span>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-semibold text-foreground">{fmt(current)}</span>
+                    <span className="text-foreground font-mono text-xs font-semibold">
+                      {fmt(current)}
+                    </span>
                     <DeltaBadge current={current} previous={previous} />
                   </div>
                 </div>
@@ -359,7 +411,7 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
             <Trophy className="size-4 text-amber-500" />
-            <h3 className="text-sm font-semibold text-foreground">Top 3 de la Semana</h3>
+            <h3 className="text-foreground text-sm font-semibold">Top 3 de la Semana</h3>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {top3.map((m) => (
@@ -372,15 +424,15 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
       {/* Rest of ranking */}
       {restMembers.length > 0 && (
         <div className="flex flex-col gap-3">
-          <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-            <Users className="size-4 text-muted-foreground" />
+          <h3 className="text-foreground flex items-center gap-2 text-sm font-semibold">
+            <Users className="text-muted-foreground size-4" />
             Clasificación Completa
           </h3>
-          <Card className="rounded-2xl overflow-hidden">
+          <Card className="overflow-hidden rounded-2xl">
             <CardContent className="p-0">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-muted/40 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  <tr className="bg-muted/40 text-muted-foreground text-xs font-medium tracking-wide uppercase">
                     <th className="w-14 py-3 pl-5 text-left">Pos.</th>
                     <th className="py-3 text-left">Surtidor</th>
                     <th className="hidden py-3 pr-4 text-right md:table-cell">UE</th>
@@ -394,49 +446,54 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
                   {restMembers.map((member, idx) => (
                     <tr
                       key={member.id}
-                      className={`border-t border-border/30 transition-colors hover:bg-muted/20 ${idx % 2 === 0 ? "" : "bg-muted/10"}`}
+                      className={`border-border/30 hover:bg-muted/20 border-t transition-colors ${idx % 2 === 0 ? "" : "bg-muted/10"}`}
                     >
                       <td className="py-3 pl-5">
-                        <span className="flex size-7 items-center justify-center rounded-full bg-muted text-xs font-bold text-muted-foreground">
+                        <span className="bg-muted text-muted-foreground flex size-7 items-center justify-center rounded-full text-xs font-bold">
                           {member.rank}
                         </span>
                       </td>
                       <td className="py-3">
                         <div className="flex items-center gap-2.5">
-                          <Avatar className="size-8 border border-muted">
-                            <AvatarFallback className="bg-secondary text-[10px] font-semibold text-secondary-foreground">
+                          <Avatar className="border-muted size-8 border">
+                            <AvatarFallback className="bg-secondary text-secondary-foreground text-[10px] font-semibold">
                               {member.avatar}
                             </AvatarFallback>
                           </Avatar>
                           <div className="flex flex-col">
-                            <span className="text-xs font-semibold text-foreground leading-tight">{member.name}</span>
+                            <span className="text-foreground text-xs leading-tight font-semibold">
+                              {member.name}
+                            </span>
                             {member.streak > 0 && (
-                              <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
-                                <Flame className="size-2.5 text-primary" />{member.streak}d
+                              <span className="text-muted-foreground flex items-center gap-0.5 text-[10px]">
+                                <Flame className="text-primary size-2.5" />
+                                {member.streak}d
                               </span>
                             )}
                           </div>
                         </div>
                       </td>
                       <td className="hidden py-3 pr-4 text-right md:table-cell">
-                        <span className="font-mono text-xs font-bold text-foreground">
+                        <span className="text-foreground font-mono text-xs font-bold">
                           {member.score.toLocaleString("es-MX", { maximumFractionDigits: 0 })}
                         </span>
                       </td>
                       <td className="hidden py-3 pr-4 text-right lg:table-cell">
-                        <span className="font-mono text-xs text-muted-foreground">
+                        <span className="text-muted-foreground font-mono text-xs">
                           {(member.foliosCompleted ?? 0).toLocaleString()}
                         </span>
                       </td>
                       <td className="hidden py-3 pr-4 text-right lg:table-cell">
-                        <span className="font-mono text-xs text-muted-foreground">
+                        <span className="text-muted-foreground font-mono text-xs">
                           {(member.distinctSkus ?? 0).toLocaleString()}
                         </span>
                       </td>
                       <td className="hidden py-3 pr-4 text-right sm:table-cell">
                         <div className="flex items-center justify-end gap-2">
                           <Progress value={member.efficiency} className="h-1.5 w-12 rounded-full" />
-                          <span className="font-mono text-[10px] text-muted-foreground w-7">{member.efficiency}%</span>
+                          <span className="text-muted-foreground w-7 font-mono text-[10px]">
+                            {member.efficiency}%
+                          </span>
                         </div>
                       </td>
                       <td className="py-3 pr-5 text-right">
@@ -445,12 +502,13 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
                             <TrendingUp className="size-2.5" />+{member.trendValue}%
                           </span>
                         ) : member.trend === "down" ? (
-                          <span className="inline-flex items-center gap-0.5 rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
+                          <span className="bg-destructive/10 text-destructive inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[10px] font-medium">
                             <TrendingDown className="size-2.5" />-{member.trendValue}%
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-0.5 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                            <Minus className="size-2.5" />{member.trendValue}%
+                          <span className="bg-muted text-muted-foreground inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[10px] font-medium">
+                            <Minus className="size-2.5" />
+                            {member.trendValue}%
                           </span>
                         )}
                       </td>

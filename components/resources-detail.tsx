@@ -1,7 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import { Database, AlertTriangle, CheckCircle2, XCircle, Server, Cloud, Globe, Cpu } from "lucide-react"
+import {
+  Database,
+  AlertTriangle,
+  CheckCircle2,
+  XCircle,
+  Server,
+  Cloud,
+  Globe,
+  Cpu,
+} from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -67,19 +76,19 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
   const atRisk = resources.filter((r) => r.status === "at-risk").length
   const exceeded = resources.filter((r) => r.status === "exceeded").length
   const overallUsage = Math.round(
-    (resources.reduce((acc, r) => acc + r.used, 0) / resources.reduce((acc, r) => acc + r.allocated, 0)) * 100
+    (resources.reduce((acc, r) => acc + r.used, 0) /
+      resources.reduce((acc, r) => acc + r.allocated, 0)) *
+      100
   )
 
   const filteredResources =
-    activeTab === "all"
-      ? resources
-      : resources.filter((r) => r.status === activeTab)
+    activeTab === "all" ? resources : resources.filter((r) => r.status === activeTab)
 
   return (
     <section className="flex flex-col gap-6" aria-labelledby="resources-heading">
       <div className="flex items-center gap-2.5">
-        <Database className="size-4 text-primary" />
-        <h2 id="resources-heading" className="text-base font-semibold text-foreground">
+        <Database className="text-primary size-4" />
+        <h2 id="resources-heading" className="text-foreground text-base font-semibold">
           Resources Detail & Progress
         </h2>
       </div>
@@ -87,10 +96,12 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
       {/* Resource Summary */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Card className="rounded-2xl">
-          <CardHeader className="pb-1 pt-5 px-5">
-            <CardDescription className="text-xs uppercase tracking-wide">Overall Usage</CardDescription>
+          <CardHeader className="px-5 pt-5 pb-1">
+            <CardDescription className="text-xs tracking-wide uppercase">
+              Overall Usage
+            </CardDescription>
           </CardHeader>
-          <CardContent className="px-5 pb-5 pt-0">
+          <CardContent className="px-5 pt-0 pb-5">
             <CardTitle className="text-3xl font-bold">{overallUsage}%</CardTitle>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -106,37 +117,37 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
         </Card>
 
         <Card className="rounded-2xl">
-          <CardHeader className="pb-1 pt-5 px-5">
-            <CardDescription className="text-xs uppercase tracking-wide">On Track</CardDescription>
+          <CardHeader className="px-5 pt-5 pb-1">
+            <CardDescription className="text-xs tracking-wide uppercase">On Track</CardDescription>
           </CardHeader>
-          <CardContent className="px-5 pb-5 pt-0">
+          <CardContent className="px-5 pt-0 pb-5">
             <div className="flex items-baseline gap-2">
-              <CardTitle className="text-3xl font-bold text-success">{onTrack}</CardTitle>
-              <span className="text-sm text-muted-foreground">resources</span>
+              <CardTitle className="text-success text-3xl font-bold">{onTrack}</CardTitle>
+              <span className="text-muted-foreground text-sm">resources</span>
             </div>
           </CardContent>
         </Card>
 
         <Card className="rounded-2xl">
-          <CardHeader className="pb-1 pt-5 px-5">
-            <CardDescription className="text-xs uppercase tracking-wide">At Risk</CardDescription>
+          <CardHeader className="px-5 pt-5 pb-1">
+            <CardDescription className="text-xs tracking-wide uppercase">At Risk</CardDescription>
           </CardHeader>
-          <CardContent className="px-5 pb-5 pt-0">
+          <CardContent className="px-5 pt-0 pb-5">
             <div className="flex items-baseline gap-2">
-              <CardTitle className="text-3xl font-bold text-warning">{atRisk}</CardTitle>
-              <span className="text-sm text-muted-foreground">resources</span>
+              <CardTitle className="text-warning text-3xl font-bold">{atRisk}</CardTitle>
+              <span className="text-muted-foreground text-sm">resources</span>
             </div>
           </CardContent>
         </Card>
 
         <Card className="rounded-2xl">
-          <CardHeader className="pb-1 pt-5 px-5">
-            <CardDescription className="text-xs uppercase tracking-wide">Exceeded</CardDescription>
+          <CardHeader className="px-5 pt-5 pb-1">
+            <CardDescription className="text-xs tracking-wide uppercase">Exceeded</CardDescription>
           </CardHeader>
-          <CardContent className="px-5 pb-5 pt-0">
+          <CardContent className="px-5 pt-0 pb-5">
             <div className="flex items-baseline gap-2">
-              <CardTitle className="text-3xl font-bold text-destructive">{exceeded}</CardTitle>
-              <span className="text-sm text-muted-foreground">resources</span>
+              <CardTitle className="text-destructive text-3xl font-bold">{exceeded}</CardTitle>
+              <span className="text-muted-foreground text-sm">resources</span>
             </div>
           </CardContent>
         </Card>
@@ -144,19 +155,31 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
 
       {/* Filterable Resource Grid */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="rounded-full bg-secondary/80 p-1">
-          <TabsTrigger value="all" className="gap-1.5 rounded-full px-4 py-1.5 text-sm data-[state=active]:bg-card data-[state=active]:shadow-sm">
+        <TabsList className="bg-secondary/80 rounded-full p-1">
+          <TabsTrigger
+            value="all"
+            className="data-[state=active]:bg-card gap-1.5 rounded-full px-4 py-1.5 text-sm data-[state=active]:shadow-sm"
+          >
             All ({resources.length})
           </TabsTrigger>
-          <TabsTrigger value="on-track" className="gap-1.5 rounded-full px-4 py-1.5 text-sm data-[state=active]:bg-card data-[state=active]:shadow-sm">
+          <TabsTrigger
+            value="on-track"
+            className="data-[state=active]:bg-card gap-1.5 rounded-full px-4 py-1.5 text-sm data-[state=active]:shadow-sm"
+          >
             <CheckCircle2 className="size-3.5" />
             On Track ({onTrack})
           </TabsTrigger>
-          <TabsTrigger value="at-risk" className="gap-1.5 rounded-full px-4 py-1.5 text-sm data-[state=active]:bg-card data-[state=active]:shadow-sm">
+          <TabsTrigger
+            value="at-risk"
+            className="data-[state=active]:bg-card gap-1.5 rounded-full px-4 py-1.5 text-sm data-[state=active]:shadow-sm"
+          >
             <AlertTriangle className="size-3.5" />
             At Risk ({atRisk})
           </TabsTrigger>
-          <TabsTrigger value="exceeded" className="gap-1.5 rounded-full px-4 py-1.5 text-sm data-[state=active]:bg-card data-[state=active]:shadow-sm">
+          <TabsTrigger
+            value="exceeded"
+            className="data-[state=active]:bg-card gap-1.5 rounded-full px-4 py-1.5 text-sm data-[state=active]:shadow-sm"
+          >
             <XCircle className="size-3.5" />
             Exceeded ({exceeded})
           </TabsTrigger>
@@ -183,12 +206,14 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
                     {/* Header */}
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="flex size-9 items-center justify-center rounded-xl bg-muted/60">
+                        <div className="bg-muted/60 flex size-9 items-center justify-center rounded-xl">
                           <CategoryIcon category={resource.category} />
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-sm font-semibold text-foreground">{resource.name}</span>
-                          <span className="text-xs text-muted-foreground">{resource.category}</span>
+                          <span className="text-foreground text-sm font-semibold">
+                            {resource.name}
+                          </span>
+                          <span className="text-muted-foreground text-xs">{resource.category}</span>
                         </div>
                       </div>
                       <StatusBadge status={resource.status} />
@@ -197,8 +222,8 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
                     {/* Usage Bar */}
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">Usage</span>
-                        <span className="font-mono text-xs font-bold text-foreground">{pct}%</span>
+                        <span className="text-muted-foreground text-xs">Usage</span>
+                        <span className="text-foreground font-mono text-xs font-bold">{pct}%</span>
                       </div>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -211,33 +236,36 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
                         </TooltipTrigger>
                         <TooltipContent>
                           <span>
-                            {formatNumber(resource.used)} / {formatNumber(resource.allocated)} {resource.unit}
+                            {formatNumber(resource.used)} / {formatNumber(resource.allocated)}{" "}
+                            {resource.unit}
                           </span>
                         </TooltipContent>
                       </Tooltip>
                       <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs text-muted-foreground">
+                        <span className="text-muted-foreground font-mono text-xs">
                           {formatNumber(resource.used)} {resource.unit}
                         </span>
-                        <span className="font-mono text-xs text-muted-foreground">
+                        <span className="text-muted-foreground font-mono text-xs">
                           {formatNumber(resource.allocated)} {resource.unit}
                         </span>
                       </div>
                     </div>
 
                     {/* Owner */}
-                    <div className="flex items-center justify-between border-t border-border pt-3">
-                      <span className="text-xs text-muted-foreground">Owner</span>
+                    <div className="border-border flex items-center justify-between border-t pt-3">
+                      <span className="text-muted-foreground text-xs">Owner</span>
                       <div className="flex items-center gap-2">
-                        <Avatar className="size-6 border-2 border-muted">
-                          <AvatarFallback className="bg-secondary text-[10px] font-semibold text-secondary-foreground">
+                        <Avatar className="border-muted size-6 border-2">
+                          <AvatarFallback className="bg-secondary text-secondary-foreground text-[10px] font-semibold">
                             {resource.owner
                               .split(" ")
                               .map((n) => n[0])
                               .join("")}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="text-xs font-medium text-foreground">{resource.owner}</span>
+                        <span className="text-foreground text-xs font-medium">
+                          {resource.owner}
+                        </span>
                       </div>
                     </div>
                   </CardContent>

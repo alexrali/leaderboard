@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from "@supabase/supabase-js"
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -80,7 +80,7 @@ export type PerformanceWeekly = {
   efficiency_score: number | null
   weekly_rank: number | null
   current_streak: number
-  trend: 'up' | 'down' | 'stable' | null
+  trend: "up" | "down" | "stable" | null
   trend_percentage: number | null
   created_at: string
   updated_at: string
@@ -122,8 +122,8 @@ export type TeamPerformanceDaily = {
 
 export type LeaderboardEntry = {
   id: number
-  leaderboard_type: 'daily_ue' | 'weekly_ue' | 'efficiency' | 'volume' | 'routes'
-  period_type: 'day' | 'week'
+  leaderboard_type: "daily_ue" | "weekly_ue" | "efficiency" | "volume" | "routes"
+  period_type: "day" | "week"
   period_date: string
   worker_key: string
   worker_name: string

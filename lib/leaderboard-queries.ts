@@ -1,13 +1,13 @@
-import { supabase } from './supabase'
-import type { TeamMember, DayProgress } from './leaderboard-data'
+import { supabase } from "./supabase"
+import type { TeamMember, DayProgress } from "./leaderboard-data"
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function getInitials(name: string): string {
   return name
-    .split(' ')
+    .split(" ")
     .map((n) => n[0])
-    .join('')
+    .join("")
     .toUpperCase()
     .slice(0, 2)
 }
@@ -22,35 +22,35 @@ function getISOWeek(date: Date): number {
 // ─── Helpers: resolve latest available date ───────────────────────────────────
 
 export async function getLatestDailyDate(): Promise<string> {
-  const today = new Date().toISOString().split('T')[0]
+  const today = new Date().toISOString().split("T")[0]
   const { data } = await supabase
-    .from('performance_daily')
-    .select('date')
-    .eq('date', today)
+    .from("performance_daily")
+    .select("date")
+    .eq("date", today)
     .limit(1)
   if (data && data.length > 0) return today
 
   const { data: latest } = await supabase
-    .from('performance_daily')
-    .select('date')
-    .order('date', { ascending: false })
+    .from("performance_daily")
+    .select("date")
+    .order("date", { ascending: false })
     .limit(1)
   return latest?.[0]?.date ?? today
 }
 
 async function getLatestHourlyDate(): Promise<string> {
-  const today = new Date().toISOString().split('T')[0]
+  const today = new Date().toISOString().split("T")[0]
   const { data } = await supabase
-    .from('team_performance_hourly')
-    .select('date')
-    .eq('date', today)
+    .from("team_performance_hourly")
+    .select("date")
+    .eq("date", today)
     .limit(1)
   if (data && data.length > 0) return today
 
   const { data: latest } = await supabase
-    .from('team_performance_hourly')
-    .select('date')
-    .order('date', { ascending: false })
+    .from("team_performance_hourly")
+    .select("date")
+    .order("date", { ascending: false })
     .limit(1)
   return latest?.[0]?.date ?? today
 }
@@ -62,8 +62,9 @@ export async function getTodayLeaderboard(): Promise<TeamMember[]> {
 
   const [dailyResult, skuResult] = await Promise.all([
     supabase
-      .from('performance_daily')
-      .select(`
+      .from("performance_daily")
+      .select(
+        `
         worker_key,
         worker_name,
         total_ue,
@@ -79,15 +80,16 @@ export async function getTodayLeaderboard(): Promise<TeamMember[]> {
         total_weight_kg,
         total_volume_m3,
         workers (role, avatar_initials)
-      `)
-      .eq('date', date)
-      .order('daily_rank', { ascending: true })
+      `
+      )
+      .eq("date", date)
+      .order("daily_rank", { ascending: true })
       .limit(50),
 
     supabase
-      .from('worker_daily_sku_summary')
-      .select('worker_key, folios_completed, distinct_skus')
-      .eq('date', date),
+      .from("worker_daily_sku_summary")
+      .select("worker_key, folios_completed, distinct_skus")
+      .eq("date", date),
   ])
 
   if (dailyResult.error) throw dailyResult.error
@@ -106,7 +108,7 @@ export async function getTodayLeaderboard(): Promise<TeamMember[]> {
   return dailyResult.data.map((row: any) => ({
     id: row.worker_key,
     name: row.worker_name,
-    role: row.workers?.role ?? 'Surtidor',
+    role: row.workers?.role ?? "Surtidor",
     avatar: row.workers?.avatar_initials ?? getInitials(row.worker_name),
     rank: Number(row.daily_rank ?? 0),
     score: parseFloat(row.total_ue ?? 0),
@@ -115,7 +117,7 @@ export async function getTodayLeaderboard(): Promise<TeamMember[]> {
     tasksTotal: Number(row.routes_completed ?? 0),
     hoursLogged: parseFloat(row.hours_worked ?? 0),
     efficiency: parseFloat(row.efficiency_score ?? 0),
-    trend: (row.trend as TeamMember['trend']) ?? 'stable',
+    trend: (row.trend as TeamMember["trend"]) ?? "stable",
     trendValue: Math.abs(parseFloat(row.trend_percentage ?? 0)),
     totalQuantity: parseFloat(row.total_quantity ?? 0),
     weightKg: parseFloat(row.total_weight_kg ?? 0),
@@ -134,8 +136,9 @@ export async function getWeeklyLeaderboard(): Promise<TeamMember[]> {
 
   const [weeklyResult, skuResult] = await Promise.all([
     supabase
-      .from('performance_weekly')
-      .select(`
+      .from("performance_weekly")
+      .select(
+        `
         worker_key,
         worker_name,
         total_ue,
@@ -150,16 +153,17 @@ export async function getWeeklyLeaderboard(): Promise<TeamMember[]> {
         total_weight_kg,
         total_volume_m3,
         workers (role, avatar_initials)
-      `)
-      .eq('year', currentYear)
-      .eq('week_number', currentWeek)
-      .order('weekly_rank', { ascending: true }),
+      `
+      )
+      .eq("year", currentYear)
+      .eq("week_number", currentWeek)
+      .order("weekly_rank", { ascending: true }),
 
     supabase
-      .from('worker_weekly_sku_summary')
-      .select('worker_key, folios_completed, distinct_skus')
-      .eq('year', currentYear)
-      .eq('week_number', currentWeek),
+      .from("worker_weekly_sku_summary")
+      .select("worker_key, folios_completed, distinct_skus")
+      .eq("year", currentYear)
+      .eq("week_number", currentWeek),
   ])
 
   if (weeklyResult.error) throw weeklyResult.error
@@ -178,7 +182,7 @@ export async function getWeeklyLeaderboard(): Promise<TeamMember[]> {
   return weeklyResult.data.map((row: any) => ({
     id: row.worker_key,
     name: row.worker_name,
-    role: row.workers?.role ?? 'Surtidor',
+    role: row.workers?.role ?? "Surtidor",
     avatar: row.workers?.avatar_initials ?? getInitials(row.worker_name),
     rank: Number(row.weekly_rank ?? 0),
     score: parseFloat(row.total_ue ?? 0),
@@ -187,7 +191,7 @@ export async function getWeeklyLeaderboard(): Promise<TeamMember[]> {
     tasksTotal: Number(row.routes_completed ?? 0),
     hoursLogged: parseFloat(row.hours_worked ?? 0),
     efficiency: parseFloat(row.efficiency_score ?? 0),
-    trend: (row.trend as TeamMember['trend']) ?? 'stable',
+    trend: (row.trend as TeamMember["trend"]) ?? "stable",
     trendValue: Math.abs(parseFloat(row.trend_percentage ?? 0)),
     totalQuantity: parseFloat(row.total_quantity ?? 0),
     weightKg: parseFloat(row.total_weight_kg ?? 0),
@@ -226,36 +230,36 @@ export async function getWeeklyTeamSummary(): Promise<WeeklyTeamSummary | null> 
 
   const [teamResult, skuResult, prevResult, workerResult, prevWorkerResult] = await Promise.all([
     supabase
-      .from('team_performance_weekly')
-      .select('team_total_ue, active_workers, total_routes_completed, avg_ue_per_worker')
-      .eq('year', currentYear)
-      .eq('week_number', currentWeek)
+      .from("team_performance_weekly")
+      .select("team_total_ue, active_workers, total_routes_completed, avg_ue_per_worker")
+      .eq("year", currentYear)
+      .eq("week_number", currentWeek)
       .single(),
 
     supabase
-      .from('worker_weekly_sku_summary')
-      .select('folios_completed, distinct_skus, total_weight_kg, total_volume_m3')
-      .eq('year', currentYear)
-      .eq('week_number', currentWeek),
+      .from("worker_weekly_sku_summary")
+      .select("folios_completed, distinct_skus, total_weight_kg, total_volume_m3")
+      .eq("year", currentYear)
+      .eq("week_number", currentWeek),
 
     supabase
-      .from('team_performance_weekly')
-      .select('team_total_ue, avg_ue_per_worker, active_workers')
-      .eq('year', prevYear)
-      .eq('week_number', prevWeek)
+      .from("team_performance_weekly")
+      .select("team_total_ue, avg_ue_per_worker, active_workers")
+      .eq("year", prevYear)
+      .eq("week_number", prevWeek)
       .single(),
 
     supabase
-      .from('performance_weekly')
-      .select('efficiency_score')
-      .eq('year', currentYear)
-      .eq('week_number', currentWeek),
+      .from("performance_weekly")
+      .select("efficiency_score")
+      .eq("year", currentYear)
+      .eq("week_number", currentWeek),
 
     supabase
-      .from('performance_weekly')
-      .select('efficiency_score')
-      .eq('year', prevYear)
-      .eq('week_number', prevWeek),
+      .from("performance_weekly")
+      .select("efficiency_score")
+      .eq("year", prevYear)
+      .eq("week_number", prevWeek),
   ])
 
   if (!teamResult.data) return null
@@ -267,14 +271,16 @@ export async function getWeeklyTeamSummary(): Promise<WeeklyTeamSummary | null> 
   const totalVolumeM3 = skus.reduce((s, r) => s + parseFloat(r.total_volume_m3 ?? 0), 0)
 
   const efficiencies = (workerResult.data ?? []).map((r) => Number(r.efficiency_score ?? 0))
-  const avgEfficiency = efficiencies.length > 0
-    ? Math.round(efficiencies.reduce((s, v) => s + v, 0) / efficiencies.length)
-    : 0
+  const avgEfficiency =
+    efficiencies.length > 0
+      ? Math.round(efficiencies.reduce((s, v) => s + v, 0) / efficiencies.length)
+      : 0
 
   const prevEfficiencies = (prevWorkerResult.data ?? []).map((r) => Number(r.efficiency_score ?? 0))
-  const prevAvgEfficiency = prevEfficiencies.length > 0
-    ? Math.round(prevEfficiencies.reduce((s, v) => s + v, 0) / prevEfficiencies.length)
-    : 0
+  const prevAvgEfficiency =
+    prevEfficiencies.length > 0
+      ? Math.round(prevEfficiencies.reduce((s, v) => s + v, 0) / prevEfficiencies.length)
+      : 0
 
   return {
     currentWeek,
@@ -310,18 +316,26 @@ export async function getWeekDailyTrend(): Promise<DailyTrend[]> {
   const currentYear = now.getFullYear()
 
   const { data, error } = await supabase
-    .from('team_performance_daily')
-    .select('date, team_total_ue, active_workers')
-    .eq('year', currentYear)
-    .eq('week_number', currentWeek)
-    .order('date', { ascending: true })
+    .from("team_performance_daily")
+    .select("date, team_total_ue, active_workers")
+    .eq("year", currentYear)
+    .eq("week_number", currentWeek)
+    .order("date", { ascending: true })
 
   if (error || !data) return []
 
-  const dayLabels: Record<number, string> = { 1: 'Lun', 2: 'Mar', 3: 'Mié', 4: 'Jue', 5: 'Vie', 6: 'Sáb', 0: 'Dom' }
+  const dayLabels: Record<number, string> = {
+    1: "Lun",
+    2: "Mar",
+    3: "Mié",
+    4: "Jue",
+    5: "Vie",
+    6: "Sáb",
+    0: "Dom",
+  }
 
   return data.map((row: any) => {
-    const d = new Date(row.date + 'T12:00:00')
+    const d = new Date(row.date + "T12:00:00")
     return {
       date: row.date,
       label: dayLabels[d.getDay()] ?? row.date,
@@ -346,7 +360,7 @@ export type FolioDetail = {
 
 export async function getWorkerFolioDetail(
   workerKey: string,
-  mode: 'daily' | 'weekly'
+  mode: "daily" | "weekly"
 ): Promise<FolioDetail[]> {
   const PAGE_SIZE = 1000
   const allRows: any[] = []
@@ -356,7 +370,7 @@ export async function getWorkerFolioDetail(
   let dateFilter: string | null = null
   let weekFilter: { year: number; week: number } | null = null
 
-  if (mode === 'daily') {
+  if (mode === "daily") {
     dateFilter = await getLatestDailyDate()
   } else {
     const now = new Date()
@@ -366,17 +380,17 @@ export async function getWorkerFolioDetail(
   // Paginate to fetch ALL rows (Supabase default limit is 1000)
   while (true) {
     let query = supabase
-      .from('performance_folio_sku')
-      .select('date, hour_bucket, folio, item_code, quantity, total_weight, total_volume, ue')
-      .eq('worker_key', workerKey)
-      .order('hour_bucket', { ascending: true })
-      .order('folio', { ascending: true })
+      .from("performance_folio_sku")
+      .select("date, hour_bucket, folio, item_code, quantity, total_weight, total_volume, ue")
+      .eq("worker_key", workerKey)
+      .order("hour_bucket", { ascending: true })
+      .order("folio", { ascending: true })
       .range(offset, offset + PAGE_SIZE - 1)
 
     if (dateFilter) {
-      query = query.eq('date', dateFilter)
+      query = query.eq("date", dateFilter)
     } else if (weekFilter) {
-      query = query.eq('year', weekFilter.year).eq('week_number', weekFilter.week)
+      query = query.eq("year", weekFilter.year).eq("week_number", weekFilter.week)
     }
 
     const { data, error } = await query
@@ -406,17 +420,17 @@ export async function getTodayHourlyProgress(): Promise<DayProgress[]> {
   const date = await getLatestHourlyDate()
 
   const { data, error } = await supabase
-    .from('team_performance_hourly')
-    .select('hour_bucket, total_routes_completed, active_workers, team_total_ue')
-    .eq('date', date)
-    .order('hour_bucket', { ascending: true })
+    .from("team_performance_hourly")
+    .select("hour_bucket, total_routes_completed, active_workers, team_total_ue")
+    .eq("date", date)
+    .order("hour_bucket", { ascending: true })
 
   if (error) throw error
   if (!data || data.length === 0) return []
 
   return data.map((row: any) => ({
-    hour: new Date(row.hour_bucket).toLocaleTimeString('es-MX', {
-      hour: 'numeric',
+    hour: new Date(row.hour_bucket).toLocaleTimeString("es-MX", {
+      hour: "numeric",
       hour12: true,
     }),
     completed: Number(row.total_routes_completed ?? 0),
@@ -437,9 +451,9 @@ export async function getTodayTeamSummary(): Promise<TeamSummary | null> {
   const date = await getLatestDailyDate()
 
   const { data, error } = await supabase
-    .from('team_performance_daily')
-    .select('team_total_ue, active_workers, total_routes_completed, avg_ue_per_worker')
-    .eq('date', date)
+    .from("team_performance_daily")
+    .select("team_total_ue, active_workers, total_routes_completed, avg_ue_per_worker")
+    .eq("date", date)
     .single()
 
   if (error || !data) return null

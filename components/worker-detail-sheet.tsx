@@ -41,6 +41,7 @@ export function WorkerDetailDrawer({
 
   useEffect(() => {
     if (!open || !member) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDetails([])
       return
     }
@@ -63,7 +64,7 @@ export function WorkerDetailDrawer({
     return () => {
       cancelled = true
     }
-  }, [open, member?.id, viewMode])
+  }, [open, member, viewMode])
 
   if (!member) return null
 
@@ -76,11 +77,11 @@ export function WorkerDetailDrawer({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent className="max-h-[85vh] flex flex-col">
+      <DrawerContent className="flex max-h-[85vh] flex-col">
         <DrawerHeader className="px-6 pt-4 pb-3">
           <div className="flex items-center gap-3">
-            <Avatar className="size-10 border-2 border-muted">
-              <AvatarFallback className="bg-secondary text-sm font-semibold text-secondary-foreground">
+            <Avatar className="border-muted size-10 border-2">
+              <AvatarFallback className="bg-secondary text-secondary-foreground text-sm font-semibold">
                 {member.avatar}
               </AvatarFallback>
             </Avatar>
@@ -94,130 +95,133 @@ export function WorkerDetailDrawer({
         </DrawerHeader>
 
         <div className="grid grid-cols-3 gap-3 px-6 pb-4 sm:grid-cols-6">
-          <div className="flex flex-col items-center rounded-lg border bg-muted/30 px-2 py-2.5">
-            <Zap className="mb-1 size-3.5 text-primary" />
-            <span className="text-xs font-bold text-foreground">
+          <div className="bg-muted/30 flex flex-col items-center rounded-lg border px-2 py-2.5">
+            <Zap className="text-primary mb-1 size-3.5" />
+            <span className="text-foreground text-xs font-bold">
               {totalUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })}
             </span>
-            <span className="text-[10px] text-muted-foreground">UE</span>
+            <span className="text-muted-foreground text-[10px]">UE</span>
           </div>
-          <div className="flex flex-col items-center rounded-lg border bg-muted/30 px-2 py-2.5">
-            <Package className="mb-1 size-3.5 text-primary" />
-            <span className="text-xs font-bold text-foreground">{uniqueFolios}</span>
-            <span className="text-[10px] text-muted-foreground">Folios</span>
+          <div className="bg-muted/30 flex flex-col items-center rounded-lg border px-2 py-2.5">
+            <Package className="text-primary mb-1 size-3.5" />
+            <span className="text-foreground text-xs font-bold">{uniqueFolios}</span>
+            <span className="text-muted-foreground text-[10px]">Folios</span>
           </div>
-          <div className="flex flex-col items-center rounded-lg border bg-muted/30 px-2 py-2.5">
-            <Box className="mb-1 size-3.5 text-primary" />
-            <span className="text-xs font-bold text-foreground">{uniqueSkus}</span>
-            <span className="text-[10px] text-muted-foreground">SKUs</span>
+          <div className="bg-muted/30 flex flex-col items-center rounded-lg border px-2 py-2.5">
+            <Box className="text-primary mb-1 size-3.5" />
+            <span className="text-foreground text-xs font-bold">{uniqueSkus}</span>
+            <span className="text-muted-foreground text-[10px]">SKUs</span>
           </div>
-          <div className="flex flex-col items-center rounded-lg border bg-muted/30 px-2 py-2.5">
-            <span className="mb-1 text-xs text-primary font-bold">#</span>
-            <span className="text-xs font-bold text-foreground">
+          <div className="bg-muted/30 flex flex-col items-center rounded-lg border px-2 py-2.5">
+            <span className="text-primary mb-1 text-xs font-bold">#</span>
+            <span className="text-foreground text-xs font-bold">
               {totalQty.toLocaleString("es-MX", { maximumFractionDigits: 0 })}
             </span>
-            <span className="text-[10px] text-muted-foreground">Qty</span>
+            <span className="text-muted-foreground text-[10px]">Qty</span>
           </div>
-          <div className="flex flex-col items-center rounded-lg border bg-muted/30 px-2 py-2.5">
-            <Weight className="mb-1 size-3.5 text-primary" />
-            <span className="text-xs font-bold text-foreground">
+          <div className="bg-muted/30 flex flex-col items-center rounded-lg border px-2 py-2.5">
+            <Weight className="text-primary mb-1 size-3.5" />
+            <span className="text-foreground text-xs font-bold">
               {totalWeight.toLocaleString("es-MX", { maximumFractionDigits: 1 })}
             </span>
-            <span className="text-[10px] text-muted-foreground">kg</span>
+            <span className="text-muted-foreground text-[10px]">kg</span>
           </div>
-          <div className="flex flex-col items-center rounded-lg border bg-muted/30 px-2 py-2.5">
-            <Box className="mb-1 size-3.5 text-primary" />
-            <span className="text-xs font-bold text-foreground">
+          <div className="bg-muted/30 flex flex-col items-center rounded-lg border px-2 py-2.5">
+            <Box className="text-primary mb-1 size-3.5" />
+            <span className="text-foreground text-xs font-bold">
               {totalVolume.toLocaleString("es-MX", { maximumFractionDigits: 3 })}
             </span>
-            <span className="text-[10px] text-muted-foreground">m³</span>
+            <span className="text-muted-foreground text-[10px]">m³</span>
           </div>
         </div>
 
         <Separator />
 
-        <div className="flex-1 overflow-y-auto min-h-0">
+        <div className="min-h-0 flex-1 overflow-y-auto">
           {loading ? (
             <div className="flex items-center justify-center py-20">
               <div className="flex flex-col items-center gap-3">
-                <div className="size-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                <span className="text-xs text-muted-foreground">Cargando detalle...</span>
+                <div className="border-primary size-6 animate-spin rounded-full border-2 border-t-transparent" />
+                <span className="text-muted-foreground text-xs">Cargando detalle...</span>
               </div>
             </div>
           ) : details.length === 0 ? (
             <div className="flex items-center justify-center py-20">
-              <span className="text-sm text-muted-foreground">Sin registros para este período</span>
+              <span className="text-muted-foreground text-sm">Sin registros para este período</span>
             </div>
           ) : (
             <div className="overflow-x-auto">
-            <Table className="min-w-[700px]">
-              <TableHeader>
-                <TableRow className="bg-muted/40 hover:bg-muted/40">
-                  {viewMode === "weekly" && (
-                    <TableHead className="pl-4 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                      Fecha
-                    </TableHead>
-                  )}
-                  <TableHead className="pl-4 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                    Hora
-                  </TableHead>
-                  <TableHead className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                    Folio
-                  </TableHead>
-                  <TableHead className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                    SKU
-                  </TableHead>
-                  <TableHead className="text-right text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                    Qty
-                  </TableHead>
-                  <TableHead className="text-right text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                    Peso
-                  </TableHead>
-                  <TableHead className="text-right text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                    Volumen
-                  </TableHead>
-                  <TableHead className="pr-4 text-right text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                    UE
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {details.map((row, i) => (
-                  <TableRow key={`${row.folio}-${row.itemCode}-${row.hourBucket}-${i}`} className="text-xs">
+              <Table className="min-w-[700px]">
+                <TableHeader>
+                  <TableRow className="bg-muted/40 hover:bg-muted/40">
                     {viewMode === "weekly" && (
-                      <TableCell className="pl-4 font-mono text-muted-foreground">
-                        {row.date}
-                      </TableCell>
+                      <TableHead className="text-muted-foreground pl-4 text-[10px] font-medium tracking-wide uppercase">
+                        Fecha
+                      </TableHead>
                     )}
-                    <TableCell className="pl-4 font-mono text-muted-foreground">
-                      {new Date(row.hourBucket).toLocaleTimeString("es-MX", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: false,
-                      })}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="rounded-md font-mono text-[10px]">
-                        {row.folio}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="font-mono">{row.itemCode}</TableCell>
-                    <TableCell className="text-right font-mono">
-                      {row.quantity.toLocaleString("es-MX", { maximumFractionDigits: 0 })}
-                    </TableCell>
-                    <TableCell className="text-right font-mono text-muted-foreground">
-                      {row.totalWeight.toLocaleString("es-MX", { maximumFractionDigits: 2 })}
-                    </TableCell>
-                    <TableCell className="text-right font-mono text-muted-foreground">
-                      {row.totalVolume.toLocaleString("es-MX", { maximumFractionDigits: 4 })}
-                    </TableCell>
-                    <TableCell className="pr-4 text-right font-mono font-semibold">
-                      {row.ue.toLocaleString("es-MX", { maximumFractionDigits: 3 })}
-                    </TableCell>
+                    <TableHead className="text-muted-foreground pl-4 text-[10px] font-medium tracking-wide uppercase">
+                      Hora
+                    </TableHead>
+                    <TableHead className="text-muted-foreground text-[10px] font-medium tracking-wide uppercase">
+                      Folio
+                    </TableHead>
+                    <TableHead className="text-muted-foreground text-[10px] font-medium tracking-wide uppercase">
+                      SKU
+                    </TableHead>
+                    <TableHead className="text-muted-foreground text-right text-[10px] font-medium tracking-wide uppercase">
+                      Qty
+                    </TableHead>
+                    <TableHead className="text-muted-foreground text-right text-[10px] font-medium tracking-wide uppercase">
+                      Peso
+                    </TableHead>
+                    <TableHead className="text-muted-foreground text-right text-[10px] font-medium tracking-wide uppercase">
+                      Volumen
+                    </TableHead>
+                    <TableHead className="text-muted-foreground pr-4 text-right text-[10px] font-medium tracking-wide uppercase">
+                      UE
+                    </TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {details.map((row, i) => (
+                    <TableRow
+                      key={`${row.folio}-${row.itemCode}-${row.hourBucket}-${i}`}
+                      className="text-xs"
+                    >
+                      {viewMode === "weekly" && (
+                        <TableCell className="text-muted-foreground pl-4 font-mono">
+                          {row.date}
+                        </TableCell>
+                      )}
+                      <TableCell className="text-muted-foreground pl-4 font-mono">
+                        {new Date(row.hourBucket).toLocaleTimeString("es-MX", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: false,
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="rounded-md font-mono text-[10px]">
+                          {row.folio}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="font-mono">{row.itemCode}</TableCell>
+                      <TableCell className="text-right font-mono">
+                        {row.quantity.toLocaleString("es-MX", { maximumFractionDigits: 0 })}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground text-right font-mono">
+                        {row.totalWeight.toLocaleString("es-MX", { maximumFractionDigits: 2 })}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground text-right font-mono">
+                        {row.totalVolume.toLocaleString("es-MX", { maximumFractionDigits: 4 })}
+                      </TableCell>
+                      <TableCell className="pr-4 text-right font-mono font-semibold">
+                        {row.ue.toLocaleString("es-MX", { maximumFractionDigits: 3 })}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           )}
         </div>
@@ -225,10 +229,11 @@ export function WorkerDetailDrawer({
         {!loading && details.length > 0 && (
           <>
             <Separator />
-            <div className="flex items-center justify-between px-6 py-3 text-xs text-muted-foreground">
+            <div className="text-muted-foreground flex items-center justify-between px-6 py-3 text-xs">
               <span>{details.length} registros</span>
               <span>
-                {uniqueFolios} folios · {uniqueSkus} SKUs · {totalUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })} UE
+                {uniqueFolios} folios · {uniqueSkus} SKUs ·{" "}
+                {totalUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })} UE
               </span>
             </div>
           </>

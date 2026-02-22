@@ -17,24 +17,24 @@ export function SectionTabs({
 }: SectionTabsProps) {
   return (
     <Tabs defaultValue="metrics" className="gap-8">
-      <TabsList className="w-full justify-start rounded-full bg-secondary/80 p-1">
+      <TabsList className="bg-secondary/80 w-full justify-start rounded-full p-1">
         <TabsTrigger
           value="metrics"
-          className="gap-1.5 rounded-full px-5 py-2 text-sm font-medium data-[state=active]:bg-card data-[state=active]:shadow-sm"
+          className="data-[state=active]:bg-card gap-1.5 rounded-full px-5 py-2 text-sm font-medium data-[state=active]:shadow-sm"
         >
           <Award className="size-3.5" />
           General Metrics
         </TabsTrigger>
         <TabsTrigger
           value="day-progress"
-          className="gap-1.5 rounded-full px-5 py-2 text-sm font-medium data-[state=active]:bg-card data-[state=active]:shadow-sm"
+          className="data-[state=active]:bg-card gap-1.5 rounded-full px-5 py-2 text-sm font-medium data-[state=active]:shadow-sm"
         >
           <Clock className="size-3.5" />
           Day Progress
         </TabsTrigger>
         <TabsTrigger
           value="resources"
-          className="gap-1.5 rounded-full px-5 py-2 text-sm font-medium data-[state=active]:bg-card data-[state=active]:shadow-sm"
+          className="data-[state=active]:bg-card gap-1.5 rounded-full px-5 py-2 text-sm font-medium data-[state=active]:shadow-sm"
         >
           <Database className="size-3.5" />
           Resources

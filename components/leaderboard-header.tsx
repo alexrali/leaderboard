@@ -15,13 +15,21 @@ function getISOWeek(date: Date): number {
   return Math.ceil(((tmp.getTime() - yearStart.getTime()) / 86400000 + 1) / 7)
 }
 
-export function LeaderboardHeader({ memberCount = 0, viewMode = "daily", dataDate }: LeaderboardHeaderProps) {
+export function LeaderboardHeader({
+  memberCount = 0,
+  viewMode = "daily",
+  dataDate,
+}: LeaderboardHeaderProps) {
   const now = new Date()
   const week = getISOWeek(now)
   const today = now.toISOString().split("T")[0]
 
   const displayDate = dataDate
-    ? new Date(dataDate + "T12:00:00").toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" })
+    ? new Date(dataDate + "T12:00:00").toLocaleDateString("es-MX", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
     : now.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" })
 
   const isStale = dataDate && dataDate < today
@@ -30,20 +38,22 @@ export function LeaderboardHeader({ memberCount = 0, viewMode = "daily", dataDat
     <header className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3">
-          <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10">
-            <Trophy className="size-5 text-primary" />
+          <div className="bg-primary/10 flex size-11 items-center justify-center rounded-2xl">
+            <Trophy className="text-primary size-5" />
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            {viewMode === "daily"
-              ? <>
-                  {`Desempeño del día — ${displayDate}`}
-                  {isStale && (
-                    <span className="ml-2 rounded-full bg-warning/15 px-2 py-0.5 text-xs font-medium text-warning-foreground">
-                      último dato disponible
-                    </span>
-                  )}
-                </>
-              : `Desempeño semanal — Semana ${week}, ${now.getFullYear()}`}
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            {viewMode === "daily" ? (
+              <>
+                {`Desempeño del día — ${displayDate}`}
+                {isStale && (
+                  <span className="bg-warning/15 text-warning-foreground ml-2 rounded-full px-2 py-0.5 text-xs font-medium">
+                    último dato disponible
+                  </span>
+                )}
+              </>
+            ) : (
+              `Desempeño semanal — Semana ${week}, ${now.getFullYear()}`
+            )}
           </p>
         </div>
       </div>

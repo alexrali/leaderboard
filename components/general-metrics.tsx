@@ -22,7 +22,7 @@ import { WorkerDetailDrawer } from "@/components/worker-detail-sheet"
 function TrendIcon({ trend, value }: { trend: TeamMember["trend"]; value: number }) {
   if (trend === "up")
     return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-success/10 px-2.5 py-0.5 text-xs font-medium text-success">
+      <span className="bg-success/10 text-success inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium">
         <TrendingUp className="size-3" />
         {"+"}
         {value}%
@@ -30,14 +30,14 @@ function TrendIcon({ trend, value }: { trend: TeamMember["trend"]; value: number
     )
   if (trend === "down")
     return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-destructive/10 px-2.5 py-0.5 text-xs font-medium text-destructive">
+      <span className="bg-destructive/10 text-destructive inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium">
         <TrendingDown className="size-3" />
         {"-"}
         {value}%
       </span>
     )
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+    <span className="bg-muted text-muted-foreground inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium">
       <Minus className="size-3" />
       {value}%
     </span>
@@ -84,17 +84,18 @@ export function GeneralMetrics({ members, teamSummary, viewMode = "daily" }: Gen
   const [sheetOpen, setSheetOpen] = useState(false)
   const totalTasks = teamSummary?.teamTotalUE ?? members.reduce((acc, m) => acc + m.score, 0)
   const totalTarget = members.reduce((acc, m) => acc + m.tasksTotal, 0)
-  const avgEfficiency = members.length > 0
-    ? Math.round(members.reduce((acc, m) => acc + m.efficiency, 0) / members.length)
-    : 0
+  const avgEfficiency =
+    members.length > 0
+      ? Math.round(members.reduce((acc, m) => acc + m.efficiency, 0) / members.length)
+      : 0
   const totalHours = members.reduce((acc, m) => acc + m.hoursLogged, 0).toFixed(1)
   const topStreak = members.length > 0 ? Math.max(...members.map((m) => m.streak)) : 0
 
   return (
     <section className="flex flex-col gap-6" aria-labelledby="general-metrics-heading">
       <div className="flex items-center gap-2.5">
-        <Award className="size-4 text-primary" />
-        <h2 id="general-metrics-heading" className="text-base font-semibold text-foreground">
+        <Award className="text-primary size-4" />
+        <h2 id="general-metrics-heading" className="text-foreground text-base font-semibold">
           Métricas Generales
         </h2>
       </div>
@@ -102,56 +103,69 @@ export function GeneralMetrics({ members, teamSummary, viewMode = "daily" }: Gen
       {/* Summary KPIs */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Card className="rounded-2xl">
-          <CardHeader className="pb-1 pt-5 px-5">
-            <CardDescription className="text-xs uppercase tracking-wide">UE Total (Equipo)</CardDescription>
+          <CardHeader className="px-5 pt-5 pb-1">
+            <CardDescription className="text-xs tracking-wide uppercase">
+              UE Total (Equipo)
+            </CardDescription>
           </CardHeader>
-          <CardContent className="px-5 pb-5 pt-0">
+          <CardContent className="px-5 pt-0 pb-5">
             <div className="flex items-baseline gap-2">
-              <CardTitle className="text-3xl font-bold">{totalTasks.toLocaleString("es-MX")}</CardTitle>
-              <span className="text-sm text-muted-foreground">UE</span>
+              <CardTitle className="text-3xl font-bold">
+                {totalTasks.toLocaleString("es-MX")}
+              </CardTitle>
+              <span className="text-muted-foreground text-sm">UE</span>
             </div>
-            <Progress value={totalTarget > 0 ? (totalTasks / totalTarget) * 100 : 0} className="mt-3 h-1.5 rounded-full" />
+            <Progress
+              value={totalTarget > 0 ? (totalTasks / totalTarget) * 100 : 0}
+              className="mt-3 h-1.5 rounded-full"
+            />
           </CardContent>
         </Card>
 
         <Card className="rounded-2xl">
-          <CardHeader className="pb-1 pt-5 px-5">
-            <CardDescription className="text-xs uppercase tracking-wide">Eficiencia Promedio</CardDescription>
+          <CardHeader className="px-5 pt-5 pb-1">
+            <CardDescription className="text-xs tracking-wide uppercase">
+              Eficiencia Promedio
+            </CardDescription>
           </CardHeader>
-          <CardContent className="px-5 pb-5 pt-0">
+          <CardContent className="px-5 pt-0 pb-5">
             <CardTitle className="text-3xl font-bold">{avgEfficiency}%</CardTitle>
             <Progress value={avgEfficiency} className="mt-3 h-1.5 rounded-full" />
           </CardContent>
         </Card>
 
         <Card className="rounded-2xl">
-          <CardHeader className="pb-1 pt-5 px-5">
-            <CardDescription className="text-xs uppercase tracking-wide">Horas Trabajadas</CardDescription>
+          <CardHeader className="px-5 pt-5 pb-1">
+            <CardDescription className="text-xs tracking-wide uppercase">
+              Horas Trabajadas
+            </CardDescription>
           </CardHeader>
-          <CardContent className="px-5 pb-5 pt-0">
+          <CardContent className="px-5 pt-0 pb-5">
             <div className="flex items-baseline gap-2">
               <CardTitle className="text-3xl font-bold">{totalHours}</CardTitle>
-              <span className="text-sm text-muted-foreground">hrs</span>
+              <span className="text-muted-foreground text-sm">hrs</span>
             </div>
             <div className="mt-3 flex items-center gap-1.5">
-              <Zap className="size-3.5 text-warning" />
-              <span className="text-xs text-muted-foreground">Acumulado del equipo</span>
+              <Zap className="text-warning size-3.5" />
+              <span className="text-muted-foreground text-xs">Acumulado del equipo</span>
             </div>
           </CardContent>
         </Card>
 
         <Card className="rounded-2xl">
-          <CardHeader className="pb-1 pt-5 px-5">
-            <CardDescription className="text-xs uppercase tracking-wide">Mejor Racha</CardDescription>
+          <CardHeader className="px-5 pt-5 pb-1">
+            <CardDescription className="text-xs tracking-wide uppercase">
+              Mejor Racha
+            </CardDescription>
           </CardHeader>
-          <CardContent className="px-5 pb-5 pt-0">
+          <CardContent className="px-5 pt-0 pb-5">
             <div className="flex items-baseline gap-2">
               <CardTitle className="text-3xl font-bold">{topStreak}</CardTitle>
-              <span className="text-sm text-muted-foreground">días</span>
+              <span className="text-muted-foreground text-sm">días</span>
             </div>
             <div className="mt-3 flex items-center gap-1.5">
-              <Flame className="size-3.5 text-primary" />
-              <span className="text-xs text-muted-foreground">
+              <Flame className="text-primary size-3.5" />
+              <span className="text-muted-foreground text-xs">
                 {members.find((m) => m.streak === topStreak)?.name ?? "—"}
               </span>
             </div>
@@ -165,93 +179,121 @@ export function GeneralMetrics({ members, teamSummary, viewMode = "daily" }: Gen
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/40 hover:bg-muted/40">
-                <TableHead className="w-16 pl-5 text-xs font-medium uppercase tracking-wide text-muted-foreground">Pos.</TableHead>
-                <TableHead className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Surtidor</TableHead>
-                <TableHead className="hidden text-right md:table-cell text-xs font-medium uppercase tracking-wide text-muted-foreground">UE</TableHead>
-                <TableHead className="hidden text-right xl:table-cell text-xs font-medium uppercase tracking-wide text-muted-foreground">Folios</TableHead>
-                <TableHead className="hidden text-right xl:table-cell text-xs font-medium uppercase tracking-wide text-muted-foreground">SKUs</TableHead>
-                <TableHead className="hidden text-right xl:table-cell text-xs font-medium uppercase tracking-wide text-muted-foreground">Qty</TableHead>
-                <TableHead className="hidden text-right xl:table-cell text-xs font-medium uppercase tracking-wide text-muted-foreground">Peso</TableHead>
-                <TableHead className="hidden text-right xl:table-cell text-xs font-medium uppercase tracking-wide text-muted-foreground">Volumen</TableHead>
-                <TableHead className="hidden text-right sm:table-cell text-xs font-medium uppercase tracking-wide text-muted-foreground">Eficiencia</TableHead>
-                <TableHead className="hidden text-center lg:table-cell text-xs font-medium uppercase tracking-wide text-muted-foreground">Racha</TableHead>
-                <TableHead className="pr-5 text-right text-xs font-medium uppercase tracking-wide text-muted-foreground">Tendencia</TableHead>
+                <TableHead className="text-muted-foreground w-16 pl-5 text-xs font-medium tracking-wide uppercase">
+                  Pos.
+                </TableHead>
+                <TableHead className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+                  Surtidor
+                </TableHead>
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase md:table-cell">
+                  UE
+                </TableHead>
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell">
+                  Folios
+                </TableHead>
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell">
+                  SKUs
+                </TableHead>
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell">
+                  Qty
+                </TableHead>
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell">
+                  Peso
+                </TableHead>
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell">
+                  Volumen
+                </TableHead>
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase sm:table-cell">
+                  Eficiencia
+                </TableHead>
+                <TableHead className="text-muted-foreground hidden text-center text-xs font-medium tracking-wide uppercase lg:table-cell">
+                  Racha
+                </TableHead>
+                <TableHead className="text-muted-foreground pr-5 text-right text-xs font-medium tracking-wide uppercase">
+                  Tendencia
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {members.map((member) => (
                 <TableRow
                   key={member.id}
-                  className="transition-colors cursor-pointer hover:bg-muted/60"
-                  onClick={() => { setSelectedMember(member); setSheetOpen(true) }}
+                  className="hover:bg-muted/60 cursor-pointer transition-colors"
+                  onClick={() => {
+                    setSelectedMember(member)
+                    setSheetOpen(true)
+                  }}
                 >
                   <TableCell className="pl-5">
                     <RankBadge rank={member.rank} name={member.name} />
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <Avatar className="size-9 border-2 border-muted">
-                        <AvatarFallback className="bg-secondary text-xs font-semibold text-secondary-foreground">
+                      <Avatar className="border-muted size-9 border-2">
+                        <AvatarFallback className="bg-secondary text-secondary-foreground text-xs font-semibold">
                           {member.avatar}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-foreground">{member.name}</span>
-                        <span className="text-xs text-muted-foreground">{member.role}</span>
+                        <span className="text-foreground text-sm font-semibold">{member.name}</span>
+                        <span className="text-muted-foreground text-xs">{member.role}</span>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell className="hidden text-right md:table-cell">
-                    <span className="font-mono text-sm font-bold text-foreground">
+                    <span className="text-foreground font-mono text-sm font-bold">
                       {member.score.toLocaleString()}
                     </span>
                   </TableCell>
                   <TableCell className="hidden text-right xl:table-cell">
-                    <span className="font-mono text-xs text-muted-foreground">
+                    <span className="text-muted-foreground font-mono text-xs">
                       {(member.foliosCompleted ?? 0).toLocaleString()}
                     </span>
                   </TableCell>
                   <TableCell className="hidden text-right xl:table-cell">
-                    <span className="font-mono text-xs text-muted-foreground">
+                    <span className="text-muted-foreground font-mono text-xs">
                       {(member.distinctSkus ?? 0).toLocaleString()}
                     </span>
                   </TableCell>
                   <TableCell className="hidden text-right xl:table-cell">
-                    <span className="font-mono text-xs text-muted-foreground">
-                      {(member.totalQuantity ?? 0).toLocaleString('es-MX', { maximumFractionDigits: 0 })}
+                    <span className="text-muted-foreground font-mono text-xs">
+                      {(member.totalQuantity ?? 0).toLocaleString("es-MX", {
+                        maximumFractionDigits: 0,
+                      })}
                     </span>
                   </TableCell>
                   <TableCell className="hidden text-right xl:table-cell">
-                    <span className="font-mono text-xs text-muted-foreground">
-                      {(member.weightKg ?? 0).toLocaleString('es-MX', { maximumFractionDigits: 1 })} kg
+                    <span className="text-muted-foreground font-mono text-xs">
+                      {(member.weightKg ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 1 })}{" "}
+                      kg
                     </span>
                   </TableCell>
                   <TableCell className="hidden text-right xl:table-cell">
-                    <span className="font-mono text-xs text-muted-foreground">
-                      {(member.volumeM3 ?? 0).toLocaleString('es-MX', { maximumFractionDigits: 3 })} m³
+                    <span className="text-muted-foreground font-mono text-xs">
+                      {(member.volumeM3 ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 3 })}{" "}
+                      m³
                     </span>
                   </TableCell>
                   <TableCell className="hidden text-right sm:table-cell">
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <div className="flex items-center justify-end gap-2.5">
-                          <Progress
-                            value={member.efficiency}
-                            className="h-2 w-16 rounded-full"
-                          />
-                          <span className="font-mono text-xs font-medium text-muted-foreground">
+                          <Progress value={member.efficiency} className="h-2 w-16 rounded-full" />
+                          <span className="text-muted-foreground font-mono text-xs font-medium">
                             {member.efficiency}%
                           </span>
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <span>{member.name}: {member.efficiency}% efficiency</span>
+                        <span>
+                          {member.name}: {member.efficiency}% efficiency
+                        </span>
                       </TooltipContent>
                     </Tooltip>
                   </TableCell>
                   <TableCell className="hidden text-center lg:table-cell">
-                    <Badge variant="outline" className="gap-1 rounded-full border-border">
-                      <Flame className="size-3 text-primary" />
+                    <Badge variant="outline" className="border-border gap-1 rounded-full">
+                      <Flame className="text-primary size-3" />
                       {member.streak}d
                     </Badge>
                   </TableCell>

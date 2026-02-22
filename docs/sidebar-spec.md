@@ -8,6 +8,7 @@
 ## Estructura General
 
 El sidebar utiliza **shadcn/ui Sidebar** (`variant="sidebar"`, `collapsible="icon"`) con soporte para:
+
 - Colapso a modo solo-icono (`collapsible="icon"`)
 - Modo móvil con sheet overlay (breakpoint < 768px)
 - Estado persistido en cookie: `sidebar_state`
@@ -18,161 +19,171 @@ El sidebar utiliza **shadcn/ui Sidebar** (`variant="sidebar"`, `collapsible="ico
 ## Opciones del Sidebar
 
 ### Cabecera (Header)
-| Campo       | Valor actual       | Notas                          |
-|-------------|-------------------|--------------------------------|
-| Icono       | `Trophy`          | 40x40px, rounded-2xl           |
-| Título      | "Leaderboard"     | Oculto en modo colapsado       |
-| Subtítulo   | "Sprint 24"       | Dinámico en el futuro          |
+
+| Campo     | Valor actual  | Notas                    |
+| --------- | ------------- | ------------------------ |
+| Icono     | `Trophy`      | 40x40px, rounded-2xl     |
+| Título    | "Leaderboard" | Oculto en modo colapsado |
+| Subtítulo | "Sprint 24"   | Dinámico en el futuro    |
 
 ---
 
 ### Navegación Principal
 
 #### 1. Panel
-| Propiedad     | Valor              |
-|---------------|-------------------|
-| Etiqueta      | Panel              |
-| Icono         | `LayoutDashboard` |
-| Clave sección | `dashboard`       |
-| Estado        | ✅ Activo          |
-| Tooltip       | Panel              |
-| Subitems      | Ninguno            |
+
+| Propiedad     | Valor                                                     |
+| ------------- | --------------------------------------------------------- |
+| Etiqueta      | Panel                                                     |
+| Icono         | `LayoutDashboard`                                         |
+| Clave sección | `dashboard`                                               |
+| Estado        | ✅ Activo                                                 |
+| Tooltip       | Panel                                                     |
+| Subitems      | Ninguno                                                   |
 | Contenido     | `SectionTabs` (vista de pestañas con todas las secciones) |
 
-#### 2. Almacén *(grupo colapsable)*
-| Propiedad     | Valor              |
-|---------------|-------------------|
-| Etiqueta      | Almacén            |
-| Icono         | `Package`         |
-| Estado        | ✅ Activo (abierto por defecto) |
-| Tooltip       | Almacén            |
+#### 2. Almacén _(grupo colapsable)_
+
+| Propiedad | Valor                           |
+| --------- | ------------------------------- |
+| Etiqueta  | Almacén                         |
+| Icono     | `Package`                       |
+| Estado    | ✅ Activo (abierto por defecto) |
+| Tooltip   | Almacén                         |
 
 **Subitems del Almacén:**
 
-| Etiqueta (ES)        | Clave sección   | Estado    | Badge | Contenido renderizado      |
-|----------------------|----------------|-----------|-------|---------------------------|
-| Resumen Semanal      | `overview`     | ✅ Activo | —     | `WeeklyOverview`          |
-| Métricas Generales   | `metrics`      | ✅ Activo | 7 (primario) | `GeneralMetrics`  |
-| Progreso del Día     | `day-progress` | ✅ Activo | —     | `DayProgressSection`      |
-| Recursos             | `resources`    | ✅ Activo | 6 (success) | `ResourcesDetail`   |
+| Etiqueta (ES)      | Clave sección  | Estado    | Badge        | Contenido renderizado |
+| ------------------ | -------------- | --------- | ------------ | --------------------- |
+| Resumen Semanal    | `overview`     | ✅ Activo | —            | `WeeklyOverview`      |
+| Métricas Generales | `metrics`      | ✅ Activo | 7 (primario) | `GeneralMetrics`      |
+| Progreso del Día   | `day-progress` | ✅ Activo | —            | `DayProgressSection`  |
+| Recursos           | `resources`    | ✅ Activo | 6 (success)  | `ResourcesDetail`     |
 
-#### 3. Inventario *(grupo colapsable)*
-| Propiedad     | Valor              |
-|---------------|-------------------|
-| Etiqueta      | Inventario         |
-| Icono         | `ClipboardList`   |
-| Estado        | 🔲 Placeholder     |
-| Tooltip       | Inventario         |
+#### 3. Inventario _(grupo colapsable)_
+
+| Propiedad | Valor           |
+| --------- | --------------- |
+| Etiqueta  | Inventario      |
+| Icono     | `ClipboardList` |
+| Estado    | 🔲 Placeholder  |
+| Tooltip   | Inventario      |
 
 **Subitems de Inventario:**
 
-| Etiqueta (ES) | Clave sección       | Estado               |
-|---------------|---------------------|----------------------|
-| Stock         | `inventory-stock`   | 🔲 Sin implementar  |
-| Movimientos   | `inventory-moves`   | 🔲 Sin implementar  |
+| Etiqueta (ES) | Clave sección     | Estado             |
+| ------------- | ----------------- | ------------------ |
+| Stock         | `inventory-stock` | 🔲 Sin implementar |
+| Movimientos   | `inventory-moves` | 🔲 Sin implementar |
 
 ---
 
-#### 4. Autoservicio *(grupo colapsable)*
-| Propiedad     | Valor              |
-|---------------|-------------------|
-| Etiqueta      | Autoservicio       |
-| Icono         | `ShoppingCart`    |
-| Estado        | 🔲 Placeholder     |
-| Tooltip       | Autoservicio       |
+#### 4. Autoservicio _(grupo colapsable)_
+
+| Propiedad | Valor          |
+| --------- | -------------- |
+| Etiqueta  | Autoservicio   |
+| Icono     | `ShoppingCart` |
+| Estado    | 🔲 Placeholder |
+| Tooltip   | Autoservicio   |
 
 **Subitems de Autoservicio:**
 
-| Etiqueta (ES)   | Clave sección        | Estado               |
-|-----------------|----------------------|----------------------|
-| Punto de Venta  | `self-pos`           | 🔲 Sin implementar  |
-| Pedidos         | `self-orders`        | 🔲 Sin implementar  |
+| Etiqueta (ES)  | Clave sección | Estado             |
+| -------------- | ------------- | ------------------ |
+| Punto de Venta | `self-pos`    | 🔲 Sin implementar |
+| Pedidos        | `self-orders` | 🔲 Sin implementar |
 
 ---
 
-#### 5. Distribución *(grupo colapsable)*
-| Propiedad     | Valor              |
-|---------------|-------------------|
-| Etiqueta      | Distribución       |
-| Icono         | `Truck`           |
-| Estado        | 🔲 Placeholder     |
-| Tooltip       | Distribución       |
+#### 5. Distribución _(grupo colapsable)_
+
+| Propiedad | Valor          |
+| --------- | -------------- |
+| Etiqueta  | Distribución   |
+| Icono     | `Truck`        |
+| Estado    | 🔲 Placeholder |
+| Tooltip   | Distribución   |
 
 **Subitems de Distribución:**
 
-| Etiqueta (ES) | Clave sección       | Estado               |
-|---------------|---------------------|----------------------|
-| Rutas         | `dist-routes`       | 🔲 Sin implementar  |
-| Entregas      | `dist-deliveries`   | 🔲 Sin implementar  |
+| Etiqueta (ES) | Clave sección     | Estado             |
+| ------------- | ----------------- | ------------------ |
+| Rutas         | `dist-routes`     | 🔲 Sin implementar |
+| Entregas      | `dist-deliveries` | 🔲 Sin implementar |
 
 ---
 
-#### 7. Equipo *(grupo colapsable)*
-| Propiedad     | Valor              |
-|---------------|-------------------|
-| Etiqueta      | Equipo             |
-| Icono         | `Users`           |
-| Estado        | 🔲 Placeholder (sin funcionalidad) |
-| Tooltip       | Equipo             |
+#### 7. Equipo _(grupo colapsable)_
+
+| Propiedad | Valor                              |
+| --------- | ---------------------------------- |
+| Etiqueta  | Equipo                             |
+| Icono     | `Users`                            |
+| Estado    | 🔲 Placeholder (sin funcionalidad) |
+| Tooltip   | Equipo                             |
 
 **Subitems del Equipo:**
 
-| Etiqueta (ES) | Clave sección | Estado               |
-|---------------|--------------|----------------------|
-| Miembros      | `team-members` | 🔲 Sin implementar  |
-| Roles         | `team-roles`   | 🔲 Sin implementar  |
+| Etiqueta (ES) | Clave sección  | Estado             |
+| ------------- | -------------- | ------------------ |
+| Miembros      | `team-members` | 🔲 Sin implementar |
+| Roles         | `team-roles`   | 🔲 Sin implementar |
 
 #### 8. Reportes
-| Propiedad     | Valor              |
-|---------------|-------------------|
-| Etiqueta      | Reportes           |
-| Icono         | `FileText`        |
-| Clave sección | `reports`         |
-| Estado        | 🔲 Placeholder (sin funcionalidad) |
-| Tooltip       | Reportes           |
-| Subitems      | Ninguno            |
 
-#### 9. Analítica *(grupo colapsable)*
-| Propiedad     | Valor              |
-|---------------|-------------------|
-| Etiqueta      | Analítica          |
-| Icono         | `TrendingUp`      |
+| Propiedad     | Valor                              |
+| ------------- | ---------------------------------- |
+| Etiqueta      | Reportes                           |
+| Icono         | `FileText`                         |
+| Clave sección | `reports`                          |
 | Estado        | 🔲 Placeholder (sin funcionalidad) |
-| Tooltip       | Analítica          |
+| Tooltip       | Reportes                           |
+| Subitems      | Ninguno                            |
+
+#### 9. Analítica _(grupo colapsable)_
+
+| Propiedad | Valor                              |
+| --------- | ---------------------------------- |
+| Etiqueta  | Analítica                          |
+| Icono     | `TrendingUp`                       |
+| Estado    | 🔲 Placeholder (sin funcionalidad) |
+| Tooltip   | Analítica                          |
 
 **Subitems de Analítica:**
 
-| Etiqueta (ES) | Clave sección      | Estado               |
-|---------------|--------------------|----------------------|
-| Rendimiento   | `analytics-perf`   | 🔲 Sin implementar  |
-| Tendencias    | `analytics-trends` | 🔲 Sin implementar  |
+| Etiqueta (ES) | Clave sección      | Estado             |
+| ------------- | ------------------ | ------------------ |
+| Rendimiento   | `analytics-perf`   | 🔲 Sin implementar |
+| Tendencias    | `analytics-trends` | 🔲 Sin implementar |
 
 #### 10. Sprints
-| Propiedad     | Valor              |
-|---------------|-------------------|
-| Etiqueta      | Sprints            |
-| Icono         | `ShoppingBag`     |
-| Clave sección | `sprints`         |
+
+| Propiedad     | Valor                              |
+| ------------- | ---------------------------------- |
+| Etiqueta      | Sprints                            |
+| Icono         | `ShoppingBag`                      |
+| Clave sección | `sprints`                          |
 | Estado        | 🔲 Placeholder (sin funcionalidad) |
-| Tooltip       | Sprints            |
-| Subitems      | Ninguno            |
+| Tooltip       | Sprints                            |
+| Subitems      | Ninguno                            |
 
 ---
 
 ### Pie de Página (Footer)
 
-| Etiqueta (ES)  | Icono         | Clave sección | Estado                          |
-|----------------|--------------|---------------|---------------------------------|
-| Configuración  | `Settings`   | `settings`    | 🔲 Sin implementar              |
-| Ayuda          | `HelpCircle` | `help`        | 🔲 Sin implementar              |
+| Etiqueta (ES) | Icono        | Clave sección | Estado             |
+| ------------- | ------------ | ------------- | ------------------ |
+| Configuración | `Settings`   | `settings`    | 🔲 Sin implementar |
+| Ayuda         | `HelpCircle` | `help`        | 🔲 Sin implementar |
 
 **Perfil de usuario:**
-| Campo       | Valor actual    | Estado               |
+| Campo | Valor actual | Estado |
 |-------------|----------------|----------------------|
-| Avatar      | Fallback "SC"  | 🔲 Hardcodeado       |
-| Nombre      | "Sarah Chen"   | 🔲 Hardcodeado       |
-| Cargo       | "Ingeniero Líder" | 🔲 Hardcodeado    |
-| Cerrar sesión | `LogOut` icon | 🔲 Sin handler       |
+| Avatar | Fallback "SC" | 🔲 Hardcodeado |
+| Nombre | "Sarah Chen" | 🔲 Hardcodeado |
+| Cargo | "Ingeniero Líder" | 🔲 Hardcodeado |
+| Cerrar sesión | `LogOut` icon | 🔲 Sin handler |
 
 ---
 
@@ -191,12 +202,13 @@ El sidebar utiliza **shadcn/ui Sidebar** (`variant="sidebar"`, `collapsible="ico
 ## Variables CSS requeridas
 
 Definir en `:root` de `globals.css`:
+
 ```css
---success: oklch(0.645 0.17 142);         /* verde */
+--success: oklch(0.645 0.17 142); /* verde */
 --success-foreground: oklch(0.985 0 0);
---warning: oklch(0.75 0.14 75);           /* ámbar */
+--warning: oklch(0.75 0.14 75); /* ámbar */
 --warning-foreground: oklch(0.145 0 0);
---info: oklch(0.625 0.17 240);            /* azul */
+--info: oklch(0.625 0.17 240); /* azul */
 --info-foreground: oklch(0.985 0 0);
 ```
 
@@ -204,26 +216,26 @@ Definir en `:root` de `globals.css`:
 
 ## Componentes shadcn/ui utilizados
 
-| Componente              | Propósito                         |
-|-------------------------|-----------------------------------|
-| `Sidebar`               | Contenedor principal              |
-| `SidebarHeader`         | Cabecera con logo/marca           |
-| `SidebarContent`        | Área scrollable de navegación     |
-| `SidebarFooter`         | Área fija inferior                |
-| `SidebarGroup`          | Agrupador de sección              |
-| `SidebarGroupContent`   | Contenido del grupo               |
-| `SidebarMenu`           | Lista de ítems (`<ul>`)           |
-| `SidebarMenuItem`       | Ítem de lista (`<li>`)            |
-| `SidebarMenuButton`     | Botón interactivo principal       |
-| `SidebarMenuBadge`      | Badge con contador                |
-| `SidebarMenuSub`        | Lista de subitems anidados        |
-| `SidebarMenuSubItem`    | Subítem (`<li>` anidado)          |
-| `SidebarMenuSubButton`  | Botón de subítem                  |
-| `SidebarSeparator`      | Divisor visual                    |
-| `Collapsible`           | Wrapper para grupos expandibles   |
-| `CollapsibleTrigger`    | Activador del colapso             |
-| `CollapsibleContent`    | Contenido colapsable              |
-| `Avatar` / `AvatarFallback` | Perfil de usuario             |
+| Componente                  | Propósito                       |
+| --------------------------- | ------------------------------- |
+| `Sidebar`                   | Contenedor principal            |
+| `SidebarHeader`             | Cabecera con logo/marca         |
+| `SidebarContent`            | Área scrollable de navegación   |
+| `SidebarFooter`             | Área fija inferior              |
+| `SidebarGroup`              | Agrupador de sección            |
+| `SidebarGroupContent`       | Contenido del grupo             |
+| `SidebarMenu`               | Lista de ítems (`<ul>`)         |
+| `SidebarMenuItem`           | Ítem de lista (`<li>`)          |
+| `SidebarMenuButton`         | Botón interactivo principal     |
+| `SidebarMenuBadge`          | Badge con contador              |
+| `SidebarMenuSub`            | Lista de subitems anidados      |
+| `SidebarMenuSubItem`        | Subítem (`<li>` anidado)        |
+| `SidebarMenuSubButton`      | Botón de subítem                |
+| `SidebarSeparator`          | Divisor visual                  |
+| `Collapsible`               | Wrapper para grupos expandibles |
+| `CollapsibleTrigger`        | Activador del colapso           |
+| `CollapsibleContent`        | Contenido colapsable            |
+| `Avatar` / `AvatarFallback` | Perfil de usuario               |
 
 ---
 
