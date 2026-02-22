@@ -48,6 +48,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { useAppStore } from "@/lib/store"
 
 interface AppSidebarProps {
   activeSection?: string
@@ -56,6 +57,8 @@ interface AppSidebarProps {
 
 export function AppSidebar({ activeSection = "overview", onSectionChange }: AppSidebarProps) {
   const { isMobile } = useSidebar()
+  const displayName = useAppStore((s) => s.settings.userProfile.displayName)
+  const userRole = useAppStore((s) => s.settings.userProfile.role)
 
   return (
     <Sidebar variant="inset" collapsible="icon">
@@ -328,7 +331,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton size="sm" tooltip="Configuración">
+                <SidebarMenuButton
+                  size="sm"
+                  tooltip="Configuración"
+                  isActive={activeSection === "settings"}
+                  onClick={() => onSectionChange?.("settings")}
+                >
                   <Settings />
                   <span>Configuración</span>
                 </SidebarMenuButton>
@@ -356,12 +364,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 >
                   <Avatar className="h-8 w-8 rounded-lg">
                     <AvatarFallback className="bg-primary/10 text-primary rounded-lg text-xs font-bold">
-                      SC
+                      {displayName.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">Alejandro RL</span>
-                    <span className="text-muted-foreground truncate text-xs">Ingeniero Líder</span>
+                    <span className="truncate font-semibold">{displayName}</span>
+                    <span className="text-muted-foreground truncate text-xs">{userRole}</span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
                 </SidebarMenuButton>
@@ -376,13 +384,13 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg">
                       <AvatarFallback className="bg-primary/10 text-primary rounded-lg text-xs font-bold">
-                        SC
+                        {displayName.slice(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">Alejandro RL</span>
+                      <span className="truncate font-semibold">{displayName}</span>
                       <span className="text-muted-foreground truncate text-xs">
-                        Ingeniero Líder
+                        {userRole}
                       </span>
                     </div>
                   </div>
