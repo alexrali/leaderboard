@@ -115,13 +115,13 @@ function PageContent() {
 
             <Separator className="opacity-20" />
 
-            {isError && (
+            {isError && activeSection !== "settings" && (
               <div className="border-destructive/30 bg-destructive/10 text-destructive rounded-xl border px-5 py-4 text-sm">
                 No se pudo cargar la información. Verifica la conexión a Supabase.
               </div>
             )}
 
-            {isLoading && (
+            {isLoading && activeSection !== "settings" && (
               <div className="flex items-center justify-center py-20">
                 <div className="flex flex-col items-center gap-3">
                   <div className="border-primary size-8 animate-spin rounded-full border-2 border-t-transparent" />
