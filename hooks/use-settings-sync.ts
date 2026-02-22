@@ -75,7 +75,7 @@ export function useSettingsSync() {
   })
 
   return {
-    saveSettings: () => saveSettings(settings),
+    saveSettings: () => saveSettings(useAppStore.getState().settings),
     isSaving: isPending,
   }
 }
