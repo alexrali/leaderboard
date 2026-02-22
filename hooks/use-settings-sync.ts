@@ -17,7 +17,11 @@ async function fetchRemoteSettings(): Promise<AppSettings | null> {
     .eq("id", id)
     .single()
 
-  if (error || !data) return null
+  if (error) {
+    if (error.code !== "PGRST116") throw error
+    return null // no row yet — expected on first visit
+  }
+  if (!data) return null
 
   return {
     userProfile: data.profile as AppSettings["userProfile"],
@@ -60,6 +64,7 @@ export function useSettingsSync() {
     updateUserProfile(remoteSettings.userProfile)
     updateAppearance(remoteSettings.appearance)
     updateDashboardPrefs(remoteSettings.dashboardPrefs)
+  // Zustand action references are stable; omitting them from deps is safe
   }, [remoteSettings]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Mutation for saving
