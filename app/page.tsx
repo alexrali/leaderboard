@@ -19,6 +19,7 @@ import { DayProgressSection } from "@/components/day-progress"
 import { ResourcesDetail } from "@/components/resources-detail"
 import { SectionTabs } from "@/components/section-tabs"
 import { WeeklyOverview } from "@/components/weekly-overview"
+import { SettingsPage } from "@/components/settings-page"
 import { useAppStore } from "@/lib/store"
 import {
   useLeaderboard,
@@ -54,6 +55,7 @@ function PageContent() {
     "day-progress": "Progreso del Día",
     resources: "Detalle de Recursos",
     dashboard: "Dashboard",
+    settings: "Configuración",
   }
 
   return (
@@ -128,7 +130,7 @@ function PageContent() {
               </div>
             )}
 
-            {!isLoading && !isError && (
+            {!isLoading && !isError && activeSection !== "settings" && (
               <>
                 {activeSection === "overview" && (
                   <WeeklyOverview
@@ -157,6 +159,8 @@ function PageContent() {
                 )}
               </>
             )}
+
+            {activeSection === "settings" && <SettingsPage />}
 
             <footer className="border-border/20 flex items-center justify-between border-t pb-4 pt-6">
               <span className="text-muted-foreground text-xs">
