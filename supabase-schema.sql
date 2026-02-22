@@ -363,3 +363,26 @@ GROUP BY worker_key, week_number, year;
 --   ('W004','Ana García',     CURRENT_DATE, EXTRACT(WEEK FROM CURRENT_DATE)::INT, EXTRACT(YEAR FROM CURRENT_DATE)::INT, 241.8, 14, 330, 330,  990.0, 6.6, 6.8, 35.56, 74, 4, true, 1, 'down', 3.2),
 --   ('W005','Luis Hernández', CURRENT_DATE, EXTRACT(WEEK FROM CURRENT_DATE)::INT, EXTRACT(YEAR FROM CURRENT_DATE)::INT, 198.2, 12, 280, 280,  840.0, 5.6, 6.5, 30.49, 61, 5, false,0, 'down', 7.8)
 -- ON CONFLICT (worker_key, date) DO NOTHING;
+
+-- ─── User Settings (local-first, device-keyed) ───────────────────────────────
+
+create table if not exists user_settings (
+  id          text primary key,           -- stable device UUID from localStorage
+  profile     jsonb not null default '{}',
+  appearance  jsonb not null default '{}',
+  preferences jsonb not null default '{}',
+  updated_at  timestamptz not null default now()
+);
+
+-- Auto-update updated_at on upsert
+create or replace function update_user_settings_timestamp()
+returns trigger language plpgsql as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
+create trigger user_settings_updated_at
+  before update on user_settings
+  for each row execute procedure update_user_settings_timestamp();
