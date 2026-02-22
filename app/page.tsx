@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense } from "react"
+import { Suspense, useEffect } from "react"
 import { parseAsStringLiteral, useQueryState } from "nuqs"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
@@ -41,6 +41,13 @@ function PageContent() {
 
   const activeSection = useAppStore((s) => s.activeSection)
   const setActiveSection = useAppStore((s) => s.setActiveSection)
+  const defaultSection = useAppStore((s) => s.settings.dashboardPrefs.defaultSection)
+
+  useEffect(() => {
+    if (defaultSection && defaultSection !== "overview") {
+      setActiveSection(defaultSection)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const { data: members = [], isLoading, isError } = useLeaderboard(viewMode)
   const { data: dayProgress = [] } = useHourlyProgress()
@@ -107,13 +114,16 @@ function PageContent() {
 
         <div className="w-full px-4 py-8 md:px-6 lg:px-8 lg:py-10">
           <div className="flex flex-col gap-10">
-            <LeaderboardHeader
-              memberCount={members.length}
-              viewMode={viewMode}
-              dataDate={dataDate}
-            />
-
-            <Separator className="opacity-20" />
+            {activeSection !== "settings" && (
+              <>
+                <LeaderboardHeader
+                  memberCount={members.length}
+                  viewMode={viewMode}
+                  dataDate={dataDate}
+                />
+                <Separator className="opacity-20" />
+              </>
+            )}
 
             {isError && activeSection !== "settings" && (
               <div className="border-destructive/30 bg-destructive/10 text-destructive rounded-xl border px-5 py-4 text-sm">
@@ -162,11 +172,13 @@ function PageContent() {
 
             {activeSection === "settings" && <SettingsPage />}
 
-            <footer className="border-border/20 flex items-center justify-between border-t pb-4 pt-6">
-              <span className="text-muted-foreground text-xs">
-                Datos actualizados automáticamente cada 5 minutos
-              </span>
-            </footer>
+            {activeSection !== "settings" && (
+              <footer className="border-border/20 flex items-center justify-between border-t pb-4 pt-6">
+                <span className="text-muted-foreground text-xs">
+                  Datos actualizados automáticamente cada 5 minutos
+                </span>
+              </footer>
+            )}
           </div>
         </div>
       </SidebarInset>

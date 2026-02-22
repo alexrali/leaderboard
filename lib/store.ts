@@ -16,9 +16,11 @@ export interface AppearanceSettings {
   theme: AppTheme
 }
 
+export type SectionKey = "overview" | "metrics" | "day-progress" | "resources" | "dashboard"
+
 export interface DashboardPrefs {
   defaultView: ViewMode
-  defaultSection: string
+  defaultSection: SectionKey
   refreshInterval: RefreshInterval
 }
 

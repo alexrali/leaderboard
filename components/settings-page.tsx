@@ -71,7 +71,7 @@ export function SettingsPage() {
     resolver: zodResolver(prefsSchema),
     defaultValues: {
       defaultView: settings.dashboardPrefs.defaultView,
-      defaultSection: settings.dashboardPrefs.defaultSection as PrefsForm["defaultSection"],
+      defaultSection: settings.dashboardPrefs.defaultSection,
       refreshInterval: settings.dashboardPrefs.refreshInterval,
     },
   })
@@ -79,7 +79,7 @@ export function SettingsPage() {
   useEffect(() => {
     prefsForm.reset({
       defaultView: settings.dashboardPrefs.defaultView,
-      defaultSection: settings.dashboardPrefs.defaultSection as PrefsForm["defaultSection"],
+      defaultSection: settings.dashboardPrefs.defaultSection,
       refreshInterval: settings.dashboardPrefs.refreshInterval,
     })
   }, [settings.dashboardPrefs]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -277,6 +277,9 @@ export function SettingsPage() {
                       <SelectItem value="30">Cada 30 minutos</SelectItem>
                     </SelectContent>
                   </Select>
+                  <p className="text-muted-foreground text-xs">
+                    Requiere recargar la página para aplicar.
+                  </p>
                 </div>
 
                 <Button type="submit" disabled={isSaving} className="self-start">

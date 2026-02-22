@@ -386,3 +386,15 @@ $$;
 create trigger user_settings_updated_at
   before update on user_settings
   for each row execute procedure update_user_settings_timestamp();
+
+-- Enable Row Level Security on user_settings
+alter table user_settings enable row level security;
+
+create policy "allow_read_user_settings" on user_settings
+  for select using (true);
+
+create policy "allow_insert_user_settings" on user_settings
+  for insert with check (true);
+
+create policy "allow_update_user_settings" on user_settings
+  for update using (true);
