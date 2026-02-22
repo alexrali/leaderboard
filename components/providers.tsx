@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useState } from "react"
 import { ThemeProvider } from "@/components/theme-provider"
 
+// QueryClient is created once per mount. Interval is read from localStorage at
+// initialization time — a refreshInterval change takes effect on next page load.
 function getRefreshIntervalMs(): number {
   if (typeof window === "undefined") return 5 * 60 * 1000
   try {
