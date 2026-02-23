@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -12,32 +13,37 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { createClient } from "@/lib/supabase/client"
 
-const schema = z.object({
+const emailSchema = z.object({
   email: z.string().email("Enter a valid email address"),
 })
 
-type FormData = z.infer<typeof schema>
+const codeSchema = z.object({
+  code: z.string().length(6, "Enter the 6-digit code from your email"),
+})
+
+type EmailFormData = z.infer<typeof emailSchema>
+type CodeFormData = z.infer<typeof codeSchema>
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [sent, setSent] = useState(false)
+  const router = useRouter()
+  const [step, setStep] = useState<"email" | "code">("email")
   const [submittedEmail, setSubmittedEmail] = useState("")
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormData>({ resolver: zodResolver(schema) })
+  const emailForm = useForm<EmailFormData>({
+    resolver: zodResolver(emailSchema),
+  })
 
-  async function onSubmit(data: FormData) {
+  const codeForm = useForm<CodeFormData>({
+    resolver: zodResolver(codeSchema),
+  })
+
+  async function onEmailSubmit(data: EmailFormData) {
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithOtp({
       email: data.email,
-      options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
-      },
     })
 
     if (error) {
@@ -46,54 +52,38 @@ export function LoginForm({
     }
 
     setSubmittedEmail(data.email)
-    setSent(true)
+    setStep("code")
+  }
+
+  async function onCodeSubmit(data: CodeFormData) {
+    const supabase = createClient()
+    const { error } = await supabase.auth.verifyOtp({
+      email: submittedEmail,
+      token: data.code,
+      type: "email",
+    })
+
+    if (error) {
+      toast.error(error.message)
+      codeForm.reset()
+      return
+    }
+
+    router.refresh()
+    router.push("/")
   }
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="p-6 md:p-8">
-          {sent ? (
-            <div className="flex flex-col items-center gap-4 text-center py-6">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-primary"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-              <h1 className="text-2xl font-bold">Check your email</h1>
-              <p className="text-muted-foreground text-sm text-balance">
-                We sent a login link to{" "}
-                <span className="font-medium text-foreground">
-                  {submittedEmail}
-                </span>
-                . Click the link to sign in.
-              </p>
-              <button
-                type="button"
-                onClick={() => setSent(false)}
-                className="text-sm text-muted-foreground underline-offset-4 hover:underline"
-              >
-                Use a different email
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit(onSubmit)}>
+          {step === "email" ? (
+            <form onSubmit={emailForm.handleSubmit(onEmailSubmit)}>
               <FieldGroup>
                 <div className="flex flex-col items-center gap-2 text-center">
                   <h1 className="text-2xl font-bold">Welcome back</h1>
                   <p className="text-muted-foreground text-sm text-balance">
-                    Enter your email to receive a login link
+                    Enter your email to receive a login code
                   </p>
                 </div>
                 <Field>
@@ -103,19 +93,71 @@ export function LoginForm({
                     type="email"
                     placeholder="you@example.com"
                     autoComplete="email"
-                    {...register("email")}
+                    {...emailForm.register("email")}
                   />
-                  {errors.email && (
+                  {emailForm.formState.errors.email && (
                     <p className="text-destructive text-sm">
-                      {errors.email.message}
+                      {emailForm.formState.errors.email.message}
                     </p>
                   )}
                 </Field>
                 <Field>
-                  <Button type="submit" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? "Sending…" : "Send login link"}
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={emailForm.formState.isSubmitting}
+                  >
+                    {emailForm.formState.isSubmitting ? "Sending…" : "Send code"}
                   </Button>
                 </Field>
+              </FieldGroup>
+            </form>
+          ) : (
+            <form onSubmit={codeForm.handleSubmit(onCodeSubmit)}>
+              <FieldGroup>
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <h1 className="text-2xl font-bold">Check your email</h1>
+                  <p className="text-muted-foreground text-sm text-balance">
+                    We sent a 6-digit code to{" "}
+                    <span className="font-medium text-foreground">
+                      {submittedEmail}
+                    </span>
+                  </p>
+                </div>
+                <Field>
+                  <FieldLabel htmlFor="code">Login code</FieldLabel>
+                  <Input
+                    id="code"
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="123456"
+                    maxLength={6}
+                    autoComplete="one-time-code"
+                    className="text-center text-lg tracking-widest"
+                    {...codeForm.register("code")}
+                  />
+                  {codeForm.formState.errors.code && (
+                    <p className="text-destructive text-sm">
+                      {codeForm.formState.errors.code.message}
+                    </p>
+                  )}
+                </Field>
+                <Field>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={codeForm.formState.isSubmitting}
+                  >
+                    {codeForm.formState.isSubmitting ? "Verifying…" : "Sign in"}
+                  </Button>
+                </Field>
+                <button
+                  type="button"
+                  onClick={() => setStep("email")}
+                  className="w-full text-center text-sm text-muted-foreground underline-offset-4 hover:underline"
+                >
+                  Use a different email
+                </button>
               </FieldGroup>
             </form>
           )}
