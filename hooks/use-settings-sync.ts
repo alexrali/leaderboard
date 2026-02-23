@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { useQuery, useMutation } from "@tanstack/react-query"
+import { useTheme } from "next-themes"
 import { toast } from "sonner"
 import { supabase } from "@/lib/supabase"
 import { useAppStore, type AppSettings } from "@/lib/store"
@@ -50,6 +51,7 @@ export function useSettingsSync() {
   const updateUserProfile = useAppStore((s) => s.updateUserProfile)
   const updateAppearance = useAppStore((s) => s.updateAppearance)
   const updateDashboardPrefs = useAppStore((s) => s.updateDashboardPrefs)
+  const { setTheme } = useTheme()
 
   // Hydrate from Supabase on mount (remote wins on conflict)
   const { data: remoteSettings } = useQuery({
@@ -64,6 +66,7 @@ export function useSettingsSync() {
     updateUserProfile(remoteSettings.userProfile)
     updateAppearance(remoteSettings.appearance)
     updateDashboardPrefs(remoteSettings.dashboardPrefs)
+    setTheme(remoteSettings.appearance.theme)
   // Zustand action references are stable; omitting them from deps is safe
   }, [remoteSettings]) // eslint-disable-line react-hooks/exhaustive-deps
 
