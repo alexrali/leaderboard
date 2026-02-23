@@ -49,6 +49,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useAppStore } from "@/lib/store"
+import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
 
 interface AppSidebarProps {
   activeSection?: string
@@ -59,6 +61,13 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
   const { isMobile } = useSidebar()
   const displayName = useAppStore((s) => s.settings.userProfile.displayName)
   const userRole = useAppStore((s) => s.settings.userProfile.role)
+  const router = useRouter()
+
+  async function handleSignOut() {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push("/login")
+  }
 
   return (
     <Sidebar variant="inset" collapsible="icon">
@@ -407,7 +416,7 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut}>
                   <LogOut className="mr-2 size-4" />
                   Cerrar sesión
                 </DropdownMenuItem>
