@@ -18,7 +18,7 @@ const emailSchema = z.object({
 })
 
 const codeSchema = z.object({
-  code: z.string().length(6, "Enter the 6-digit code from your email"),
+  code: z.string().min(6, "Enter the code from your email"),
 })
 
 type EmailFormData = z.infer<typeof emailSchema>
@@ -118,7 +118,7 @@ export function LoginForm({
                 <div className="flex flex-col items-center gap-2 text-center">
                   <h1 className="text-2xl font-bold">Check your email</h1>
                   <p className="text-muted-foreground text-sm text-balance">
-                    We sent a 6-digit code to{" "}
+                    We sent a login code to{" "}
                     <span className="font-medium text-foreground">
                       {submittedEmail}
                     </span>
@@ -130,8 +130,8 @@ export function LoginForm({
                     id="code"
                     type="text"
                     inputMode="numeric"
-                    placeholder="123456"
-                    maxLength={6}
+                    placeholder="12345678"
+                    maxLength={8}
                     autoComplete="one-time-code"
                     className="text-center text-lg tracking-widest"
                     {...codeForm.register("code")}
