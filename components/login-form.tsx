@@ -80,6 +80,7 @@ export function LoginForm({
                 . Click the link to sign in.
               </p>
               <button
+                type="button"
                 onClick={() => setSent(false)}
                 className="text-sm text-muted-foreground underline-offset-4 hover:underline"
               >
