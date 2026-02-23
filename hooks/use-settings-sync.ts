@@ -8,6 +8,10 @@ import { supabase } from "@/lib/supabase"
 import { useAppStore, type AppSettings } from "@/lib/store"
 import { getDeviceKey } from "@/lib/utils"
 
+// Module-level flag: survives component remounts, resets only on full page reload.
+// Prevents re-hydrating from Supabase every time SettingsPage mounts/unmounts.
+let hydrationDone = false
+
 // ─── Remote read ──────────────────────────────────────────────────────────────
 
 async function fetchRemoteSettings(): Promise<AppSettings | null> {
@@ -62,7 +66,8 @@ export function useSettingsSync() {
   })
 
   useEffect(() => {
-    if (!remoteSettings) return
+    if (!remoteSettings || hydrationDone) return
+    hydrationDone = true
     updateUserProfile(remoteSettings.userProfile)
     updateAppearance(remoteSettings.appearance)
     updateDashboardPrefs(remoteSettings.dashboardPrefs)
