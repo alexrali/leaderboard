@@ -12,7 +12,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       <div className="w-full max-w-sm flex flex-col gap-4">
         {error === "auth_failed" && (
           <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive text-center">
-            Your login link has expired or is invalid. Please request a new one.
+            El enlace de acceso expiró o no es válido. Por favor solicita uno nuevo.
           </div>
         )}
         <LoginForm />

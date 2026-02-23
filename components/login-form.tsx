@@ -14,11 +14,11 @@ import { Input } from "@/components/ui/input"
 import { createClient } from "@/lib/supabase/client"
 
 const emailSchema = z.object({
-  email: z.string().email("Enter a valid email address"),
+  email: z.string().email("Ingresa un correo válido"),
 })
 
 const codeSchema = z.object({
-  code: z.string().min(6, "Enter the code from your email"),
+  code: z.string().min(6, "Ingresa el código de tu correo"),
 })
 
 type EmailFormData = z.infer<typeof emailSchema>
@@ -81,9 +81,9 @@ export function LoginForm({
             <form onSubmit={emailForm.handleSubmit(onEmailSubmit)}>
               <FieldGroup>
                 <div className="flex flex-col items-center gap-2 text-center">
-                  <h1 className="text-2xl font-bold">Welcome back</h1>
+                  <h1 className="text-2xl font-bold">Bienvenido</h1>
                   <p className="text-muted-foreground text-sm text-balance">
-                    Enter your email to receive a login code
+                    Ingresa tu correo para recibir un código de acceso
                   </p>
                 </div>
                 <Field>
@@ -107,7 +107,7 @@ export function LoginForm({
                     className="w-full"
                     disabled={emailForm.formState.isSubmitting}
                   >
-                    {emailForm.formState.isSubmitting ? "Sending…" : "Send code"}
+                    {emailForm.formState.isSubmitting ? "Enviando…" : "Enviar código"}
                   </Button>
                 </Field>
               </FieldGroup>
@@ -116,16 +116,16 @@ export function LoginForm({
             <form onSubmit={codeForm.handleSubmit(onCodeSubmit)}>
               <FieldGroup>
                 <div className="flex flex-col items-center gap-2 text-center">
-                  <h1 className="text-2xl font-bold">Check your email</h1>
+                  <h1 className="text-2xl font-bold">Revisa tu correo</h1>
                   <p className="text-muted-foreground text-sm text-balance">
-                    We sent a login code to{" "}
+                    Enviamos un código de acceso a{" "}
                     <span className="font-medium text-foreground">
                       {submittedEmail}
                     </span>
                   </p>
                 </div>
                 <Field>
-                  <FieldLabel htmlFor="code">Login code</FieldLabel>
+                  <FieldLabel htmlFor="code">Código de acceso</FieldLabel>
                   <Input
                     id="code"
                     type="text"
@@ -148,7 +148,7 @@ export function LoginForm({
                     className="w-full"
                     disabled={codeForm.formState.isSubmitting}
                   >
-                    {codeForm.formState.isSubmitting ? "Verifying…" : "Sign in"}
+                    {codeForm.formState.isSubmitting ? "Verificando…" : "Iniciar sesión"}
                   </Button>
                 </Field>
                 <button
@@ -156,7 +156,7 @@ export function LoginForm({
                   onClick={() => setStep("email")}
                   className="w-full text-center text-sm text-muted-foreground underline-offset-4 hover:underline"
                 >
-                  Use a different email
+                  Usar otro correo
                 </button>
               </FieldGroup>
             </form>
