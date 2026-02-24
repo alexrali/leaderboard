@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description: "Track team performance, daily progress, and resource utilization",
   generator: "v0.app",
   icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    icon: [{ url: "/ctx-ico.svg", type: "image/svg+xml" }],
   },
 }
 
