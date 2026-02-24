@@ -265,7 +265,7 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
             icon={FileText}
           />
           <KpiCard
-            label="SKUs Distintos"
+            label="SKUs (Total)"
             value={weeklySummary.totalSkus.toLocaleString("es-MX")}
             icon={Layers}
           />
@@ -317,24 +317,24 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
                 >
                   <CartesianGrid
                     strokeDasharray="3 3"
-                    stroke="hsl(var(--border))"
+                    stroke="var(--border)"
                     vertical={false}
                   />
                   <XAxis
                     dataKey="label"
-                    tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                    tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
                     axisLine={false}
                     tickLine={false}
                   />
                   <YAxis
-                    tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
+                    tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
                     axisLine={false}
                     tickLine={false}
                     tickFormatter={(v) => (v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v)}
                   />
                   <RechartsTooltip
                     content={<ChartTooltip />}
-                    cursor={{ fill: "hsl(var(--muted))", radius: 6 }}
+                    cursor={{ fill: "var(--muted)", radius: 6 }}
                   />
                   <Bar dataKey="teamUE" radius={[6, 6, 0, 0]}>
                     {dailyTrend.map((entry, i) => (
@@ -342,8 +342,8 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
                         key={i}
                         fill={
                           entry.teamUE === maxUE
-                            ? "hsl(var(--primary))"
-                            : "hsl(var(--primary) / 0.35)"
+                            ? "var(--primary)"
+                            : "color-mix(in oklch, var(--primary) 35%, transparent)"
                         }
                       />
                     ))}

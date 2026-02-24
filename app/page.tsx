@@ -24,7 +24,6 @@ import { useAppStore } from "@/lib/store"
 import {
   useLeaderboard,
   useHourlyProgress,
-  useTeamSummary,
   useLatestDailyDate,
   useWeeklyTeamSummary,
   useWeekDailyTrend,
@@ -51,7 +50,6 @@ function PageContent() {
 
   const { data: members = [], isLoading, isError } = useLeaderboard(viewMode)
   const { data: dayProgress = [] } = useHourlyProgress()
-  const { data: teamSummary = null } = useTeamSummary(viewMode)
   const { data: dataDate = null } = useLatestDailyDate()
   const { data: weeklySummary = null } = useWeeklyTeamSummary()
   const { data: dailyTrend = [] } = useWeekDailyTrend()
@@ -150,7 +148,7 @@ function PageContent() {
                   />
                 )}
                 {activeSection === "metrics" && (
-                  <GeneralMetrics members={members} teamSummary={teamSummary} viewMode={viewMode} />
+                  <GeneralMetrics members={members} viewMode={viewMode} />
                 )}
                 {activeSection === "day-progress" && <DayProgressSection data={dayProgress} />}
                 {activeSection === "resources" && <ResourcesDetail resources={resources} />}
@@ -159,7 +157,6 @@ function PageContent() {
                     metricsContent={
                       <GeneralMetrics
                         members={members}
-                        teamSummary={teamSummary}
                         viewMode={viewMode}
                       />
                     }

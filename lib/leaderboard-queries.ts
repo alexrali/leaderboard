@@ -116,7 +116,7 @@ export async function getTodayLeaderboard(): Promise<TeamMember[]> {
     tasksCompleted: Number(row.routes_completed ?? 0),
     tasksTotal: Number(row.routes_completed ?? 0),
     hoursLogged: parseFloat(row.hours_worked ?? 0),
-    efficiency: parseFloat(row.efficiency_score ?? 0),
+    efficiency: Math.round(parseFloat(row.efficiency_score ?? 0)),
     trend: (row.trend as TeamMember["trend"]) ?? "stable",
     trendValue: Math.abs(parseFloat(row.trend_percentage ?? 0)),
     totalQuantity: parseFloat(row.total_quantity ?? 0),
@@ -190,7 +190,7 @@ export async function getWeeklyLeaderboard(): Promise<TeamMember[]> {
     tasksCompleted: Number(row.routes_completed ?? 0),
     tasksTotal: Number(row.routes_completed ?? 0),
     hoursLogged: parseFloat(row.hours_worked ?? 0),
-    efficiency: parseFloat(row.efficiency_score ?? 0),
+    efficiency: Math.round(parseFloat(row.efficiency_score ?? 0)),
     trend: (row.trend as TeamMember["trend"]) ?? "stable",
     trendValue: Math.abs(parseFloat(row.trend_percentage ?? 0)),
     totalQuantity: parseFloat(row.total_quantity ?? 0),
@@ -238,7 +238,7 @@ export async function getWeeklyTeamSummary(): Promise<WeeklyTeamSummary | null> 
 
     supabase
       .from("worker_weekly_sku_summary")
-      .select("folios_completed, distinct_skus, total_weight_kg, total_volume_m3")
+      .select("folios_completed, distinct_skus")
       .eq("year", currentYear)
       .eq("week_number", currentWeek),
 
@@ -251,7 +251,7 @@ export async function getWeeklyTeamSummary(): Promise<WeeklyTeamSummary | null> 
 
     supabase
       .from("performance_weekly")
-      .select("efficiency_score")
+      .select("efficiency_score, total_weight_kg, total_volume_m3")
       .eq("year", currentYear)
       .eq("week_number", currentWeek),
 
@@ -267,14 +267,16 @@ export async function getWeeklyTeamSummary(): Promise<WeeklyTeamSummary | null> 
   const skus = skuResult.data ?? []
   const totalFolios = skus.reduce((s, r) => s + Number(r.folios_completed ?? 0), 0)
   const totalSkus = skus.reduce((s, r) => s + Number(r.distinct_skus ?? 0), 0)
-  const totalWeightKg = skus.reduce((s, r) => s + parseFloat(r.total_weight_kg ?? 0), 0)
-  const totalVolumeM3 = skus.reduce((s, r) => s + parseFloat(r.total_volume_m3 ?? 0), 0)
 
-  const efficiencies = (workerResult.data ?? []).map((r) => Number(r.efficiency_score ?? 0))
+  const workers = workerResult.data ?? []
+  const efficiencies = workers.map((r) => Number(r.efficiency_score ?? 0))
   const avgEfficiency =
     efficiencies.length > 0
       ? Math.round(efficiencies.reduce((s, v) => s + v, 0) / efficiencies.length)
       : 0
+  // Use performance_weekly as single source for weight/volume (same table as member rows)
+  const totalWeightKg = workers.reduce((s, r) => s + parseFloat(r.total_weight_kg ?? 0), 0)
+  const totalVolumeM3 = workers.reduce((s, r) => s + parseFloat(r.total_volume_m3 ?? 0), 0)
 
   const prevEfficiencies = (prevWorkerResult.data ?? []).map((r) => Number(r.efficiency_score ?? 0))
   const prevAvgEfficiency =

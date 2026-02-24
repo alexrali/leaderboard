@@ -16,7 +16,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import type { TeamMember } from "@/lib/leaderboard-data"
-import type { TeamSummary } from "@/lib/leaderboard-queries"
 import { WorkerDetailDrawer } from "@/components/worker-detail-sheet"
 
 function TrendIcon({ trend, value }: { trend: TeamMember["trend"]; value: number }) {
@@ -75,15 +74,13 @@ function RankBadge({ rank, name }: { rank: number; name: string }) {
 
 interface GeneralMetricsProps {
   members: TeamMember[]
-  teamSummary?: TeamSummary | null
   viewMode?: "daily" | "weekly"
 }
 
-export function GeneralMetrics({ members, teamSummary, viewMode = "daily" }: GeneralMetricsProps) {
+export function GeneralMetrics({ members, viewMode = "daily" }: GeneralMetricsProps) {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
-  const totalTasks = teamSummary?.teamTotalUE ?? members.reduce((acc, m) => acc + m.score, 0)
-  const totalTarget = members.reduce((acc, m) => acc + m.tasksTotal, 0)
+  const totalTasks = members.reduce((acc, m) => acc + m.score, 0)
   const avgEfficiency =
     members.length > 0
       ? Math.round(members.reduce((acc, m) => acc + m.efficiency, 0) / members.length)
@@ -115,10 +112,6 @@ export function GeneralMetrics({ members, teamSummary, viewMode = "daily" }: Gen
               </CardTitle>
               <span className="text-muted-foreground text-sm">UE</span>
             </div>
-            <Progress
-              value={totalTarget > 0 ? (totalTasks / totalTarget) * 100 : 0}
-              className="mt-3 h-1.5 rounded-full"
-            />
           </CardContent>
         </Card>
 
