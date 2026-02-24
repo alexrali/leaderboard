@@ -9,13 +9,10 @@ import {
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
-  BreadcrumbLink,
 } from "@/components/ui/breadcrumb"
 import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { AppSidebar } from "@/components/app-sidebar"
-import { LeaderboardHeader } from "@/components/leaderboard-header"
 import { GeneralMetrics } from "@/components/general-metrics"
 import { DayProgressSection } from "@/components/day-progress"
 import { ResourcesDetail } from "@/components/resources-detail"
@@ -39,6 +36,13 @@ import type { TeamMember } from "@/lib/leaderboard-data"
 const VIEW_MODES = ["daily", "weekly"] as const
 
 const EXCLUDED_SECTIONS = ["settings", "account", "notifications"]
+
+function getISOWeek(date: Date): number {
+  const tmp = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+  tmp.setUTCDate(tmp.getUTCDate() + 4 - (tmp.getUTCDay() || 7))
+  const yearStart = new Date(Date.UTC(tmp.getUTCFullYear(), 0, 1))
+  return Math.ceil(((tmp.getTime() - yearStart.getTime()) / 86400000 + 1) / 7)
+}
 
 function PageContent() {
   const [viewMode, setViewMode] = useQueryState(
@@ -65,6 +69,18 @@ function PageContent() {
   const { data: weeklySummary = null } = useWeeklyTeamSummary()
   const { data: dailyTrend = [] } = useWeekDailyTrend()
 
+  const now = new Date()
+  const week = getISOWeek(now)
+  const today = now.toISOString().split("T")[0]
+  const isStale = dataDate ? dataDate < today : false
+  const displayDate = dataDate
+    ? new Date(dataDate + "T12:00:00").toLocaleDateString("es-MX", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : now.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" })
+
   const sectionLabel: Record<string, string> = {
     overview: "Resumen Semanal",
     metrics: "Métricas Generales",
@@ -89,16 +105,32 @@ function PageContent() {
           />
           <Breadcrumb>
             <BreadcrumbList>
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">SIM-PCR</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage>{sectionLabel[activeSection] ?? activeSection}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <div className="ml-auto flex items-center gap-3">
+          <div className="flex-1 flex justify-center">
+            {!EXCLUDED_SECTIONS.includes(activeSection) && !isLoading && !isError && (
+              <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
+                {viewMode === "daily" && (
+                  <>
+                    <span>{displayDate}</span>
+                    <span className="text-border">·</span>
+                  </>
+                )}
+                <span>Sem {week}{viewMode === "weekly" ? `, ${now.getFullYear()}` : ""}</span>
+                <span className="text-border">·</span>
+                <span>{members.length} surtidores</span>
+                {isStale && (
+                  <span className="bg-warning/15 text-warning-foreground rounded-full px-2 py-0.5 font-medium">
+                    último dato disponible
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
             <Button
               variant="outline"
               size="sm"
@@ -138,17 +170,6 @@ function PageContent() {
 
         <div className="w-full flex-1 min-h-0 overflow-auto px-4 py-8 md:px-6 lg:px-8 lg:py-10">
           <div className="flex flex-col gap-10">
-            {!EXCLUDED_SECTIONS.includes(activeSection) && (
-              <>
-                <LeaderboardHeader
-                  memberCount={members.length}
-                  viewMode={viewMode}
-                  dataDate={dataDate}
-                />
-                <Separator className="opacity-20" />
-              </>
-            )}
-
             {isError && !EXCLUDED_SECTIONS.includes(activeSection) && (
               <div className="border-destructive/30 bg-destructive/10 text-destructive rounded-xl border px-5 py-4 text-sm">
                 No se pudo cargar la información. Verifica la conexión a Supabase.
