@@ -18,6 +18,7 @@ import { GeneralMetrics } from "@/components/general-metrics"
 import { DayProgressSection } from "@/components/day-progress"
 import { ResourcesDetail } from "@/components/resources-detail"
 import { SectionTabs } from "@/components/section-tabs"
+import { PanelOverview } from "@/components/panel-overview"
 import { WeeklyOverview } from "@/components/weekly-overview"
 import { SettingsPage } from "@/components/settings-page"
 import { useAppStore } from "@/lib/store"
@@ -60,6 +61,7 @@ function PageContent() {
     "day-progress": "Progreso del Día",
     resources: "Detalle de Recursos",
     dashboard: "Dashboard",
+    panel: "Panel",
     settings: "Configuración",
   }
 
@@ -164,6 +166,7 @@ function PageContent() {
                     resourcesContent={<ResourcesDetail resources={resources} />}
                   />
                 )}
+                {activeSection === "panel" && <PanelOverview />}
               </>
             )}
 

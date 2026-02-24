@@ -96,8 +96,8 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
             <SidebarMenuItem>
               <SidebarMenuButton
                 tooltip="Panel"
-                isActive={activeSection === "dashboard"}
-                onClick={() => onSectionChange?.("dashboard")}
+                isActive={activeSection === "panel"}
+                onClick={() => onSectionChange?.("panel")}
               >
                 <LayoutDashboard />
                 <span>Panel</span>

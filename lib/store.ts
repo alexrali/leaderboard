@@ -16,7 +16,7 @@ export interface AppearanceSettings {
   theme: AppTheme
 }
 
-export type SectionKey = "overview" | "metrics" | "day-progress" | "resources" | "dashboard"
+export type SectionKey = "overview" | "metrics" | "day-progress" | "resources" | "dashboard" | "panel"
 
 export interface DashboardPrefs {
   defaultView: ViewMode

@@ -32,7 +32,7 @@ const profileSchema = z.object({
 
 const prefsSchema = z.object({
   defaultView: z.enum(["daily", "weekly"]),
-  defaultSection: z.enum(["overview", "metrics", "day-progress", "resources", "dashboard"]),
+  defaultSection: z.enum(["overview", "metrics", "day-progress", "resources", "dashboard", "panel"]),
   refreshInterval: z.coerce.number().refine((v) => [1, 5, 10, 30].includes(v), {
     message: "Selecciona un intervalo válido",
   }),
