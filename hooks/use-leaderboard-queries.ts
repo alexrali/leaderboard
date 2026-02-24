@@ -9,6 +9,9 @@ import {
   getLatestDailyDate,
   getWeeklyTeamSummary,
   getWeekDailyTrend,
+  getPanelKPIs,
+  getTeamDailyHistory,
+  getTeamDayDetail,
 } from "@/lib/leaderboard-queries"
 
 export function useLeaderboard(viewMode: "daily" | "weekly") {
@@ -53,5 +56,27 @@ export function useWeekDailyTrend() {
   return useQuery({
     queryKey: ["weekDailyTrend"],
     queryFn: getWeekDailyTrend,
+  })
+}
+
+export function usePanelKPIs() {
+  return useQuery({
+    queryKey: ["panelKPIs"],
+    queryFn: getPanelKPIs,
+  })
+}
+
+export function useTeamDailyHistory(days = 60) {
+  return useQuery({
+    queryKey: ["teamDailyHistory", days],
+    queryFn: () => getTeamDailyHistory(days),
+  })
+}
+
+export function useTeamDayDetail(date: string | null) {
+  return useQuery({
+    queryKey: ["teamDayDetail", date],
+    queryFn: () => getTeamDayDetail(date!),
+    enabled: !!date,
   })
 }
