@@ -436,7 +436,9 @@ export async function getTodayHourlyProgress(): Promise<DayProgress[]> {
       hour12: true,
     }),
     completed: Number(row.total_routes_completed ?? 0),
-    target: Math.round(Number(row.total_routes_completed ?? 0) * 1.1),
+    target: 0, // no configured target in DB — never use synthetic values
+    teamUE: parseFloat(row.team_total_ue ?? 0),
+    activeWorkers: Number(row.active_workers ?? 0),
   }))
 }
 

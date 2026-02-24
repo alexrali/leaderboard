@@ -23,7 +23,9 @@ export interface TeamMember {
 export interface DayProgress {
   hour: string
   completed: number
-  target: number
+  target: number       // 0 when no real target is configured
+  teamUE?: number
+  activeWorkers?: number
 }
 
 export interface Resource {

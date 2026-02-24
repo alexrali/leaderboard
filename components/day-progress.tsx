@@ -22,7 +22,6 @@ import {
   CartesianGrid,
   Tooltip as RechartsTooltip,
   ResponsiveContainer,
-  ReferenceLine,
 } from "recharts"
 import type { DayProgress as DayProgressType } from "@/lib/leaderboard-data"
 
@@ -45,7 +44,7 @@ function ChartTooltipContent({
         <p className="text-card-foreground mb-1.5 text-xs font-semibold">{label}</p>
         {payload.map((entry) => (
           <p key={entry.dataKey} className="text-muted-foreground text-xs">
-            {entry.dataKey === "completed" ? "Completed" : "Target"}:{" "}
+            Rutas:{" "}
             <span className="text-card-foreground font-mono font-bold">{entry.value}</span>
           </p>
         ))}
@@ -56,32 +55,24 @@ function ChartTooltipContent({
 }
 
 export function DayProgressSection({ data }: DayProgressProps) {
-  const hourlyBreakdown = data.map((row) => {
-    const pct = row.target > 0 ? row.completed / row.target : 0
-    const status: "ahead" | "behind" | "on-track" =
-      pct > 1.05 ? "ahead" : pct < 0.95 ? "behind" : "on-track"
-    return { ...row, status }
-  })
+  const hourlyBreakdown = data
 
   const midpoint = Math.ceil(hourlyBreakdown.length / 2)
   const morning = hourlyBreakdown.slice(0, midpoint)
   const afternoon = hourlyBreakdown.slice(midpoint)
   const sumCompleted = (rows: typeof hourlyBreakdown) => rows.reduce((s, r) => s + r.completed, 0)
-  const sumTarget = (rows: typeof hourlyBreakdown) => rows.reduce((s, r) => s + r.target, 0)
 
   const timeBlocks = [
     {
       label: "Mañana",
       range: `${morning[0]?.hour ?? ""} - ${morning[morning.length - 1]?.hour ?? ""}`,
       completed: sumCompleted(morning),
-      target: sumTarget(morning),
       icon: Clock,
     },
     {
       label: "Tarde",
       range: `${afternoon[0]?.hour ?? ""} - ${afternoon[afternoon.length - 1]?.hour ?? ""}`,
       completed: sumCompleted(afternoon),
-      target: sumTarget(afternoon),
       icon: Timer,
     },
   ]
@@ -92,10 +83,8 @@ export function DayProgressSection({ data }: DayProgressProps) {
     data.length > 0
       ? data.reduce((best, r) => (r.completed > best.completed ? r : best), data[0]).hour
       : "—"
-  const latestCompleted = data[data.length - 1]?.completed ?? 0
-  const latestTarget = data[data.length - 1]?.target ?? 0
-  const completionRate = latestTarget > 0 ? Math.round((latestCompleted / latestTarget) * 100) : 0
-  const aheadBehind = latestCompleted - latestTarget
+  const totalCompleted = data.reduce((s, r) => s + r.completed, 0)
+  const totalUE = data.reduce((s, r) => s + (r.teamUE ?? 0), 0)
 
   return (
     <section className="flex flex-col gap-6" aria-labelledby="day-progress-heading">
@@ -111,40 +100,32 @@ export function DayProgressSection({ data }: DayProgressProps) {
         <Card className="rounded-2xl">
           <CardHeader className="px-5 pt-5 pb-1">
             <CardDescription className="text-xs tracking-wide uppercase">
-              Completadas Hoy
+              Rutas Hoy
             </CardDescription>
           </CardHeader>
           <CardContent className="px-5 pt-0 pb-5">
-            <CardTitle className="text-3xl font-bold">{latestCompleted}</CardTitle>
+            <CardTitle className="text-3xl font-bold">{totalCompleted.toLocaleString("es-MX")}</CardTitle>
             <div className="mt-2 flex items-center gap-1.5">
               <CheckCircle2 className="text-success size-3.5" />
-              <span className="text-muted-foreground text-xs">
-                {aheadBehind >= 0 ? `${aheadBehind} adelante` : `${Math.abs(aheadBehind)} atrás`}
-              </span>
+              <span className="text-muted-foreground text-xs">Total del día</span>
             </div>
           </CardContent>
         </Card>
 
         <Card className="rounded-2xl">
           <CardHeader className="px-5 pt-5 pb-1">
-            <CardDescription className="text-xs tracking-wide uppercase">Meta</CardDescription>
+            <CardDescription className="text-xs tracking-wide uppercase">
+              UE Total
+            </CardDescription>
           </CardHeader>
           <CardContent className="px-5 pt-0 pb-5">
-            <CardTitle className="text-3xl font-bold">{latestTarget}</CardTitle>
+            <CardTitle className="text-3xl font-bold">
+              {totalUE.toLocaleString("es-MX", { maximumFractionDigits: 0 })}
+            </CardTitle>
             <div className="mt-2 flex items-center gap-1.5">
-              <Target className="text-info size-3.5" />
-              <span className="text-muted-foreground text-xs">Meta diaria</span>
+              <BarChart3 className="text-primary size-3.5" />
+              <span className="text-muted-foreground text-xs">Acumulado del día</span>
             </div>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-2xl">
-          <CardHeader className="px-5 pt-5 pb-1">
-            <CardDescription className="text-xs tracking-wide uppercase">Avance</CardDescription>
-          </CardHeader>
-          <CardContent className="px-5 pt-0 pb-5">
-            <CardTitle className="text-3xl font-bold">{completionRate}%</CardTitle>
-            <Progress value={completionRate} className="mt-3 h-1.5 rounded-full" />
           </CardContent>
         </Card>
 
@@ -156,8 +137,23 @@ export function DayProgressSection({ data }: DayProgressProps) {
           </CardHeader>
           <CardContent className="px-5 pt-0 pb-5">
             <CardTitle className="text-3xl font-bold">{avgTasksPerHour}</CardTitle>
+            <div className="mt-2 flex items-center gap-1.5">
+              <Target className="text-info size-3.5" />
+              <span className="text-muted-foreground text-xs">Promedio por hora</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-2xl">
+          <CardHeader className="px-5 pt-5 pb-1">
+            <CardDescription className="text-xs tracking-wide uppercase">
+              Hora Pico
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-5 pt-0 pb-5">
+            <CardTitle className="text-3xl font-bold">{peakHour}</CardTitle>
             <div className="mt-2">
-              <span className="text-muted-foreground text-xs">Pico: {peakHour}</span>
+              <span className="text-muted-foreground text-xs">Mayor actividad</span>
             </div>
           </CardContent>
         </Card>
@@ -218,20 +214,6 @@ export function DayProgressSection({ data }: DayProgressProps) {
                         tickLine={false}
                       />
                       <RechartsTooltip content={<ChartTooltipContent />} />
-                      <ReferenceLine
-                        y={30}
-                        stroke="var(--color-info)"
-                        strokeDasharray="6 4"
-                        strokeOpacity={0.4}
-                      />
-                      <Area
-                        type="monotone"
-                        dataKey="target"
-                        stroke="var(--color-muted-foreground)"
-                        strokeWidth={1.5}
-                        strokeDasharray="4 4"
-                        fill="none"
-                      />
                       <Area
                         type="monotone"
                         dataKey="completed"
@@ -267,7 +249,7 @@ export function DayProgressSection({ data }: DayProgressProps) {
               <CardContent className="flex flex-col gap-4 px-5 pt-0 pb-5">
                 {timeBlocks.map((block) => {
                   const pct =
-                    block.target > 0 ? Math.round((block.completed / block.target) * 100) : 0
+                    totalCompleted > 0 ? Math.round((block.completed / totalCompleted) * 100) : 0
                   return (
                     <div
                       key={block.label}
@@ -289,23 +271,16 @@ export function DayProgressSection({ data }: DayProgressProps) {
                           <div className="flex items-center gap-3">
                             <Progress value={pct} className="h-2 flex-1 rounded-full" />
                             <span className="text-foreground font-mono text-xs font-bold">
-                              {block.completed}/{block.target}
+                              {block.completed.toLocaleString("es-MX")}
                             </span>
                           </div>
                         </TooltipTrigger>
                         <TooltipContent>
-                          <span>{pct}% of target reached</span>
+                          <span>{pct}% del total del día</span>
                         </TooltipContent>
                       </Tooltip>
-                      <Badge
-                        variant={pct >= 100 ? "default" : "outline"}
-                        className={
-                          pct >= 100
-                            ? "bg-success text-success-foreground w-fit rounded-full"
-                            : "border-warning/30 bg-warning/10 text-warning-foreground w-fit rounded-full"
-                        }
-                      >
-                        {pct >= 100 ? "Meta cumplida" : `${100 - pct}% restante`}
+                      <Badge variant="outline" className="border-border text-muted-foreground w-fit rounded-full">
+                        {pct}% del día
                       </Badge>
                     </div>
                   )
@@ -345,59 +320,35 @@ export function DayProgressSection({ data }: DayProgressProps) {
                       Hora
                     </TableHead>
                     <TableHead className="text-muted-foreground text-right text-xs font-medium tracking-wide uppercase">
-                      Completadas
-                    </TableHead>
-                    <TableHead className="text-muted-foreground text-right text-xs font-medium tracking-wide uppercase">
-                      Meta
-                    </TableHead>
-                    <TableHead className="text-muted-foreground text-right text-xs font-medium tracking-wide uppercase">
-                      Avance
+                      Rutas
                     </TableHead>
                     <TableHead className="text-muted-foreground pr-5 text-right text-xs font-medium tracking-wide uppercase">
-                      Estado
+                      % del día
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {hourlyBreakdown.map((row) => {
-                    const pct = row.target > 0 ? Math.round((row.completed / row.target) * 100) : 0
+                    const pct =
+                      totalCompleted > 0
+                        ? Math.round((row.completed / totalCompleted) * 100)
+                        : 0
                     return (
                       <TableRow key={row.hour}>
                         <TableCell className="pl-5 font-mono text-sm font-medium">
                           {row.hour}
                         </TableCell>
                         <TableCell className="text-right font-mono font-bold">
-                          {row.completed}
-                        </TableCell>
-                        <TableCell className="text-muted-foreground text-right font-mono">
-                          {row.target}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            <Progress
-                              value={Math.min(pct, 100)}
-                              className="h-1.5 w-14 rounded-full"
-                            />
-                            <span className="text-muted-foreground font-mono text-xs">{pct}%</span>
-                          </div>
+                          {row.completed.toLocaleString("es-MX")}
                         </TableCell>
                         <TableCell className="pr-5 text-right">
-                          <Badge
-                            variant="outline"
-                            className={`rounded-full ${
-                              row.status === "ahead"
-                                ? "border-success/30 bg-success/10 text-success"
-                                : row.status === "behind"
-                                  ? "border-warning/30 bg-warning/10 text-warning"
-                                  : "border-info/30 bg-info/10 text-info"
-                            }`}
-                          >
-                            {row.status === "ahead"
-                              ? "Adelante"
-                              : row.status === "behind"
-                                ? "Atrás"
-                                : "En Meta"}
-                          </Badge>
+                          <div className="flex items-center justify-end gap-2">
+                            <Progress
+                              value={pct}
+                              className="h-1.5 w-14 rounded-full"
+                            />
+                            <span className="text-muted-foreground font-mono text-xs w-8 text-right">{pct}%</span>
+                          </div>
                         </TableCell>
                       </TableRow>
                     )
