@@ -41,7 +41,7 @@ export function HeatmapDayDrawer({ date, onClose }: HeatmapDayDrawerProps) {
 
   return (
     <Sheet open={!!date} onOpenChange={(open) => { if (!open) onClose() }}>
-      <SheetContent className="w-[380px] sm:w-[460px] overflow-y-auto">
+      <SheetContent className="w-[380px] sm:w-[460px] overflow-y-auto p-6">
         {date && (
           <>
             <SheetHeader className="pb-4">
