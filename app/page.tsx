@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useEffect } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { parseAsStringLiteral, useQueryState } from "nuqs"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
@@ -12,6 +12,8 @@ import {
   BreadcrumbSeparator,
   BreadcrumbLink,
 } from "@/components/ui/breadcrumb"
+import { Search } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { AppSidebar } from "@/components/app-sidebar"
 import { LeaderboardHeader } from "@/components/leaderboard-header"
 import { GeneralMetrics } from "@/components/general-metrics"
@@ -21,6 +23,8 @@ import { SectionTabs } from "@/components/section-tabs"
 import { PanelOverview } from "@/components/panel-overview"
 import { WeeklyOverview } from "@/components/weekly-overview"
 import { SettingsPage } from "@/components/settings-page"
+import { Spotlight } from "@/components/spotlight"
+import { WorkerDetailDrawer } from "@/components/worker-detail-sheet"
 import { useAppStore } from "@/lib/store"
 import {
   useLeaderboard,
@@ -30,14 +34,20 @@ import {
   useWeekDailyTrend,
 } from "@/hooks/use-leaderboard-queries"
 import { resources } from "@/lib/leaderboard-data"
+import type { TeamMember } from "@/lib/leaderboard-data"
 
 const VIEW_MODES = ["daily", "weekly"] as const
+
+const EXCLUDED_SECTIONS = ["settings", "account", "notifications"]
 
 function PageContent() {
   const [viewMode, setViewMode] = useQueryState(
     "view",
     parseAsStringLiteral(VIEW_MODES).withDefault("daily")
   )
+  const [spotlightOpen, setSpotlightOpen] = useState(false)
+  const [workerSheetMember, setWorkerSheetMember] = useState<TeamMember | null>(null)
+  const [workerSheetOpen, setWorkerSheetOpen] = useState(false)
 
   const activeSection = useAppStore((s) => s.activeSection)
   const setActiveSection = useAppStore((s) => s.setActiveSection)
@@ -63,6 +73,8 @@ function PageContent() {
     dashboard: "Dashboard",
     panel: "Panel",
     settings: "Configuración",
+    account: "Mi Cuenta",
+    notifications: "Notificaciones",
   }
 
   return (
@@ -87,6 +99,18 @@ function PageContent() {
             </BreadcrumbList>
           </Breadcrumb>
           <div className="ml-auto flex items-center gap-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setSpotlightOpen(true)}
+              className="gap-2 text-muted-foreground"
+            >
+              <Search className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline text-xs">Buscar</span>
+              <kbd className="bg-muted border-border hidden items-center gap-1 rounded border px-1.5 font-mono text-[10px] sm:inline-flex">
+                ⌘K
+              </kbd>
+            </Button>
             <div className="border-border/40 bg-muted/40 flex items-center gap-1 rounded-full border p-1">
               <button
                 onClick={() => setViewMode("daily")}
@@ -114,7 +138,7 @@ function PageContent() {
 
         <div className="w-full px-4 py-8 md:px-6 lg:px-8 lg:py-10">
           <div className="flex flex-col gap-10">
-            {activeSection !== "settings" && (
+            {!EXCLUDED_SECTIONS.includes(activeSection) && (
               <>
                 <LeaderboardHeader
                   memberCount={members.length}
@@ -125,13 +149,13 @@ function PageContent() {
               </>
             )}
 
-            {isError && activeSection !== "settings" && (
+            {isError && !EXCLUDED_SECTIONS.includes(activeSection) && (
               <div className="border-destructive/30 bg-destructive/10 text-destructive rounded-xl border px-5 py-4 text-sm">
                 No se pudo cargar la información. Verifica la conexión a Supabase.
               </div>
             )}
 
-            {isLoading && activeSection !== "settings" && (
+            {isLoading && !EXCLUDED_SECTIONS.includes(activeSection) && (
               <div className="flex items-center justify-center py-20">
                 <div className="flex flex-col items-center gap-3">
                   <div className="border-primary size-8 animate-spin rounded-full border-2 border-t-transparent" />
@@ -140,7 +164,7 @@ function PageContent() {
               </div>
             )}
 
-            {!isLoading && !isError && activeSection !== "settings" && (
+            {!isLoading && !isError && !EXCLUDED_SECTIONS.includes(activeSection) && (
               <>
                 {activeSection === "overview" && (
                   <WeeklyOverview
@@ -167,12 +191,22 @@ function PageContent() {
                   />
                 )}
                 {activeSection === "panel" && <PanelOverview />}
+                {activeSection === "account" && (
+                  <div className="text-muted-foreground py-20 text-center text-sm">
+                    Perfil de cuenta — próximamente
+                  </div>
+                )}
+                {activeSection === "notifications" && (
+                  <div className="text-muted-foreground py-20 text-center text-sm">
+                    Notificaciones — próximamente
+                  </div>
+                )}
               </>
             )}
 
             {activeSection === "settings" && <SettingsPage />}
 
-            {activeSection !== "settings" && (
+            {!EXCLUDED_SECTIONS.includes(activeSection) && (
               <footer className="border-border/20 flex items-center justify-between border-t pb-4 pt-6">
                 <span className="text-muted-foreground text-xs">
                   Datos actualizados automáticamente cada 5 minutos
@@ -182,6 +216,22 @@ function PageContent() {
           </div>
         </div>
       </SidebarInset>
+      <Spotlight
+        open={spotlightOpen}
+        onOpenChange={setSpotlightOpen}
+        members={members}
+        onSetViewMode={setViewMode}
+        onSelectWorker={(member) => {
+          setWorkerSheetMember(member)
+          setWorkerSheetOpen(true)
+        }}
+      />
+      <WorkerDetailDrawer
+        member={workerSheetMember}
+        open={workerSheetOpen}
+        onOpenChange={setWorkerSheetOpen}
+        viewMode={viewMode}
+      />
     </SidebarProvider>
   )
 }
