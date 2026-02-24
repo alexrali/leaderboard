@@ -33,7 +33,6 @@ interface SpotlightProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   members: TeamMember[]
-  viewMode: "daily" | "weekly"
   onSetViewMode: (mode: "daily" | "weekly") => void
   onSelectWorker: (member: TeamMember) => void
 }
@@ -55,7 +54,7 @@ const ACTION_ITEMS = [
   { label: "Cerrar sesión", icon: LogOut, action: "signout" as const },
 ]
 
-export function Spotlight({ open, onOpenChange, members, viewMode, onSetViewMode, onSelectWorker }: SpotlightProps) {
+export function Spotlight({ open, onOpenChange, members, onSetViewMode, onSelectWorker }: SpotlightProps) {
   const setActiveSection = useAppStore((s) => s.setActiveSection)
   const router = useRouter()
 
@@ -106,8 +105,6 @@ export function Spotlight({ open, onOpenChange, members, viewMode, onSetViewMode
     close()
   }
 
-  const defaultWorkers = members.slice(0, 5)
-
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
       <CommandInput placeholder="Buscar secciones, trabajadores, acciones..." />
@@ -127,23 +124,27 @@ export function Spotlight({ open, onOpenChange, members, viewMode, onSetViewMode
           ))}
         </CommandGroup>
 
-        <CommandSeparator />
+        {members.length > 0 && (
+          <>
+            <CommandSeparator />
 
-        <CommandGroup heading="Trabajadores">
-          {defaultWorkers.map((member) => (
-            <CommandItem
-              key={member.id}
-              value={member.name}
-              onSelect={() => handleWorker(member)}
-            >
-              <User className="mr-2 h-4 w-4" />
-              <span className="font-medium">{member.name}</span>
-              <span className="text-muted-foreground ml-2 text-xs">
-                #{member.rank} · {member.score} UE
-              </span>
-            </CommandItem>
-          ))}
-        </CommandGroup>
+            <CommandGroup heading="Trabajadores">
+              {members.map((member) => (
+                <CommandItem
+                  key={member.id}
+                  value={member.name}
+                  onSelect={() => handleWorker(member)}
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  <span className="font-medium">{member.name}</span>
+                  <span className="text-muted-foreground ml-2 text-xs">
+                    #{member.rank} · {member.score} UE
+                  </span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </>
+        )}
 
         <CommandSeparator />
 
