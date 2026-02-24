@@ -476,7 +476,7 @@ export type PanelKPIs = {
   teamTotalUE: number
   activeWorkers: number
   totalFolios: number
-  teamStreak: number // consecutive days where majority of workers hit target
+  teamStreak: number // consecutive days where majority of workers hit target (capped at last 30 days)
 }
 
 export type TeamDayCell = {
