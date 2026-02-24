@@ -80,7 +80,7 @@ function PageContent() {
   return (
     <SidebarProvider>
       <AppSidebar activeSection={activeSection} onSectionChange={setActiveSection} />
-      <SidebarInset>
+      <SidebarInset className="overflow-hidden">
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator
@@ -136,7 +136,7 @@ function PageContent() {
           </div>
         </header>
 
-        <div className="w-full px-4 py-8 md:px-6 lg:px-8 lg:py-10">
+        <div className="w-full flex-1 min-h-0 overflow-auto px-4 py-8 md:px-6 lg:px-8 lg:py-10">
           <div className="flex flex-col gap-10">
             {!EXCLUDED_SECTIONS.includes(activeSection) && (
               <>
