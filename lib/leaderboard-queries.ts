@@ -469,3 +469,180 @@ export async function getTodayTeamSummary(): Promise<TeamSummary | null> {
     avgUEPerWorker: parseFloat(data.avg_ue_per_worker ?? 0),
   }
 }
+
+// ─── Panel: KPI types ────────────────────────────────────────────────────────
+
+export type PanelKPIs = {
+  teamTotalUE: number
+  activeWorkers: number
+  totalFolios: number
+  teamStreak: number // consecutive days where majority of workers hit target
+}
+
+export type TeamDayCell = {
+  date: string
+  teamUE: number
+  activeWorkers: number
+  totalRoutes: number
+  efficiencyScore: number | null
+}
+
+export type TeamDayDetail = {
+  date: string
+  teamUE: number
+  activeWorkers: number
+  totalRoutes: number
+  totalFolios: number
+  totalSkus: number
+  totalWeightKg: number
+  totalVolumeM3: number
+  hourly: Array<{ hour: string; teamUE: number; activeWorkers: number }>
+}
+
+export async function getPanelKPIs(): Promise<PanelKPIs> {
+  const date = await getLatestDailyDate()
+
+  const thirtyDaysAgo = new Date()
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+  const sinceStr = thirtyDaysAgo.toISOString().split("T")[0]
+
+  const [teamRow, skuRow, streakRows] = await Promise.all([
+    supabase
+      .from("team_performance_daily")
+      .select("team_total_ue, active_workers")
+      .eq("date", date)
+      .single(),
+
+    supabase
+      .from("worker_daily_sku_summary")
+      .select("folios_completed")
+      .eq("date", date),
+
+    supabase
+      .from("performance_daily")
+      .select("date, hit_target")
+      .gte("date", sinceStr)
+      .order("date", { ascending: false }),
+  ])
+
+  // Compute team streak: consecutive days where majority of workers hit target
+  let streak = 0
+  if (streakRows.data && streakRows.data.length > 0) {
+    const byDate = new Map<string, { hits: number; total: number }>()
+    for (const row of streakRows.data) {
+      const entry = byDate.get(row.date) ?? { hits: 0, total: 0 }
+      entry.total += 1
+      if (row.hit_target) entry.hits += 1
+      byDate.set(row.date, entry)
+    }
+    const sortedDates = Array.from(byDate.keys()).sort((a, b) => b.localeCompare(a))
+    for (const d of sortedDates) {
+      const { hits, total } = byDate.get(d)!
+      if (total > 0 && hits / total >= 0.5) {
+        streak += 1
+      } else {
+        break
+      }
+    }
+  }
+
+  const totalFolios = (skuRow.data ?? []).reduce(
+    (s, r) => s + Number(r.folios_completed ?? 0),
+    0
+  )
+
+  return {
+    teamTotalUE: parseFloat(teamRow.data?.team_total_ue ?? 0),
+    activeWorkers: Number(teamRow.data?.active_workers ?? 0),
+    totalFolios,
+    teamStreak: streak,
+  }
+}
+
+export async function getTeamDailyHistory(days = 60): Promise<TeamDayCell[]> {
+  const since = new Date()
+  since.setDate(since.getDate() - days)
+  const sinceStr = since.toISOString().split("T")[0]
+
+  const { data, error } = await supabase
+    .from("team_performance_daily")
+    .select("date, team_total_ue, active_workers, total_routes_completed, team_efficiency_score")
+    .gte("date", sinceStr)
+    .order("date", { ascending: true })
+
+  if (error || !data) return []
+
+  return data.map((row: any) => ({
+    date: row.date,
+    teamUE: parseFloat(row.team_total_ue ?? 0),
+    activeWorkers: Number(row.active_workers ?? 0),
+    totalRoutes: Number(row.total_routes_completed ?? 0),
+    efficiencyScore: row.team_efficiency_score != null ? Number(row.team_efficiency_score) : null,
+  }))
+}
+
+export async function getTeamDayDetail(date: string): Promise<TeamDayDetail | null> {
+  const [dailyRow, skuRows, workerRows, hourlyRows] = await Promise.all([
+    supabase
+      .from("team_performance_daily")
+      .select("team_total_ue, active_workers, total_routes_completed")
+      .eq("date", date)
+      .single(),
+
+    supabase
+      .from("worker_daily_sku_summary")
+      .select("folios_completed, distinct_skus")
+      .eq("date", date),
+
+    supabase
+      .from("performance_daily")
+      .select("total_weight_kg, total_volume_m3")
+      .eq("date", date),
+
+    supabase
+      .from("team_performance_hourly")
+      .select("hour_bucket, team_total_ue, active_workers")
+      .eq("date", date)
+      .order("hour_bucket", { ascending: true }),
+  ])
+
+  if (!dailyRow.data) return null
+
+  const totalFolios = (skuRows.data ?? []).reduce(
+    (s, r) => s + Number(r.folios_completed ?? 0),
+    0
+  )
+  const totalSkus = (skuRows.data ?? []).reduce(
+    (s, r) => s + Number(r.distinct_skus ?? 0),
+    0
+  )
+  const totalWeightKg = (workerRows.data ?? []).reduce(
+    (s, r) => s + parseFloat(r.total_weight_kg ?? 0),
+    0
+  )
+  const totalVolumeM3 = (workerRows.data ?? []).reduce(
+    (s, r) => s + parseFloat(r.total_volume_m3 ?? 0),
+    0
+  )
+
+  const hourly = (hourlyRows.data ?? []).map((row: any) => ({
+    hour: new Date(row.hour_bucket).toLocaleTimeString("es-MX", {
+      hour: "numeric",
+      hour12: true,
+    }),
+    teamUE: parseFloat(row.team_total_ue ?? 0),
+    activeWorkers: Number(row.active_workers ?? 0),
+  }))
+
+  return {
+    date,
+    teamUE: parseFloat(dailyRow.data.team_total_ue ?? 0),
+    activeWorkers: Number(dailyRow.data.active_workers ?? 0),
+    totalRoutes: Number(dailyRow.data.total_routes_completed ?? 0),
+    totalFolios,
+    totalSkus,
+    totalWeightKg,
+    totalVolumeM3,
+    hourly,
+  }
+}
