@@ -17,17 +17,17 @@ function getCellColor(cell: TeamDayCell, maxUE: number): string {
 
   const score = cell.efficiencyScore
   if (score !== null) {
-    if (score >= 85) return "bg-[#22c55e]"
-    if (score >= 70) return "bg-[#16a34a]"
-    if (score >= 50) return "bg-[#15803d]"
-    return "bg-[#166534]"
+    if (score >= 85) return "bg-[#39d353]"
+    if (score >= 70) return "bg-[#26a641]"
+    if (score >= 50) return "bg-[#006d32]"
+    return "bg-[#0e4429]"
   }
 
   const pct = maxUE > 0 ? cell.teamUE / maxUE : 0
-  if (pct >= 0.75) return "bg-[#22c55e]"
-  if (pct >= 0.5) return "bg-[#16a34a]"
-  if (pct >= 0.25) return "bg-[#15803d]"
-  return "bg-[#166534]"
+  if (pct >= 0.75) return "bg-[#39d353]"
+  if (pct >= 0.5) return "bg-[#26a641]"
+  if (pct >= 0.25) return "bg-[#006d32]"
+  return "bg-[#0e4429]"
 }
 
 // Build an array of date strings covering last `days` days, aligned to Monday
@@ -132,10 +132,10 @@ export function ContributionHeatmap({ data, onDayClick, selectedDate }: Contribu
       <div className="flex items-center gap-2">
         <span className="text-[10px] text-muted-foreground">Menos</span>
         <div className="size-[10px] rounded-sm bg-muted" />
-        <div className="size-[10px] rounded-sm bg-[#166534]" />
-        <div className="size-[10px] rounded-sm bg-[#15803d]" />
-        <div className="size-[10px] rounded-sm bg-[#16a34a]" />
-        <div className="size-[10px] rounded-sm bg-[#22c55e]" />
+        <div className="size-[10px] rounded-sm bg-[#0e4429]" />
+        <div className="size-[10px] rounded-sm bg-[#006d32]" />
+        <div className="size-[10px] rounded-sm bg-[#26a641]" />
+        <div className="size-[10px] rounded-sm bg-[#39d353]" />
         <span className="text-[10px] text-muted-foreground">Más</span>
       </div>
     </div>
