@@ -12,21 +12,22 @@ interface ContributionHeatmapProps {
   selectedDate: string | null
 }
 
-function getCellColor(cell: TeamDayCell, maxUE: number): string {
+function getQuantileThresholds(data: TeamDayCell[]): [number, number, number] {
+  const values = data
+    .map((d) => d.teamUE)
+    .filter((v) => v > 0)
+    .sort((a, b) => a - b)
+  if (values.length === 0) return [0, 0, 0]
+  const at = (p: number) => values[Math.floor(p * (values.length - 1))]
+  return [at(0.25), at(0.5), at(0.75)]
+}
+
+function getCellColor(cell: TeamDayCell, thresholds: [number, number, number]): string {
   if (cell.teamUE === 0) return "bg-muted"
-
-  const score = cell.efficiencyScore
-  if (score !== null) {
-    if (score >= 85) return "bg-[#39d353]"
-    if (score >= 70) return "bg-[#26a641]"
-    if (score >= 50) return "bg-[#006d32]"
-    return "bg-[#0e4429]"
-  }
-
-  const pct = maxUE > 0 ? cell.teamUE / maxUE : 0
-  if (pct >= 0.75) return "bg-[#39d353]"
-  if (pct >= 0.5) return "bg-[#26a641]"
-  if (pct >= 0.25) return "bg-[#006d32]"
+  const [q1, q2, q3] = thresholds
+  if (cell.teamUE >= q3) return "bg-[#39d353]"
+  if (cell.teamUE >= q2) return "bg-[#26a641]"
+  if (cell.teamUE >= q1) return "bg-[#006d32]"
   return "bg-[#0e4429]"
 }
 
@@ -52,7 +53,7 @@ function buildGrid(data: TeamDayCell[], days: number): Array<TeamDayCell | null>
 const DAY_LABELS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
 
 export function ContributionHeatmap({ data, onDayClick, selectedDate }: ContributionHeatmapProps) {
-  const maxUE = data.length > 0 ? Math.max(...data.map((d) => d.teamUE)) : 0
+  const thresholds = getQuantileThresholds(data)
   const cells = buildGrid(data, 60)
   const totalCols = Math.ceil(cells.length / 7)
 
@@ -108,7 +109,7 @@ export function ContributionHeatmap({ data, onDayClick, selectedDate }: Contribu
                     <TooltipTrigger asChild>
                       <button
                         onClick={() => onDayClick(cell.date)}
-                        className={`size-[14px] rounded-sm transition-all hover:ring-2 hover:ring-white/30 ${getCellColor(cell, maxUE)} ${isSelected ? "ring-2 ring-white/60" : ""}`}
+                        className={`size-[14px] rounded-sm transition-all hover:ring-2 hover:ring-white/30 ${getCellColor(cell, thresholds)} ${isSelected ? "ring-2 ring-white/60" : ""}`}
                         aria-label={`${label}: ${cell.teamUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })} UE`}
                       />
                     </TooltipTrigger>
