@@ -23,6 +23,7 @@ import { SettingsPage } from "@/components/settings-page"
 import { Spotlight } from "@/components/spotlight"
 import { WorkerDetailDrawer } from "@/components/worker-detail-sheet"
 import { useAppStore } from "@/lib/store"
+import { useSettingsSync } from "@/hooks/use-settings-sync"
 import {
   useLeaderboard,
   useHourlyProgress,
@@ -62,6 +63,8 @@ function PageContent() {
       setActiveSection(defaultSection)
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useSettingsSync()
 
   const { data: members = [], isLoading, isError } = useLeaderboard(viewMode)
   const { data: dayProgress = [] } = useHourlyProgress()

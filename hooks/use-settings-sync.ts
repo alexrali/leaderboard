@@ -4,22 +4,20 @@ import { useEffect } from "react"
 import { useQuery, useMutation } from "@tanstack/react-query"
 import { useTheme } from "next-themes"
 import { toast } from "sonner"
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase/client"
 import { useAppStore, type AppSettings } from "@/lib/store"
-import { getDeviceKey } from "@/lib/utils"
-
-// Module-level flag: survives component remounts, resets only on full page reload.
-// Prevents re-hydrating from Supabase every time SettingsPage mounts/unmounts.
-let hydrationDone = false
 
 // ─── Remote read ──────────────────────────────────────────────────────────────
 
 async function fetchRemoteSettings(): Promise<AppSettings | null> {
-  const id = getDeviceKey()
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return null
+
   const { data, error } = await supabase
     .from("user_settings")
     .select("profile, appearance, preferences")
-    .eq("id", id)
+    .eq("id", user.id)
     .single()
 
   if (error) {
@@ -38,9 +36,12 @@ async function fetchRemoteSettings(): Promise<AppSettings | null> {
 // ─── Remote write ─────────────────────────────────────────────────────────────
 
 async function upsertRemoteSettings(settings: AppSettings): Promise<void> {
-  const id = getDeviceKey()
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error("Not authenticated")
+
   const { error } = await supabase.from("user_settings").upsert({
-    id,
+    id: user.id,
     profile: settings.userProfile,
     appearance: settings.appearance,
     preferences: settings.dashboardPrefs,
@@ -51,23 +52,21 @@ async function upsertRemoteSettings(settings: AppSettings): Promise<void> {
 // ─── Hook ─────────────────────────────────────────────────────────────────────
 
 export function useSettingsSync() {
-  const settings = useAppStore((s) => s.settings)
   const updateUserProfile = useAppStore((s) => s.updateUserProfile)
   const updateAppearance = useAppStore((s) => s.updateAppearance)
   const updateDashboardPrefs = useAppStore((s) => s.updateDashboardPrefs)
   const { setTheme } = useTheme()
 
-  // Hydrate from Supabase on mount (remote wins on conflict)
   const { data: remoteSettings } = useQuery({
     queryKey: ["user-settings"],
     queryFn: fetchRemoteSettings,
-    staleTime: Infinity, // only fetch once per session
+    staleTime: Infinity,
     retry: 1,
   })
 
+  // Hydrate store from Supabase — remote wins on conflict
   useEffect(() => {
-    if (!remoteSettings || hydrationDone) return
-    hydrationDone = true
+    if (!remoteSettings) return
     updateUserProfile(remoteSettings.userProfile)
     updateAppearance(remoteSettings.appearance)
     updateDashboardPrefs(remoteSettings.dashboardPrefs)
@@ -75,7 +74,6 @@ export function useSettingsSync() {
   // Zustand action references are stable; omitting them from deps is safe
   }, [remoteSettings]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Mutation for saving
   const { mutate: saveSettings, isPending } = useMutation({
     mutationFn: upsertRemoteSettings,
     onSuccess: () => toast.success("Configuración guardada"),

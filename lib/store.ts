@@ -48,8 +48,8 @@ interface AppState {
 
 const defaultSettings: AppSettings = {
   userProfile: {
-    displayName: "Alejandro RL",
-    role: "Ingeniero Líder",
+    displayName: "",
+    role: "",
   },
   appearance: {
     theme: "system",
