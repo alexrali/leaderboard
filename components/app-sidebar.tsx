@@ -172,7 +172,10 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton>
+                      <SidebarMenuSubButton
+                        isActive={activeSection === "members"}
+                        onClick={() => onSectionChange?.("members")}
+                      >
                         <span>Miembros</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>

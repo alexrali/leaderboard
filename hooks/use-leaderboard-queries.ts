@@ -12,7 +12,10 @@ import {
   getPanelKPIs,
   getTeamDailyHistory,
   getTeamDayDetail,
+  getMembersRangeSummary,
+  getMembersWeeklyTrend,
 } from "@/lib/leaderboard-queries"
+import type { MembersRange } from "@/lib/supabase"
 
 export function useLeaderboard(viewMode: "daily" | "weekly") {
   return useQuery({
@@ -78,5 +81,21 @@ export function useTeamDayDetail(date: string | null) {
     queryKey: ["teamDayDetail", date],
     queryFn: () => getTeamDayDetail(date!),
     enabled: !!date,
+  })
+}
+
+export function useMembersRangeSummary(range: MembersRange) {
+  return useQuery({
+    queryKey: ["membersRange", range],
+    queryFn: () => getMembersRangeSummary(range),
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
+export function useMembersWeeklyTrend(weeks: number) {
+  return useQuery({
+    queryKey: ["membersWeeklyTrend", weeks],
+    queryFn: () => getMembersWeeklyTrend(weeks),
+    staleTime: 5 * 60 * 1000,
   })
 }

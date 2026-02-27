@@ -132,3 +132,33 @@ export type LeaderboardEntry = {
   metric_value: number | null
   created_at: string
 }
+
+// ─── Members Range Summary (computed by getMembersRangeSummary) ───────────────
+
+export type MemberRangeSummary = {
+  worker_key: string
+  worker_name: string
+  avatar_initials: string | null
+  total_ue: number
+  total_hours: number
+  total_routes: number
+  days_worked: number
+  avg_ue_per_hour: number
+  avg_efficiency_score: number
+  avg_weekly_rank: number
+  current_streak: number
+  hit_target_pct: number // 0–100
+  trend: "up" | "down" | "stable"
+  trend_pct: number
+}
+
+export type MemberWeeklyTrendPoint = {
+  worker_key: string
+  worker_name: string
+  week_number: number
+  year: number
+  week_start_date: string
+  total_ue: number
+}
+
+export type MembersRange = "week" | "2weeks" | "month"

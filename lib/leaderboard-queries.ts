@@ -1,5 +1,6 @@
 import { supabase } from "./supabase"
 import type { TeamMember, DayProgress } from "./leaderboard-data"
+import type { MemberRangeSummary, MemberWeeklyTrendPoint, MembersRange } from "./supabase"
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -645,4 +646,139 @@ export async function getTeamDayDetail(date: string): Promise<TeamDayDetail | nu
     totalVolumeM3,
     hourly,
   }
+}
+
+// ─── Helpers: week range ──────────────────────────────────────────────────────
+
+function getWeekRangeStartDate(range: MembersRange): string {
+  const now = new Date()
+  const weeksBack = range === "week" ? 0 : range === "2weeks" ? 1 : 3
+  const d = new Date(now)
+  d.setDate(d.getDate() - weeksBack * 7)
+  // Return Monday of that week
+  const day = d.getDay() || 7
+  d.setDate(d.getDate() - day + 1)
+  return d.toISOString().split("T")[0]
+}
+
+// ─── Members Range Summary ────────────────────────────────────────────────────
+
+export async function getMembersRangeSummary(
+  range: MembersRange
+): Promise<MemberRangeSummary[]> {
+  const startDate = getWeekRangeStartDate(range)
+
+  const [weeklyResult, dailyResult] = await Promise.all([
+    supabase
+      .from("performance_weekly")
+      .select(
+        `
+        worker_key,
+        worker_name,
+        total_ue,
+        hours_worked,
+        routes_completed,
+        days_worked,
+        avg_ue_per_hour,
+        efficiency_score,
+        weekly_rank,
+        current_streak,
+        trend,
+        trend_percentage,
+        week_start_date,
+        workers (avatar_initials)
+        `
+      )
+      .gte("week_start_date", startDate)
+      .order("worker_key"),
+
+    supabase
+      .from("performance_daily")
+      .select("worker_key, hit_target")
+      .gte("date", startDate),
+  ])
+
+  if (weeklyResult.error) throw weeklyResult.error
+  if (!weeklyResult.data || weeklyResult.data.length === 0) return []
+
+  // Group weekly rows by worker
+  type WeeklyRow = (typeof weeklyResult.data)[number]
+  const byWorker = new Map<string, WeeklyRow[]>()
+  for (const row of weeklyResult.data) {
+    if (!byWorker.has(row.worker_key)) byWorker.set(row.worker_key, [])
+    byWorker.get(row.worker_key)!.push(row)
+  }
+
+  // hit_target per worker
+  const hitMap = new Map<string, { total: number; hit: number }>()
+  if (dailyResult.data) {
+    for (const row of dailyResult.data) {
+      if (!hitMap.has(row.worker_key)) hitMap.set(row.worker_key, { total: 0, hit: 0 })
+      const entry = hitMap.get(row.worker_key)!
+      entry.total++
+      if (row.hit_target) entry.hit++
+    }
+  }
+
+  return Array.from(byWorker.entries()).map(([worker_key, rows]) => {
+    const latest = rows.reduce((a, b) =>
+      a.week_start_date > b.week_start_date ? a : b
+    )
+    const totalUE = rows.reduce((s, r) => s + parseFloat(r.total_ue ?? 0), 0)
+    const totalHours = rows.reduce((s, r) => s + parseFloat(r.hours_worked ?? 0), 0)
+    const totalRoutes = rows.reduce((s, r) => s + Number(r.routes_completed ?? 0), 0)
+    const totalDays = rows.reduce((s, r) => s + Number(r.days_worked ?? 0), 0)
+    const avgUePerHour = totalHours > 0 ? totalUE / totalHours : 0
+    const avgEfficiency =
+      rows.reduce((s, r) => s + Number(r.efficiency_score ?? 0), 0) / rows.length
+    const avgRank =
+      rows.reduce((s, r) => s + Number(r.weekly_rank ?? 0), 0) / rows.length
+    const hitEntry = hitMap.get(worker_key)
+    const hitPct = hitEntry && hitEntry.total > 0
+      ? Math.round((hitEntry.hit / hitEntry.total) * 100)
+      : 0
+
+    return {
+      worker_key,
+      worker_name: latest.worker_name,
+      avatar_initials: (latest.workers as Array<{ avatar_initials: string | null }> | null)?.[0]?.avatar_initials ?? null,
+      total_ue: parseFloat(totalUE.toFixed(1)),
+      total_hours: parseFloat(totalHours.toFixed(1)),
+      total_routes: totalRoutes,
+      days_worked: totalDays,
+      avg_ue_per_hour: parseFloat(avgUePerHour.toFixed(2)),
+      avg_efficiency_score: parseFloat(avgEfficiency.toFixed(1)),
+      avg_weekly_rank: parseFloat(avgRank.toFixed(1)),
+      current_streak: Number(latest.current_streak ?? 0),
+      hit_target_pct: hitPct,
+      trend: (latest.trend as "up" | "down" | "stable") ?? "stable",
+      trend_pct: parseFloat(latest.trend_percentage ?? 0),
+    }
+  })
+}
+
+export async function getMembersWeeklyTrend(weeks: number): Promise<MemberWeeklyTrendPoint[]> {
+  const startDate = (() => {
+    const d = new Date()
+    d.setDate(d.getDate() - (weeks - 1) * 7)
+    const day = d.getDay() || 7
+    d.setDate(d.getDate() - day + 1)
+    return d.toISOString().split("T")[0]
+  })()
+
+  const { data, error } = await supabase
+    .from("performance_weekly")
+    .select("worker_key, worker_name, week_number, year, week_start_date, total_ue")
+    .gte("week_start_date", startDate)
+    .order("week_start_date", { ascending: true })
+
+  if (error) throw error
+  return (data ?? []).map((r) => ({
+    worker_key: r.worker_key,
+    worker_name: r.worker_name,
+    week_number: Number(r.week_number),
+    year: Number(r.year),
+    week_start_date: r.week_start_date,
+    total_ue: parseFloat(r.total_ue ?? 0),
+  }))
 }

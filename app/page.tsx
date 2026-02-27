@@ -20,6 +20,7 @@ import { SectionTabs } from "@/components/section-tabs"
 import { PanelOverview } from "@/components/panel-overview"
 import { WeeklyOverview } from "@/components/weekly-overview"
 import { SettingsPage } from "@/components/settings-page"
+import { MembersPage } from "@/components/miembros/members-page"
 import { Spotlight } from "@/components/spotlight"
 import { WorkerDetailDrawer } from "@/components/worker-detail-sheet"
 import { useAppStore } from "@/lib/store"
@@ -91,6 +92,7 @@ function PageContent() {
     resources: "Detalle de Recursos",
     dashboard: "Dashboard",
     panel: "Panel",
+    members: "Miembros",
     settings: "Configuración",
     account: "Mi Cuenta",
     notifications: "Notificaciones",
@@ -215,6 +217,7 @@ function PageContent() {
                   />
                 )}
                 {activeSection === "panel" && <PanelOverview />}
+                {activeSection === "members" && <MembersPage />}
                 {activeSection === "account" && (
                   <div className="text-muted-foreground py-20 text-center text-sm">
                     Perfil de cuenta — próximamente
