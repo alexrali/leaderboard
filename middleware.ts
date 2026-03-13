@@ -2,6 +2,14 @@ import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 
 export async function middleware(request: NextRequest) {
+  const isHermesEventsRoute = request.nextUrl.pathname.startsWith("/api/hermes/events")
+  const isHermesWebhookRoute = request.nextUrl.pathname.startsWith("/api/hermes/webhook")
+  const isHermesProcessDueRoute = request.nextUrl.pathname.startsWith("/api/hermes/process-due")
+
+  if (isHermesEventsRoute || isHermesWebhookRoute || isHermesProcessDueRoute) {
+    return NextResponse.next({ request })
+  }
+
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
