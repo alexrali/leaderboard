@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   Trophy,
   ChevronRight,
+  ChevronDown,
   FileText,
   Users,
   ShoppingBag,
@@ -346,6 +347,68 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton onClick={() => handleSectionChange()}>
                         <span>Tendencias</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </SidebarMenuItem>
+            </Collapsible>
+
+            {/* SRI — Sales Rep Intelligence */}
+            <Collapsible defaultOpen={false} asChild>
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton tooltip="SRI" onClick={() => handleSectionChange()}>
+                    <ShoppingBag />
+                    <span>SRI</span>
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuAction className="data-[state=open]:rotate-90">
+                    <ChevronRight />
+                    <span className="sr-only">Expandir</span>
+                  </SidebarMenuAction>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={activeSection === "sri-agentes"}
+                        onClick={() => handleSectionChange("sri-agentes")}
+                      >
+                        <span>Agentes</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={activeSection === "sri-clientes"}
+                        onClick={() => handleSectionChange("sri-clientes")}
+                      >
+                        <span>Clientes</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={activeSection === "sri-portafolio"}
+                        onClick={() => handleSectionChange("sri-portafolio")}
+                      >
+                        <span>Portafolio</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={activeSection === "sri-metas"}
+                        onClick={() => handleSectionChange("sri-metas")}
+                      >
+                        <span>Metas</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={activeSection === "sri-alertas"}
+                        onClick={() => handleSectionChange("sri-alertas")}
+                      >
+                        <span>Alertas</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
