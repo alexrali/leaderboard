@@ -26,6 +26,7 @@ import { WorkerDetailDrawer } from "@/components/worker-detail-sheet"
 import { AgentesPage } from "@/components/sri/pages/agentes-page"
 import { ClientesPage } from "@/components/sri/pages/clientes-page"
 import { PortafolioPage } from "@/components/sri/pages/portafolio-page"
+import { MetasPage } from "@/components/sri/pages/metas-page"
 import { useAppStore } from "@/lib/store"
 import { useSettingsSync } from "@/hooks/use-settings-sync"
 import {
@@ -229,11 +230,7 @@ function PageContent() {
                 {activeSection === "sri-agentes" && <AgentesPage />}
                 {activeSection === "sri-clientes" && <ClientesPage />}
                 {activeSection === "sri-portafolio" && <PortafolioPage />}
-                {activeSection === "sri-metas" && (
-                  <div className="text-muted-foreground py-20 text-center text-sm">
-                    Metas — próximamente
-                  </div>
-                )}
+                {activeSection === "sri-metas" && <MetasPage />}
                 {activeSection === "sri-alertas" && (
                   <div className="text-muted-foreground py-20 text-center text-sm">
                     Alertas — próximamente
