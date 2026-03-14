@@ -417,7 +417,7 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
                     onChange={(event) => updateValue("event_conditions_text", event.target.value)}
                     placeholder={eventConditionExample}
                   />
-                  <FieldDescription>Condiciones que debe cumplir el evento para activar esta rule. Formato: [{field, operator, value}]. Ej: [{field: "user.plan", operator: "eq", value: "pro"}]</FieldDescription>
+                  <FieldDescription>Condiciones que debe cumplir el evento para activar esta rule. Formato: arreglo de objetos con propiedades field, operator y value.</FieldDescription>
                 </Field>
               </TabsContent>
 
