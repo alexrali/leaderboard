@@ -23,6 +23,7 @@ import { SettingsPage } from "@/components/settings-page"
 import { MembersPage } from "@/components/miembros/members-page"
 import { Spotlight } from "@/components/spotlight"
 import { WorkerDetailDrawer } from "@/components/worker-detail-sheet"
+import { AgentesPage } from "@/components/sri/pages/agentes-page"
 import { useAppStore } from "@/lib/store"
 import { useSettingsSync } from "@/hooks/use-settings-sync"
 import {
@@ -96,6 +97,11 @@ function PageContent() {
     settings: "Configuración",
     account: "Mi Cuenta",
     notifications: "Notificaciones",
+    "sri-agentes": "Agentes",
+    "sri-clientes": "Clientes",
+    "sri-portafolio": "Portafolio",
+    "sri-metas": "Metas",
+    "sri-alertas": "Alertas",
   }
 
   return (
@@ -218,6 +224,27 @@ function PageContent() {
                 )}
                 {activeSection === "panel" && <PanelOverview />}
                 {activeSection === "members" && <MembersPage />}
+                {activeSection === "sri-agentes" && <AgentesPage />}
+                {activeSection === "sri-clientes" && (
+                  <div className="text-muted-foreground py-20 text-center text-sm">
+                    Clientes — próximamente
+                  </div>
+                )}
+                {activeSection === "sri-portafolio" && (
+                  <div className="text-muted-foreground py-20 text-center text-sm">
+                    Portafolio — próximamente
+                  </div>
+                )}
+                {activeSection === "sri-metas" && (
+                  <div className="text-muted-foreground py-20 text-center text-sm">
+                    Metas — próximamente
+                  </div>
+                )}
+                {activeSection === "sri-alertas" && (
+                  <div className="text-muted-foreground py-20 text-center text-sm">
+                    Alertas — próximamente
+                  </div>
+                )}
                 {activeSection === "account" && (
                   <div className="text-muted-foreground py-20 text-center text-sm">
                     Perfil de cuenta — próximamente
