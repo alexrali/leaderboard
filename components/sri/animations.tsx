@@ -1,9 +1,9 @@
 "use client"
 
-import { motion, useReducedMotion } from "framer-motion"
+import { motion, useReducedMotion, Variants } from "framer-motion"
 
 // Staggered entrance variants for lists
-export const staggerContainer = {
+export const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -14,7 +14,7 @@ export const staggerContainer = {
   },
 }
 
-export const staggerItem = {
+export const staggerItem: Variants = {
   hidden: { opacity: 0, y: 8 },
   show: {
     opacity: 1,
