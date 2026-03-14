@@ -11,13 +11,6 @@ import { formatHermesDateTime, shortenHermesId } from "@/lib/hermes/display"
 export default async function MessagingReviewPage() {
   const recentEvents = await listHermesAdminEvents({ limit: 10 })
 
-  const gaps = [
-    "Versionado y diff de templates/rules antes de publicar cambios.",
-    "Búsqueda, filtros avanzados y exportación para timelines y delivery logs.",
-    "Audit trail por usuario para cambios administrativos en Hermes.",
-    "Recipient resolvers LOOKUP/GROUP con vistas de debugging y fallback controlado.",
-  ]
-
   return (
     <div className="flex flex-col gap-6">
       <HermesPageHeader
@@ -69,19 +62,6 @@ export default async function MessagingReviewPage() {
                 ))}
               </TableBody>
             </Table>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>High-level gaps</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc space-y-2 pl-5 text-sm text-muted-foreground">
-              {gaps.map((gap) => (
-                <li key={gap}>{gap}</li>
-              ))}
-            </ul>
           </CardContent>
         </Card>
       </div>

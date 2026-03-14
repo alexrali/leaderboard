@@ -18,7 +18,7 @@ const emailSchema = z.object({
 })
 
 const codeSchema = z.object({
-  code: z.string().min(6, "Ingresa el código de tu correo"),
+  code: z.string().min(8, "Ingresa el código de 8 dígitos de tu correo"),
 })
 
 type EmailFormData = z.infer<typeof emailSchema>

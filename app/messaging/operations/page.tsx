@@ -35,10 +35,10 @@ export default async function MessagingOperationsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Uso</CardTitle>
+          <CardTitle>Panel de operaciones manuales</CardTitle>
         </CardHeader>
         <CardContent className="text-muted-foreground text-sm leading-6">
-          Estas acciones usan rutas autenticadas bajo `/api/hermes/admin/operations/*`. Son útiles para pruebas, soporte operativo y carga de ejemplos sin exponer el `HERMES_API_SECRET` al navegador.
+          Usa estos controles para procesar eventos, reintentar tareas fallidas o cargar datos de ejemplo. Las operaciones se ejecutan con tu sesión de admin sin necesidad de claves API.
         </CardContent>
       </Card>
 

@@ -1,9 +1,10 @@
 import Link from "next/link"
+import { Workflow } from "lucide-react"
 import { HermesPageHeader } from "@/components/hermes/hermes-page-header"
 import { HermesStatusBadge } from "@/components/hermes/hermes-status-badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { listHermesAdminRules } from "@/lib/hermes/admin"
 import { formatHermesDateTime, shortenHermesId } from "@/lib/hermes/display"
@@ -36,9 +37,19 @@ export default async function MessagingRulesPage() {
           {rules.length === 0 ? (
             <Empty>
               <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Workflow className="size-6" />
+                </EmptyMedia>
                 <EmptyTitle>Sin rules</EmptyTitle>
-                <EmptyDescription>No hay rules registradas todavía en `hermes_rules`.</EmptyDescription>
+                <EmptyDescription>
+                  No hay rules configuradas todavía. Las rules definen qué eventos disparan envíos y cuándo.
+                </EmptyDescription>
               </EmptyHeader>
+              <EmptyContent>
+                <Button asChild>
+                  <Link href="/messaging/rules/new">Crear primera rule</Link>
+                </Button>
+              </EmptyContent>
             </Empty>
           ) : (
             <Table>

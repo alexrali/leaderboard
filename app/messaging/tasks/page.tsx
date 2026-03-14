@@ -1,10 +1,11 @@
 import Link from "next/link"
+import { Clock } from "lucide-react"
 import { HermesFilterLinks } from "@/components/hermes/hermes-filter-links"
 import { HermesPageHeader } from "@/components/hermes/hermes-page-header"
 import { HermesStatusBadge } from "@/components/hermes/hermes-status-badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { listHermesAdminScheduledTasks } from "@/lib/hermes/admin"
 import { formatHermesDateTime, shortenHermesId } from "@/lib/hermes/display"
@@ -52,9 +53,23 @@ export default async function MessagingTasksPage({ searchParams }: TasksPageProp
           {tasks.length === 0 ? (
             <Empty>
               <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Clock className="size-6" />
+                </EmptyMedia>
                 <EmptyTitle>Sin tareas</EmptyTitle>
-                <EmptyDescription>No hay tareas para el filtro seleccionado.</EmptyDescription>
+                <EmptyDescription>
+                  {currentStatus === "ALL"
+                    ? "No hay tareas programadas. Las tareas se crean cuando una rule con schedule procesa un evento."
+                    : "No hay tareas con el estado seleccionado. Prueba cambiando el filtro."}
+                </EmptyDescription>
               </EmptyHeader>
+              {currentStatus === "ALL" && (
+                <EmptyContent>
+                  <Button asChild variant="outline">
+                    <Link href="/messaging/rules">Ver rules</Link>
+                  </Button>
+                </EmptyContent>
+              )}
             </Empty>
           ) : (
             <Table>

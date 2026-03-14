@@ -1,8 +1,9 @@
 import Link from "next/link"
+import { FileX } from "lucide-react"
 import { HermesPageHeader } from "@/components/hermes/hermes-page-header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { listHermesAdminTemplates } from "@/lib/hermes/admin"
 import { formatHermesBoolean, formatHermesDateTime } from "@/lib/hermes/display"
@@ -57,9 +58,19 @@ export default async function MessagingTemplatesPage() {
           {templates.length === 0 ? (
             <Empty>
               <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <FileX className="size-6" />
+                </EmptyMedia>
                 <EmptyTitle>Sin templates</EmptyTitle>
-                <EmptyDescription>No hay templates cargados todavía en `hermes_templates`.</EmptyDescription>
+                <EmptyDescription>
+                  No hay templates creados todavía. Los templates definen el diseño y contenido de tus correos.
+                </EmptyDescription>
               </EmptyHeader>
+              <EmptyContent>
+                <Button asChild>
+                  <Link href="/messaging/templates/new">Crear primer template</Link>
+                </Button>
+              </EmptyContent>
             </Empty>
           ) : (
             <Table>

@@ -1,10 +1,11 @@
 import Link from "next/link"
+import { Send } from "lucide-react"
 import { HermesFilterLinks } from "@/components/hermes/hermes-filter-links"
 import { HermesPageHeader } from "@/components/hermes/hermes-page-header"
 import { HermesStatusBadge } from "@/components/hermes/hermes-status-badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { listHermesAdminDeliveryLogs } from "@/lib/hermes/admin"
 import { formatHermesDateTime, shortenHermesId } from "@/lib/hermes/display"
@@ -53,9 +54,23 @@ export default async function MessagingDeliveryPage({ searchParams }: DeliveryPa
           {deliveries.length === 0 ? (
             <Empty>
               <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Send className="size-6" />
+                </EmptyMedia>
                 <EmptyTitle>Sin entregas</EmptyTitle>
-                <EmptyDescription>No hay registros para el filtro seleccionado.</EmptyDescription>
+                <EmptyDescription>
+                  {currentStatus === "ALL"
+                    ? "No hay entregas registradas todavía. Las entregas se crean cuando un template se envía exitosamente."
+                    : "No hay entregas con el estado seleccionado. Prueba cambiando el filtro."}
+                </EmptyDescription>
               </EmptyHeader>
+              {currentStatus === "ALL" && (
+                <EmptyContent>
+                  <Button asChild variant="outline">
+                    <Link href="/messaging/review">Probar envío de prueba</Link>
+                  </Button>
+                </EmptyContent>
+              )}
             </Empty>
           ) : (
             <Table>
@@ -75,10 +90,12 @@ export default async function MessagingDeliveryPage({ searchParams }: DeliveryPa
                   <TableRow key={delivery.id}>
                     <TableCell>
                       <div className="flex flex-col">
-                        <Link href={`/messaging/delivery/${delivery.id}`} className="font-medium hover:underline">
+                        <Link href={`/messaging/delivery/${delivery.id}`} className="font-medium hover:underline truncate max-w-[200px]" title={delivery.recipient_email}>
                           {delivery.recipient_email}
                         </Link>
-                        <span className="text-muted-foreground text-xs">{delivery.subject ?? "Sin asunto"}</span>
+                        <span className="text-muted-foreground text-xs truncate max-w-[200px]" title={delivery.subject ?? undefined}>
+                          {delivery.subject ?? "Sin asunto"}
+                        </span>
                       </div>
                     </TableCell>
                     <TableCell><HermesStatusBadge status={delivery.status} /></TableCell>

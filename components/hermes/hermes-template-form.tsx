@@ -143,7 +143,7 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
       const parsedVariables = JSON.parse(values.variables_text)
       if (!Array.isArray(parsedVariables)) {
         return {
-          error: "Variables debe ser un arreglo JSON",
+          error: "Variables debe ser un arreglo JSON. Usa corchetes []: [{name, type, ...}]",
           rendered: null,
           variablesCount: 0,
         }
@@ -151,7 +151,7 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
       variables = normalizeTemplateVariables(parsedVariables)
     } catch {
       return {
-        error: "Variables JSON no es válido",
+        error: "Variables JSON no es válido. Revisa comillas, llaves y comas.",
         rendered: null,
         variablesCount: 0,
       }
@@ -161,7 +161,7 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
       const parsedDefaults = JSON.parse(values.default_values_text)
       if (!isRecord(parsedDefaults)) {
         return {
-          error: "Default values debe ser un objeto JSON",
+          error: "Default values debe ser un objeto JSON. Usa llaves {}: {clave: valor}",
           rendered: null,
           variablesCount: variables.length,
         }
@@ -169,7 +169,7 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
       defaultValues = parsedDefaults as HermesJsonObject
     } catch {
       return {
-        error: "Default values JSON no es válido",
+        error: "Default values JSON no es válido. Revisa comillas, llaves y comas.",
         rendered: null,
         variablesCount: variables.length,
       }
@@ -179,7 +179,7 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
       const parsedSampleValues = JSON.parse(values.sample_values_text)
       if (!isRecord(parsedSampleValues)) {
         return {
-          error: "Sample values debe ser un objeto JSON",
+          error: "Sample values debe ser un objeto JSON. Usa llaves {}: {clave: valor}",
           rendered: null,
           variablesCount: variables.length,
         }
@@ -187,7 +187,7 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
       sampleValues = parsedSampleValues
     } catch {
       return {
-        error: "Sample values JSON no es válido",
+        error: "Sample values JSON no es válido. Revisa comillas, llaves y comas.",
         rendered: null,
         variablesCount: variables.length,
       }
@@ -253,24 +253,24 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
     try {
       variables = JSON.parse(values.variables_text)
     } catch {
-      toast.error("Variables JSON no es válido")
+      toast.error("Variables JSON no es válido. Revisa comillas, corchetes y comas.")
       return
     }
 
     try {
       defaultValues = JSON.parse(values.default_values_text)
     } catch {
-      toast.error("Default values JSON no es válido")
+      toast.error("Default values JSON no es válido. Revisa comillas, llaves y comas.")
       return
     }
 
     if (!Array.isArray(variables)) {
-      toast.error("Variables debe ser un arreglo JSON")
+      toast.error("Variables debe ser un arreglo JSON. Usa corchetes []: [{...}]")
       return
     }
 
     if (!defaultValues || typeof defaultValues !== "object" || Array.isArray(defaultValues)) {
-      toast.error("Default values debe ser un objeto JSON")
+      toast.error("Default values debe ser un objeto JSON. Usa llaves {}: {...}")
       return
     }
 
@@ -299,21 +299,21 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
         body: JSON.stringify(payload),
       })
 
-      const data = (await response.json().catch(() => ({ success: false, error: ["Invalid JSON response"] }))) as {
+      const data = (await response.json().catch(() => ({ success: false, error: ["El servidor no respondió correctamente"] }))) as {
         success: boolean
         item?: { id: string }
         error?: string[]
       }
 
       if (!response.ok || !data.success || !data.item) {
-        throw new Error(data.error?.join(" | ") ?? "No se pudo guardar el template")
+        throw new Error(data.error?.join(". ") ?? "No se pudo guardar el template. Intenta de nuevo.")
       }
 
-      toast.success(mode === "create" ? "Template creado" : "Template actualizado")
+      toast.success(mode === "create" ? "template creado correctamente" : "template actualizado correctamente")
       router.push(`/messaging/templates/${data.item.id}`)
       router.refresh()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "No se pudo guardar el template")
+      toast.error(error instanceof Error ? error.message : "No se pudo guardar el template. Verifica tu conexión e intenta de nuevo.")
     } finally {
       setIsSubmitting(false)
     }
@@ -333,7 +333,7 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
                 {isSubmitting ? "Guardando…" : actionLabel}
               </Button>
               <Button asChild variant="outline">
-                <Link href={isEditMode ? `/messaging/templates/${initialValue.id}` : "/messaging/templates"}>Cancelar</Link>
+                <Link href={isEditMode ? `/messaging/templates/${initialValue.id}` : "/messaging/templates"}>Cancelar y volver</Link>
               </Button>
             </div>
 

@@ -6,6 +6,16 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface OperationResponse {
   success: boolean
@@ -23,12 +33,25 @@ export function HermesOperationsPanel() {
   const [bulkTaskLimit, setBulkTaskLimit] = useState("10")
   const [busyKey, setBusyKey] = useState<string | null>(null)
   const [result, setResult] = useState<unknown>(null)
+  const [confirmDialog, setConfirmDialog] = useState<{
+    type: "bulk-reprocess-events" | "bulk-retry-tasks" | "bulk-cancel-tasks"
+    count: number
+  } | null>(null)
 
   function parseIds(value: string) {
     return value
       .split(/[\n,\s]+/)
       .map((entry) => entry.trim())
       .filter((entry) => entry.length > 0)
+  }
+
+  function getBulkCount() {
+    const eventIds = parseIds(bulkEventIds)
+    const taskIds = parseIds(bulkTaskIds)
+    return {
+      eventCount: eventIds.length > 0 ? eventIds.length : Number(bulkEventLimit) || 10,
+      taskCount: taskIds.length > 0 ? taskIds.length : Number(bulkTaskLimit) || 10,
+    }
   }
 
   async function runOperation(key: string, url: string, payload?: Record<string, unknown>) {
@@ -46,12 +69,14 @@ export function HermesOperationsPanel() {
       setResult(data)
 
       if (!response.ok || !data.success) {
-        throw new Error(data.error?.join(" | ") ?? "Operation failed")
+        const errorMsg = data.error?.join(". ") ?? "No se pudo completar la operación"
+        throw new Error(errorMsg)
       }
 
-      toast.success("Operación ejecutada correctamente")
+      toast.success("Operación completada")
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Operation failed")
+      const msg = error instanceof Error ? error.message : "Ocurrió un error al ejecutar la operación"
+      toast.error(msg)
     } finally {
       setBusyKey(null)
     }
@@ -62,7 +87,7 @@ export function HermesOperationsPanel() {
       <Card>
         <CardHeader>
           <CardTitle>Procesar tareas vencidas</CardTitle>
-          <CardDescription>Ejecuta manualmente la cola vencida sin pasar por el endpoint externo protegido por secret.</CardDescription>
+          <CardDescription>Ejecuta tareas programadas cuya hora ya pasó. Útil para procesar envíos pendientes.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Input
@@ -78,7 +103,7 @@ export function HermesOperationsPanel() {
             disabled={busyKey === "process-due"}
             onClick={() => runOperation("process-due", "/api/hermes/admin/operations/process-due", { limit: Number(dueLimit) || 25 })}
           >
-            {busyKey === "process-due" ? "Procesando…" : "Procesar cola"}
+            {busyKey === "process-due" ? "Procesando…" : "Procesar tareas"}
           </Button>
         </CardContent>
       </Card>
@@ -86,7 +111,7 @@ export function HermesOperationsPanel() {
       <Card>
         <CardHeader>
           <CardTitle>Reprocesar evento</CardTitle>
-          <CardDescription>Vuelve a ejecutar el pipeline real de un evento existente por su `id`.</CardDescription>
+          <CardDescription>Vuelve a ejecutar el pipeline de matching y delivery para un evento existente.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Input value={eventId} onChange={(event) => setEventId(event.target.value)} placeholder="UUID del evento" />
@@ -103,7 +128,7 @@ export function HermesOperationsPanel() {
       <Card>
         <CardHeader>
           <CardTitle>Reintentar tarea</CardTitle>
-          <CardDescription>Ejecuta de nuevo una tarea programada específica por su `id`.</CardDescription>
+          <CardDescription>Marca una tarea fallida para que se intente ejecutar nuevamente.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Input value={taskId} onChange={(event) => setTaskId(event.target.value)} placeholder="UUID de la tarea" />
@@ -119,8 +144,8 @@ export function HermesOperationsPanel() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Bulk reprocesar eventos</CardTitle>
-          <CardDescription>Reprocesa varios eventos por IDs o toma los últimos fallidos por límite.</CardDescription>
+          <CardTitle>Reprocesar varios eventos</CardTitle>
+          <CardDescription>Reprocesa eventos por ID o los últimos eventos fallidos (máx. 100).</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Textarea
@@ -140,23 +165,20 @@ export function HermesOperationsPanel() {
           <Button
             className="w-full"
             disabled={busyKey === "bulk-reprocess-events"}
-            onClick={() =>
-              runOperation("bulk-reprocess-events", "/api/hermes/admin/operations/events/bulk-reprocess", {
-                ids: parseIds(bulkEventIds),
-                limit: Number(bulkEventLimit) || 10,
-                status: "FAILED",
-              })
-            }
+            onClick={() => {
+              const count = getBulkCount()
+              setConfirmDialog({ type: "bulk-reprocess-events", count: count.eventCount })
+            }}
           >
-            {busyKey === "bulk-reprocess-events" ? "Procesando…" : "Bulk reprocesar"}
+            {busyKey === "bulk-reprocess-events" ? "Procesando…" : "Reprocesar eventos"}
           </Button>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Bulk retry tasks</CardTitle>
-          <CardDescription>Reintenta varias tareas por IDs o las últimas tareas fallidas/retrying/pending.</CardDescription>
+          <CardTitle>Reintentar varias tareas</CardTitle>
+          <CardDescription>Reintenta tareas por ID o las últimas tareas en estado failed/retrying/pending.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Textarea
@@ -176,22 +198,20 @@ export function HermesOperationsPanel() {
           <Button
             className="w-full"
             disabled={busyKey === "bulk-retry-tasks"}
-            onClick={() =>
-              runOperation("bulk-retry-tasks", "/api/hermes/admin/operations/tasks/bulk-retry", {
-                ids: parseIds(bulkTaskIds),
-                limit: Number(bulkTaskLimit) || 10,
-              })
-            }
+            onClick={() => {
+              const count = getBulkCount()
+              setConfirmDialog({ type: "bulk-retry-tasks", count: count.taskCount })
+            }}
           >
-            {busyKey === "bulk-retry-tasks" ? "Procesando…" : "Bulk retry"}
+            {busyKey === "bulk-retry-tasks" ? "Procesando…" : "Reintentar tareas"}
           </Button>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Bulk cancel tasks</CardTitle>
-          <CardDescription>Cancela varias tareas por IDs o las últimas tareas activas de la cola.</CardDescription>
+          <CardTitle>Cancelar varias tareas</CardTitle>
+          <CardDescription>Cancela tareas por ID o las últimas tareas activas de la cola (pending/retrying).</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Textarea
@@ -211,14 +231,12 @@ export function HermesOperationsPanel() {
           <Button
             className="w-full"
             disabled={busyKey === "bulk-cancel-tasks"}
-            onClick={() =>
-              runOperation("bulk-cancel-tasks", "/api/hermes/admin/operations/tasks/bulk-cancel", {
-                ids: parseIds(bulkTaskIds),
-                limit: Number(bulkTaskLimit) || 10,
-              })
-            }
+            onClick={() => {
+              const count = getBulkCount()
+              setConfirmDialog({ type: "bulk-cancel-tasks", count: count.taskCount })
+            }}
           >
-            {busyKey === "bulk-cancel-tasks" ? "Procesando…" : "Bulk cancel"}
+            {busyKey === "bulk-cancel-tasks" ? "Procesando…" : "Cancelar tareas"}
           </Button>
         </CardContent>
       </Card>
@@ -226,18 +244,18 @@ export function HermesOperationsPanel() {
       <Card>
         <CardHeader>
           <CardTitle>Instalar ejemplos Hermes</CardTitle>
-          <CardDescription>Crea o actualiza 2 templates y 2 rules de referencia inspirados en hermes-base para validar flujos end-to-end.</CardDescription>
+          <CardDescription>Crea 2 templates y 2 rules de ejemplo para probar el sistema end-to-end.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="text-muted-foreground text-sm leading-6">
-            Ejecuta esta acción cuando quieras dejar una base conocida para probar review, timeline, deliveries inmediatas y tareas diferidas.
+            Úsalo para tener datos de prueba en review, timeline y deliveries. No sobrescribe templates/rules existentes con el mismo nombre.
           </div>
           <Button
             className="w-full"
             disabled={busyKey === "bootstrap-examples"}
             onClick={() => runOperation("bootstrap-examples", "/api/hermes/admin/operations/bootstrap-examples")}
           >
-            {busyKey === "bootstrap-examples" ? "Instalando…" : "Instalar ejemplos"}
+            {busyKey === "bootstrap-examples" ? "Instalando ejemplos…" : "Instalar ejemplos"}
           </Button>
         </CardContent>
       </Card>
@@ -253,6 +271,55 @@ export function HermesOperationsPanel() {
           </pre>
         </CardContent>
       </Card>
+
+      <AlertDialog open={confirmDialog !== null} onOpenChange={(open) => !open && setConfirmDialog(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {confirmDialog?.type === "bulk-reprocess-events" && "Reprocesar eventos"}
+              {confirmDialog?.type === "bulk-retry-tasks" && "Reintentar tareas"}
+              {confirmDialog?.type === "bulk-cancel-tasks" && "Cancelar tareas"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {confirmDialog?.type === "bulk-reprocess-events" &&
+                `¿Reprocesar ${confirmDialog.count} evento${confirmDialog.count > 1 ? "s" : ""}? Esto volverá a ejecutar el pipeline de matching y delivery.`}
+              {confirmDialog?.type === "bulk-retry-tasks" &&
+                `¿Reintentar ${confirmDialog.count} tarea${confirmDialog.count > 1 ? "s" : ""}? Esto marcará las tareas para ejecutar nuevamente.`}
+              {confirmDialog?.type === "bulk-cancel-tasks" &&
+                `¿Cancelar ${confirmDialog.count} tarea${confirmDialog.count > 1 ? "s" : ""}? Esto eliminará las tareas de la cola y no se pueden recuperar.`}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                if (!confirmDialog) return
+                const { type, count } = confirmDialog
+
+                if (type === "bulk-reprocess-events") {
+                  await runOperation("bulk-reprocess-events", "/api/hermes/admin/operations/events/bulk-reprocess", {
+                    ids: parseIds(bulkEventIds),
+                    limit: Number(bulkEventLimit) || 10,
+                    status: "FAILED",
+                  })
+                } else if (type === "bulk-retry-tasks") {
+                  await runOperation("bulk-retry-tasks", "/api/hermes/admin/operations/tasks/bulk-retry", {
+                    ids: parseIds(bulkTaskIds),
+                    limit: Number(bulkTaskLimit) || 10,
+                  })
+                } else if (type === "bulk-cancel-tasks") {
+                  await runOperation("bulk-cancel-tasks", "/api/hermes/admin/operations/tasks/bulk-cancel", {
+                    ids: parseIds(bulkTaskIds),
+                    limit: Number(bulkTaskLimit) || 10,
+                  })
+                }
+              }}
+            >
+              Confirmar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

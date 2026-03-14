@@ -153,7 +153,7 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
       const parsedConditions = JSON.parse(values.event_conditions_text)
       if (!Array.isArray(parsedConditions)) {
         return {
-          error: "Event conditions debe ser un arreglo JSON",
+          error: "Event conditions debe ser un arreglo JSON. Usa corchetes [] con condiciones dentro: [{...}]",
           eventConditionsCount: 0,
           scheduleConfigKeys: 0,
           recipientConfigKeys: 0,
@@ -163,7 +163,7 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
       const parsedScheduleConfig = JSON.parse(values.schedule_config_text)
       if (!parsedScheduleConfig || typeof parsedScheduleConfig !== "object" || Array.isArray(parsedScheduleConfig)) {
         return {
-          error: "Schedule config debe ser un objeto JSON",
+          error: "Schedule config debe ser un objeto JSON. Usa llaves {} con clave:valor",
           eventConditionsCount: parsedConditions.length,
           scheduleConfigKeys: 0,
           recipientConfigKeys: 0,
@@ -173,7 +173,7 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
       const parsedRecipientConfig = JSON.parse(values.recipient_config_text)
       if (!parsedRecipientConfig || typeof parsedRecipientConfig !== "object" || Array.isArray(parsedRecipientConfig)) {
         return {
-          error: "Recipient config debe ser un objeto JSON",
+          error: "Recipient config debe ser un objeto JSON. Usa llaves {} con clave:valor",
           eventConditionsCount: parsedConditions.length,
           scheduleConfigKeys: Object.keys(parsedScheduleConfig).length,
           recipientConfigKeys: 0,
@@ -188,7 +188,7 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
       }
     } catch {
       return {
-        error: "Hay JSON inválido en la configuración avanzada",
+        error: "Hay JSON inválido en la configuración. Revisa comillas, llaves y comas.",
         eventConditionsCount: 0,
         scheduleConfigKeys: 0,
         recipientConfigKeys: 0,
@@ -206,36 +206,36 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
     try {
       eventConditions = JSON.parse(values.event_conditions_text)
     } catch {
-      toast.error("Event conditions JSON no es válido")
+      toast.error("Event conditions: formato JSON inválido. Revisa comillas y corchetes.")
       return
     }
 
     try {
       scheduleConfig = JSON.parse(values.schedule_config_text)
     } catch {
-      toast.error("Schedule config JSON no es válido")
+      toast.error("Schedule config: formato JSON inválido. Revisa comillas y llaves.")
       return
     }
 
     try {
       recipientConfig = JSON.parse(values.recipient_config_text)
     } catch {
-      toast.error("Recipient config JSON no es válido")
+      toast.error("Recipient config: formato JSON inválido. Revisa comillas y llaves.")
       return
     }
 
     if (!Array.isArray(eventConditions)) {
-      toast.error("Event conditions debe ser un arreglo JSON")
+      toast.error("Event conditions debe ser un arreglo JSON. Usa corchetes []: [{...}]")
       return
     }
 
     if (!scheduleConfig || typeof scheduleConfig !== "object" || Array.isArray(scheduleConfig)) {
-      toast.error("Schedule config debe ser un objeto JSON")
+      toast.error("Schedule config debe ser un objeto JSON. Usa llaves {}: {...}")
       return
     }
 
     if (!recipientConfig || typeof recipientConfig !== "object" || Array.isArray(recipientConfig)) {
-      toast.error("Recipient config debe ser un objeto JSON")
+      toast.error("Recipient config debe ser un objeto JSON. Usa llaves {}: {...}")
       return
     }
 
@@ -264,21 +264,21 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
         body: JSON.stringify(payload),
       })
 
-      const data = (await response.json().catch(() => ({ success: false, error: ["Invalid JSON response"] }))) as {
+      const data = (await response.json().catch(() => ({ success: false, error: ["El servidor no respondió correctamente"] }))) as {
         success: boolean
         item?: { id: string }
         error?: string[]
       }
 
       if (!response.ok || !data.success || !data.item) {
-        throw new Error(data.error?.join(" | ") ?? "No se pudo guardar la rule")
+        throw new Error(data.error?.join(". ") ?? "No se pudo guardar la rule. Intenta de nuevo.")
       }
 
-      toast.success(mode === "create" ? "Rule creada" : "Rule actualizada")
+      toast.success(mode === "create" ? "rule creada correctamente" : "rule actualizada correctamente")
       router.push(`/messaging/rules/${data.item.id}`)
       router.refresh()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "No se pudo guardar la rule")
+      toast.error(error instanceof Error ? error.message : "No se pudo guardar la rule. Verifica tu conexión e intenta de nuevo.")
     } finally {
       setIsSubmitting(false)
     }
@@ -298,7 +298,7 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
                 {isSubmitting ? "Guardando…" : mode === "create" ? "Crear rule" : "Guardar cambios"}
               </Button>
               <Button asChild variant="outline">
-                <Link href={isEditMode ? `/messaging/rules/${initialValue?.id}` : "/messaging/rules"}>Cancelar</Link>
+                <Link href={isEditMode ? `/messaging/rules/${initialValue?.id}` : "/messaging/rules"}>Cancelar y volver</Link>
               </Button>
             </div>
 
@@ -350,10 +350,18 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
                       ))}
                     </SelectContent>
                   </Select>
+                  <FieldDescription>
+                    {values.schedule_type === "IMMEDIATE" && "Envía inmediatamente cuando el evento coincide."}
+                    {values.schedule_type === "DELAYED" && "Espera un tiempo definido antes de enviar."}
+                    {values.schedule_type === "SCHEDULED" && "Envía a una hora específica en zona horaria determinada."}
+                    {values.schedule_type === "RECURRING" && "Envía periódicamente usando expresión cron."}
+                    {values.schedule_type === "BATCHED" && "Agrupa múltiples eventos y envía en ventana de tiempo."}
+                  </FieldDescription>
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="rule-timezone">Timezone</FieldLabel>
                   <Input id="rule-timezone" value={values.timezone} onChange={(event) => updateValue("timezone", event.target.value)} />
+                  <FieldDescription>Zona horaria para schedules tipo SCHEDULED y RECURRING. Ej: America/Mexico_City</FieldDescription>
                 </Field>
                 <Field>
                   <FieldLabel>Recipient type</FieldLabel>
@@ -367,7 +375,12 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
                       ))}
                     </SelectContent>
                   </Select>
-                  <FieldDescription>LOOKUP y GROUP siguen visibles para edición, pero el runtime actual los marca como no implementados.</FieldDescription>
+                  <FieldDescription>
+                    {values.recipient_type === "STATIC" && "Lista fija de correos definida en la config."}
+                    {values.recipient_type === "DYNAMIC" && "Extrae correo del payload del evento usando rutas JSON."}
+                    {values.recipient_type === "CONDITIONAL" && "Elige destinatarios basándose en condiciones del evento."}
+                    {(values.recipient_type === "LOOKUP" || values.recipient_type === "GROUP") && "⚠️ No implementado aún en el runtime."}
+                  </FieldDescription>
                 </Field>
                 <Field className="flex-row items-center justify-between rounded-lg border p-4">
                   <div className="space-y-1">
@@ -404,7 +417,7 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
                     onChange={(event) => updateValue("event_conditions_text", event.target.value)}
                     placeholder={eventConditionExample}
                   />
-                  <FieldDescription>Arreglo JSON de condiciones evaluadas por el runtime antes de resolver recipients y template.</FieldDescription>
+                  <FieldDescription>Condiciones que debe cumplir el evento para activar esta rule. Formato: [{field, operator, value}]. Ej: [{field: "user.plan", operator: "eq", value: "pro"}]</FieldDescription>
                 </Field>
               </TabsContent>
 
@@ -418,7 +431,7 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
                     onChange={(event) => updateValue("schedule_config_text", event.target.value)}
                     placeholder={scheduleConfigExamples[values.schedule_type]}
                   />
-                  <FieldDescription>Objeto JSON libre para la estrategia de schedule seleccionada.</FieldDescription>
+                  <FieldDescription>Configuración específica para el tipo de schedule. El placeholder muestra el formato correcto según el tipo seleccionado.</FieldDescription>
                 </Field>
               </TabsContent>
 
@@ -432,7 +445,7 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
                     onChange={(event) => updateValue("recipient_config_text", event.target.value)}
                     placeholder={recipientConfigExamples[values.recipient_type]}
                   />
-                  <FieldDescription>Objeto JSON completo para el tipo de recipient seleccionado.</FieldDescription>
+                  <FieldDescription>Configuración de destinatarios según el tipo seleccionado. El placeholder muestra ejemplos correctos para STATIC (emails), DYNAMIC (rutas), CONDITIONAL (reglas), etc.</FieldDescription>
                 </Field>
               </TabsContent>
             </Tabs>

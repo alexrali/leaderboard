@@ -1,10 +1,11 @@
 import Link from "next/link"
+import { Zap } from "lucide-react"
 import { HermesFilterLinks } from "@/components/hermes/hermes-filter-links"
 import { HermesPageHeader } from "@/components/hermes/hermes-page-header"
 import { HermesStatusBadge } from "@/components/hermes/hermes-status-badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { listHermesAdminEvents } from "@/lib/hermes/admin"
 import { formatHermesDateTime, shortenHermesId } from "@/lib/hermes/display"
@@ -51,9 +52,23 @@ export default async function MessagingEventsPage({ searchParams }: EventsPagePr
           {events.length === 0 ? (
             <Empty>
               <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Zap className="size-6" />
+                </EmptyMedia>
                 <EmptyTitle>Sin eventos</EmptyTitle>
-                <EmptyDescription>No hay eventos para el filtro seleccionado.</EmptyDescription>
+                <EmptyDescription>
+                  {currentStatus === "ALL"
+                    ? "No hay eventos registrados todavía. Los eventos llegan vía API o webhook y disparan rules configuradas."
+                    : "No hay eventos con el estado seleccionado. Prueba cambiando el filtro."}
+                </EmptyDescription>
               </EmptyHeader>
+              {currentStatus === "ALL" && (
+                <EmptyContent>
+                  <Button asChild variant="outline">
+                    <Link href="/messaging/review">Probar evento de prueba</Link>
+                  </Button>
+                </EmptyContent>
+              )}
             </Empty>
           ) : (
             <Table>

@@ -42,24 +42,24 @@ export function HermesReviewPanel() {
     try {
       payload = JSON.parse(payloadJson)
     } catch {
-      toast.error("Payload JSON no es válido")
+      toast.error("El payload no tiene formato JSON válido. Revisa que tenga llaves y comillas correctas.")
       return
     }
 
     try {
       metadata = JSON.parse(metadataJson)
     } catch {
-      toast.error("Metadata JSON no es válido")
+      toast.error("La metadata no tiene formato JSON válido. Revisa que tenga llaves y comillas correctas.")
       return
     }
 
     if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
-      toast.error("Payload debe ser un objeto JSON")
+      toast.error("El payload debe ser un objeto JSON, no un arreglo. Usa llaves {} en lugar de corchetes []")
       return
     }
 
     if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
-      toast.error("Metadata debe ser un objeto JSON")
+      toast.error("La metadata debe ser un objeto JSON, no un arreglo. Usa llaves {} en lugar de corchetes []")
       return
     }
 
@@ -80,16 +80,16 @@ export function HermesReviewPanel() {
         }),
       })
 
-      const data = (await response.json().catch(() => ({ success: false, error: ["Invalid JSON response"] }))) as ReviewResponse
+      const data = (await response.json().catch(() => ({ success: false, error: ["El servidor no respondió con un formato válido"] }))) as ReviewResponse
       setResult(data)
 
       if (!response.ok || !data.success) {
-        throw new Error(data.error?.join(" | ") ?? "No se pudo revisar el evento")
+        throw new Error(data.error?.join(". ") ?? "No se pudo procesar el evento")
       }
 
-      toast.success(mode === "preview" ? "Preview generado" : "Evento creado y procesado")
+      toast.success(mode === "preview" ? "Preview generado correctamente" : "Evento creado y procesado")
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "No se pudo revisar el evento")
+      toast.error(error instanceof Error ? error.message : "No se pudo procesar el evento. Intenta de nuevo.")
     } finally {
       setBusyMode(null)
     }
