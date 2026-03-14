@@ -6,8 +6,9 @@ export async function middleware(request: NextRequest) {
   const isHermesWebhookRoute = request.nextUrl.pathname.startsWith("/api/hermes/webhook")
   const isHermesProcessDueRoute = request.nextUrl.pathname.startsWith("/api/hermes/process-due")
   const isCronRoute = request.nextUrl.pathname.startsWith("/api/cron/")
+  const isDebugRoute = request.nextUrl.pathname.startsWith("/api/debug/")
 
-  if (isHermesEventsRoute || isHermesWebhookRoute || isHermesProcessDueRoute || isCronRoute) {
+  if (isHermesEventsRoute || isHermesWebhookRoute || isHermesProcessDueRoute || isCronRoute || isDebugRoute) {
     return NextResponse.next({ request })
   }
 
