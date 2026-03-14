@@ -25,6 +25,7 @@ import { Spotlight } from "@/components/spotlight"
 import { WorkerDetailDrawer } from "@/components/worker-detail-sheet"
 import { AgentesPage } from "@/components/sri/pages/agentes-page"
 import { ClientesPage } from "@/components/sri/pages/clientes-page"
+import { PortafolioPage } from "@/components/sri/pages/portafolio-page"
 import { useAppStore } from "@/lib/store"
 import { useSettingsSync } from "@/hooks/use-settings-sync"
 import {
@@ -227,11 +228,7 @@ function PageContent() {
                 {activeSection === "members" && <MembersPage />}
                 {activeSection === "sri-agentes" && <AgentesPage />}
                 {activeSection === "sri-clientes" && <ClientesPage />}
-                {activeSection === "sri-portafolio" && (
-                  <div className="text-muted-foreground py-20 text-center text-sm">
-                    Portafolio — próximamente
-                  </div>
-                )}
+                {activeSection === "sri-portafolio" && <PortafolioPage />}
                 {activeSection === "sri-metas" && (
                   <div className="text-muted-foreground py-20 text-center text-sm">
                     Metas — próximamente
