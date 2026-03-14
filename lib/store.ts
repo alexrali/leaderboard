@@ -42,6 +42,10 @@ interface AppState {
   updateUserProfile: (profile: Partial<UserProfile>) => void
   updateAppearance: (appearance: Partial<AppearanceSettings>) => void
   updateDashboardPrefs: (prefs: Partial<DashboardPrefs>) => void
+
+  // SRI: Month selection
+  sriMonth: string
+  setSriMonth: (month: string) => void
 }
 
 // ─── Defaults ─────────────────────────────────────────────────────────────────
@@ -94,11 +98,18 @@ export const useAppStore = create<AppState>()(
             dashboardPrefs: { ...state.settings.dashboardPrefs, ...prefs },
           },
         })),
+
+      // SRI: Month selection
+      sriMonth: new Date().toISOString().slice(0, 7), // Current month YYYY-MM
+      setSriMonth: (month) => set({ sriMonth: month }),
     }),
     {
       name: "leaderboard-app-settings",
-      // Only persist settings, not activeSection (navigation is transient)
-      partialize: (state) => ({ settings: state.settings }),
+      // Only persist settings and sriMonth, not activeSection (navigation is transient)
+      partialize: (state) => ({
+        settings: state.settings,
+        sriMonth: state.sriMonth,
+      }),
     }
   )
 )
