@@ -54,14 +54,22 @@ function ClientTableRow({ client, index }: ClientTableRowProps) {
   const recencyLevel = getStatusLevel(client.recency_days, { green: 30, yellow: 60 })
 
   const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr + "T12:00:00")
-    return date.toLocaleDateString("es-MX", { day: "numeric", month: "short" })
+    try {
+      const date = new Date(dateStr + "T12:00:00")
+      if (isNaN(date.getTime())) {
+        return "Fecha inválida"
+      }
+      return date.toLocaleDateString("es-MX", { day: "numeric", month: "short" })
+    } catch {
+      return "Fecha inválida"
+    }
   }
 
   return (
     <motion.tr
       variants={staggerItem}
-      className="border-border/40 hover:bg-muted/30 transition-colors border-b last:border-0"
+      tabIndex={0}
+      className="border-border/40 hover:bg-muted/30 focus-visible:ring-2 focus-visible:ring-neutral-400 transition-colors border-b last:border-0 outline-none"
     >
       <td className="py-3 px-4 text-sm font-medium">{client.client_id}</td>
       <td className="py-3 px-4">
@@ -268,25 +276,25 @@ export function ClientesPage() {
               </p>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full" aria-label="Clientes en riesgo con sus métricas RFM">
                 <thead>
                   <tr className="bg-muted/50">
-                    <th className="text-muted-foreground px-4 py-3 text-left text-xs font-medium uppercase">
+                    <th scope="col" className="text-muted-foreground px-4 py-3 text-left text-xs font-medium uppercase">
                       Cliente
                     </th>
-                    <th className="text-muted-foreground px-4 py-3 text-left text-xs font-medium uppercase">
+                    <th scope="col" className="text-muted-foreground px-4 py-3 text-left text-xs font-medium uppercase">
                       Recencia
                     </th>
-                    <th className="text-muted-foreground px-4 py-3 text-left text-xs font-medium uppercase">
+                    <th scope="col" className="text-muted-foreground px-4 py-3 text-left text-xs font-medium uppercase">
                       Revenue
                     </th>
-                    <th className="text-muted-foreground px-4 py-3 text-left text-xs font-medium uppercase">
+                    <th scope="col" className="text-muted-foreground px-4 py-3 text-left text-xs font-medium uppercase">
                       Facturas
                     </th>
-                    <th className="text-muted-foreground px-4 py-3 text-left text-xs font-medium uppercase">
+                    <th scope="col" className="text-muted-foreground px-4 py-3 text-left text-xs font-medium uppercase">
                       Última Compra
                     </th>
-                    <th className="text-muted-foreground px-4 py-3 text-left text-xs font-medium uppercase">
+                    <th scope="col" className="text-muted-foreground px-4 py-3 text-left text-xs font-medium uppercase">
                       Segmento RFM
                     </th>
                   </tr>
