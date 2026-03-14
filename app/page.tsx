@@ -27,6 +27,7 @@ import { AgentesPage } from "@/components/sri/pages/agentes-page"
 import { ClientesPage } from "@/components/sri/pages/clientes-page"
 import { PortafolioPage } from "@/components/sri/pages/portafolio-page"
 import { MetasPage } from "@/components/sri/pages/metas-page"
+import { AlertasPage } from "@/components/sri/pages/alertas-page"
 import { useAppStore } from "@/lib/store"
 import { useSettingsSync } from "@/hooks/use-settings-sync"
 import {
@@ -231,11 +232,7 @@ function PageContent() {
                 {activeSection === "sri-clientes" && <ClientesPage />}
                 {activeSection === "sri-portafolio" && <PortafolioPage />}
                 {activeSection === "sri-metas" && <MetasPage />}
-                {activeSection === "sri-alertas" && (
-                  <div className="text-muted-foreground py-20 text-center text-sm">
-                    Alertas — próximamente
-                  </div>
-                )}
+                {activeSection === "sri-alertas" && <AlertasPage />}
                 {activeSection === "account" && (
                   <div className="text-muted-foreground py-20 text-center text-sm">
                     Perfil de cuenta — próximamente
