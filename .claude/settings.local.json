@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"C:\\\\Users\\\\arami\\\\Current\\\\report generator\\\\leaderboard\" && npx tsc --noEmit --skipLibCheck 2>&1 | head -50)",
+      "Bash(cd \"C:\\\\Users\\\\arami\\\\Current\\\\report generator\\\\leaderboard\" && npx tsc --noEmit --skipLibCheck components/skip-link.tsx app/layout.tsx app/globals.css 2>&1 | grep -E \"\\(skip-link|layout\\\\.tsx|globals\\\\.css\\)\" || echo \"No errors in our changes\")",
+      "Bash(cd \"C:\\\\Users\\\\arami\\\\Current\\\\report generator\\\\leaderboard\" && npx tsc --noEmit --skipLibCheck components/skip-link.tsx 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\arami\\\\Current\\\\report generator\\\\leaderboard\" && npx tailwindcss --help 2>&1 | head -20)",
+      "Bash(cd \"C:\\\\Users\\\\arami\\\\Current\\\\report generator\\\\leaderboard\" && npx tsc --noEmit --pretty 2>&1 | grep -E \"\\(error TS|skip-link|layout\\\\.tsx|page\\\\.tsx|globals\\\\.css\\)\" | head -20)",
+      "Bash(cd \"C:\\\\Users\\\\arami\\\\Current\\\\report generator\\\\leaderboard\" && npx tsc --noEmit --skipLibCheck app/page.tsx 2>&1 | grep -E \"error TS\" | head -5 || echo \"No TypeScript errors in page.tsx\")",
+      "Bash(cd \"C:\\\\Users\\\\arami\\\\Current\\\\report generator\\\\leaderboard\" && npx tsc --noEmit --pretty 2>&1 | head -50)",
+      "Bash(cd \"C:\\\\Users\\\\arami\\\\Current\\\\report generator\\\\leaderboard\" && npx tsc --noEmit --pretty 2>&1 | grep -i \"contribution-heatmap\" || echo \"No errors in contribution-heatmap.tsx\")",
+      "Bash(cd \"/c/Users/arami/Current/report generator/leaderboard\" && npm run build 2>&1 | head -100)",
+      "Bash(cd \"/c/Users/arami/Current/report generator/leaderboard\" && npm run build)",
+      "Bash(cd \"/c/Users/arami/Current/report generator/leaderboard\" && npx tsc --noEmit --pretty 2>&1 | head -50)",
+      "Bash(cd \"/c/Users/arami/Current/report generator/leaderboard\" && npx tsc --noEmit --pretty 2>&1 | grep -E \"\\(error TS|avatar\\)\" | head -20)",
+      "Bash(cd \"C:/Users/arami/Current/report generator/leaderboard\" && npx tsc --noEmit --skipLibCheck 2>&1 | head -50)",
+      "Bash(cd \"C:\\\\Users\\\\arami\\\\Current\\\\report generator\\\\leaderboard\" && npm run build 2>&1 | head -50)"
+    ]
+  }
+}

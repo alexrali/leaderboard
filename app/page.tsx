@@ -151,7 +151,7 @@ function PageContent() {
             <div className="border-border/40 bg-muted/40 flex items-center gap-1 rounded-full border p-1">
               <button
                 onClick={() => setViewMode("daily")}
-                className={`rounded-full px-3 py-0.5 text-xs font-medium transition-colors ${
+                className={`rounded-full px-3 py-0.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none ${
                   viewMode === "daily"
                     ? "bg-background text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
@@ -161,7 +161,7 @@ function PageContent() {
               </button>
               <button
                 onClick={() => setViewMode("weekly")}
-                className={`rounded-full px-3 py-0.5 text-xs font-medium transition-colors ${
+                className={`rounded-full px-3 py-0.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none ${
                   viewMode === "weekly"
                     ? "bg-background text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
@@ -173,7 +173,7 @@ function PageContent() {
           </div>
         </header>
 
-        <div className="w-full flex-1 min-h-0 overflow-auto px-4 py-8 md:px-6 lg:px-8 lg:py-10">
+        <main id="main-content" className="w-full flex-1 min-h-0 overflow-auto px-4 py-8 md:px-6 lg:px-8 lg:py-10" tabIndex={-1}>
           <div className="flex flex-col gap-10">
             {isError && !EXCLUDED_SECTIONS.includes(activeSection) && (
               <div className="border-destructive/30 bg-destructive/10 text-destructive rounded-xl border px-5 py-4 text-sm">
@@ -241,7 +241,7 @@ function PageContent() {
               </footer>
             )}
           </div>
-        </div>
+        </main>
       </SidebarInset>
       <Spotlight
         open={spotlightOpen}

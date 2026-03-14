@@ -255,7 +255,7 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
                     <div className="border-border flex items-center justify-between border-t pt-3">
                       <span className="text-muted-foreground text-xs">Owner</span>
                       <div className="flex items-center gap-2">
-                        <Avatar className="border-muted size-6 border-2">
+                        <Avatar className="border-muted size-6 border-2" aria-label={`Avatar for ${resource.owner}`}>
                           <AvatarFallback className="bg-secondary text-secondary-foreground text-[10px] font-semibold">
                             {resource.owner
                               .split(" ")

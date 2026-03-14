@@ -5,6 +5,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Providers } from "@/components/providers"
 import { Toaster } from "sonner"
+import { SkipLink } from "@/components/skip-link"
 import "./globals.css"
 
 const outfit = Outfit({
@@ -28,8 +29,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={outfit.variable} suppressHydrationWarning>
+    <html lang="es" className={outfit.variable} suppressHydrationWarning>
       <body className="font-sans antialiased">
+        <SkipLink />
         <Providers>
           <NuqsAdapter>
             <TooltipProvider>

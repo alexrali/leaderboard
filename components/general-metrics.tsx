@@ -21,23 +21,32 @@ import { WorkerDetailDrawer } from "@/components/worker-detail-sheet"
 function TrendIcon({ trend, value }: { trend: TeamMember["trend"]; value: number }) {
   if (trend === "up")
     return (
-      <span className="bg-success/10 text-success inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium">
-        <TrendingUp className="size-3" />
+      <span
+        className="bg-success/10 text-success inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium"
+        aria-label={`Tendencia positiva: +${value}% con respecto al período anterior`}
+      >
+        <TrendingUp className="size-3" aria-hidden="true" />
         {"+"}
         {value}%
       </span>
     )
   if (trend === "down")
     return (
-      <span className="bg-destructive/10 text-destructive inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium">
-        <TrendingDown className="size-3" />
+      <span
+        className="bg-destructive/10 text-destructive inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium"
+        aria-label={`Tendencia negativa: -${value}% con respecto al período anterior`}
+      >
+        <TrendingDown className="size-3" aria-hidden="true" />
         {"-"}
         {value}%
       </span>
     )
   return (
-    <span className="bg-muted text-muted-foreground inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium">
-      <Minus className="size-3" />
+    <span
+      className="bg-muted text-muted-foreground inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium"
+      aria-label={`Tendencia estable: ${value}% con respecto al período anterior`}
+    >
+      <Minus className="size-3" aria-hidden="true" />
       {value}%
     </span>
   )
@@ -169,40 +178,40 @@ export function GeneralMetrics({ members, viewMode = "daily" }: GeneralMetricsPr
       {/* Ranking Table */}
       <Card className="overflow-hidden rounded-2xl">
         <CardContent className="p-0">
-          <Table>
+          <Table aria-label="Ranking del equipo - métricas de rendimiento por surtidor">
             <TableHeader>
               <TableRow className="bg-muted/40 hover:bg-muted/40">
-                <TableHead className="text-muted-foreground w-16 pl-5 text-xs font-medium tracking-wide uppercase">
+                <TableHead className="text-muted-foreground w-16 pl-5 text-xs font-medium tracking-wide uppercase" scope="col">
                   Pos.
                 </TableHead>
-                <TableHead className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+                <TableHead className="text-muted-foreground min-w-0 text-xs font-medium tracking-wide uppercase" scope="col">
                   Surtidor
                 </TableHead>
-                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase md:table-cell">
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase md:table-cell" scope="col">
                   UE
                 </TableHead>
-                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell">
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell" scope="col">
                   Folios
                 </TableHead>
-                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell">
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell" scope="col">
                   SKUs
                 </TableHead>
-                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell">
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell" scope="col">
                   Qty
                 </TableHead>
-                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell">
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell" scope="col">
                   Peso
                 </TableHead>
-                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell">
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase xl:table-cell" scope="col">
                   Volumen
                 </TableHead>
-                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase sm:table-cell">
+                <TableHead className="text-muted-foreground hidden text-right text-xs font-medium tracking-wide uppercase sm:table-cell" scope="col">
                   Eficiencia
                 </TableHead>
-                <TableHead className="text-muted-foreground hidden text-center text-xs font-medium tracking-wide uppercase lg:table-cell">
+                <TableHead className="text-muted-foreground hidden text-center text-xs font-medium tracking-wide uppercase lg:table-cell" scope="col">
                   Racha
                 </TableHead>
-                <TableHead className="text-muted-foreground pr-5 text-right text-xs font-medium tracking-wide uppercase">
+                <TableHead className="text-muted-foreground pr-5 text-right text-xs font-medium tracking-wide uppercase" scope="col">
                   Tendencia
                 </TableHead>
               </TableRow>
@@ -221,15 +230,15 @@ export function GeneralMetrics({ members, viewMode = "daily" }: GeneralMetricsPr
                     <RankBadge rank={member.rank} name={member.name} />
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Avatar className="border-muted size-9 border-2">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <Avatar className="border-muted size-9 border-2 shrink-0" aria-label={`Avatar for ${member.name}`}>
                         <AvatarFallback className="bg-secondary text-secondary-foreground text-xs font-semibold">
                           {member.avatar}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="flex flex-col">
-                        <span className="text-foreground text-sm font-semibold">{member.name}</span>
-                        <span className="text-muted-foreground text-xs">{member.role}</span>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-foreground text-sm font-semibold truncate">{member.name}</span>
+                        <span className="text-muted-foreground text-xs truncate">{member.role}</span>
                       </div>
                     </div>
                   </TableCell>

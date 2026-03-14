@@ -39,19 +39,28 @@ function DeltaBadge({ current, previous }: { current: number; previous: number }
   const abs = Math.abs(pct).toFixed(1)
   if (pct > 0.5)
     return (
-      <span className="inline-flex items-center gap-0.5 text-xs font-medium text-emerald-600">
-        <TrendingUp className="size-3" />+{abs}%
+      <span
+        className="inline-flex items-center gap-0.5 text-xs font-medium text-emerald-600"
+        aria-label={`Aumento del ${abs}% con respecto a la semana anterior`}
+      >
+        <TrendingUp className="size-3" aria-hidden="true" />+{abs}%
       </span>
     )
   if (pct < -0.5)
     return (
-      <span className="text-destructive inline-flex items-center gap-0.5 text-xs font-medium">
-        <TrendingDown className="size-3" />-{abs}%
+      <span
+        className="text-destructive inline-flex items-center gap-0.5 text-xs font-medium"
+        aria-label={`Disminución del ${abs}% con respecto a la semana anterior`}
+      >
+        <TrendingDown className="size-3" aria-hidden="true" />-{abs}%
       </span>
     )
   return (
-    <span className="text-muted-foreground inline-flex items-center gap-0.5 text-xs font-medium">
-      <Minus className="size-3" />
+    <span
+      className="text-muted-foreground inline-flex items-center gap-0.5 text-xs font-medium"
+      aria-label={`Sin cambio significativo: ${abs}% con respecto a la semana anterior`}
+    >
+      <Minus className="size-3" aria-hidden="true" />
       {abs}%
     </span>
   )
@@ -130,16 +139,16 @@ function PodiumCard({ member }: { member: TeamMember }) {
     <Card className={`rounded-2xl ${style.ring}`}>
       <CardContent className="flex flex-col items-center gap-3 px-5 py-5">
         <div className="relative">
-          <Avatar className="border-muted size-14 border-2">
+          <Avatar className="border-muted size-14 border-2" aria-label={`Avatar for ${member.name}`}>
             <AvatarFallback className="bg-secondary text-secondary-foreground text-sm font-bold">
               {member.avatar}
             </AvatarFallback>
           </Avatar>
           <span className="absolute -right-1 -bottom-1 text-base leading-none">{style.label}</span>
         </div>
-        <div className="text-center">
-          <p className="text-foreground text-sm leading-tight font-semibold">{member.name}</p>
-          <p className="text-muted-foreground text-[11px]">{member.role}</p>
+        <div className="text-center min-w-0">
+          <p className="text-foreground text-sm leading-tight font-semibold truncate">{member.name}</p>
+          <p className="text-muted-foreground text-[11px] truncate">{member.role}</p>
         </div>
         <Separator className="opacity-20" />
         <div className="grid w-full grid-cols-2 gap-2 text-center">
@@ -430,16 +439,16 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
           </h3>
           <Card className="overflow-hidden rounded-2xl">
             <CardContent className="p-0">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm" aria-label="Clasificación completa del equipo - ranking de surtidores">
                 <thead>
                   <tr className="bg-muted/40 text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                    <th className="w-14 py-3 pl-5 text-left">Pos.</th>
-                    <th className="py-3 text-left">Surtidor</th>
-                    <th className="hidden py-3 pr-4 text-right md:table-cell">UE</th>
-                    <th className="hidden py-3 pr-4 text-right lg:table-cell">Folios</th>
-                    <th className="hidden py-3 pr-4 text-right lg:table-cell">SKUs</th>
-                    <th className="hidden py-3 pr-4 text-right sm:table-cell">Efic.</th>
-                    <th className="py-3 pr-5 text-right">Tendencia</th>
+                    <th className="w-14 py-3 pl-5 text-left" scope="col">Pos.</th>
+                    <th className="py-3 text-left min-w-0" scope="col">Surtidor</th>
+                    <th className="hidden py-3 pr-4 text-right md:table-cell" scope="col">UE</th>
+                    <th className="hidden py-3 pr-4 text-right lg:table-cell" scope="col">Folios</th>
+                    <th className="hidden py-3 pr-4 text-right lg:table-cell" scope="col">SKUs</th>
+                    <th className="hidden py-3 pr-4 text-right sm:table-cell" scope="col">Efic.</th>
+                    <th className="py-3 pr-5 text-right" scope="col">Tendencia</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -454,14 +463,14 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
                         </span>
                       </td>
                       <td className="py-3">
-                        <div className="flex items-center gap-2.5">
-                          <Avatar className="border-muted size-8 border">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <Avatar className="border-muted size-8 border shrink-0" aria-label={`Avatar for ${member.name}`}>
                             <AvatarFallback className="bg-secondary text-secondary-foreground text-[10px] font-semibold">
                               {member.avatar}
                             </AvatarFallback>
                           </Avatar>
-                          <div className="flex flex-col">
-                            <span className="text-foreground text-xs leading-tight font-semibold">
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-foreground text-xs leading-tight font-semibold truncate">
                               {member.name}
                             </span>
                             {member.streak > 0 && (
@@ -498,16 +507,25 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend }: WeeklyOve
                       </td>
                       <td className="py-3 pr-5 text-right">
                         {member.trend === "up" ? (
-                          <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-600">
-                            <TrendingUp className="size-2.5" />+{member.trendValue}%
+                          <span
+                            className="inline-flex items-center gap-0.5 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-600"
+                            aria-label={`Tendencia positiva: +${member.trendValue}%`}
+                          >
+                            <TrendingUp className="size-2.5" aria-hidden="true" />+{member.trendValue}%
                           </span>
                         ) : member.trend === "down" ? (
-                          <span className="bg-destructive/10 text-destructive inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[10px] font-medium">
-                            <TrendingDown className="size-2.5" />-{member.trendValue}%
+                          <span
+                            className="bg-destructive/10 text-destructive inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[10px] font-medium"
+                            aria-label={`Tendencia negativa: -${member.trendValue}%`}
+                          >
+                            <TrendingDown className="size-2.5" aria-hidden="true" />-{member.trendValue}%
                           </span>
                         ) : (
-                          <span className="bg-muted text-muted-foreground inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[10px] font-medium">
-                            <Minus className="size-2.5" />
+                          <span
+                            className="bg-muted text-muted-foreground inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[10px] font-medium"
+                            aria-label={`Tendencia estable: ${member.trendValue}%`}
+                          >
+                            <Minus className="size-2.5" aria-hidden="true" />
                             {member.trendValue}%
                           </span>
                         )}

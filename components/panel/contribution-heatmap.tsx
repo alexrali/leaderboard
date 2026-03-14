@@ -105,22 +105,30 @@ export function ContributionHeatmap({ data, onDayClick, selectedDate }: Contribu
                 const label = format(parseISO(cell.date), "EEE d MMM", { locale: es })
 
                 return (
-                  <Tooltip key={col}>
-                    <TooltipTrigger asChild>
-                      <button
-                        onClick={() => onDayClick(cell.date)}
-                        className={`size-[14px] rounded-sm transition-all hover:ring-2 hover:ring-white/30 ${getCellColor(cell, thresholds)} ${isSelected ? "ring-2 ring-white/60" : ""}`}
-                        aria-label={`${label}: ${cell.teamUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })} UE`}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="top" className="text-xs">
-                      <p className="font-semibold capitalize">{label}</p>
-                      <p className="text-muted-foreground">
-                        {cell.teamUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })} UE ·{" "}
-                        {cell.activeWorkers} trabajadores
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
+                  <div key={col} className="relative size-[14px]">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          onClick={() => onDayClick(cell.date)}
+                          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-[44px] rounded-sm transition-all hover:ring-2 hover:ring-white/30 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+                          aria-label={`${label}: ${cell.teamUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })} UE`}
+                        >
+                          {/* Visual cell - 14x14px */}
+                          <span
+                            className={`block size-[14px] rounded-sm ${getCellColor(cell, thresholds)} ${isSelected ? "ring-2 ring-white/60" : ""}`}
+                            aria-hidden="true"
+                          />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="text-xs">
+                        <p className="font-semibold capitalize">{label}</p>
+                        <p className="text-muted-foreground">
+                          {cell.teamUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })} UE ·{" "}
+                          {cell.activeWorkers} trabajadores
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                 )
               })}
             </div>

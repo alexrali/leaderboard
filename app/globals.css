@@ -138,6 +138,11 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Consistent focus-visible ring for keyboard navigation */
+  *:focus-visible {
+    @apply ring-2 ring-ring ring-offset-2 outline-none;
+  }
 }
 
 @layer components {
@@ -167,5 +172,16 @@
   /* Sidebar separator - nearly invisible */
   [data-slot="sidebar-separator"] {
     opacity: 0.3;
+  }
+}
+
+/* Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

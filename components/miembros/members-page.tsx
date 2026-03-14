@@ -70,7 +70,7 @@ export function MembersPage() {
             <button
               key={opt.value}
               onClick={() => setRange(opt.value)}
-              className={`rounded-full px-3 py-0.5 text-xs font-medium transition-colors ${
+              className={`rounded-full px-3 py-0.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none ${
                 range === opt.value
                   ? "bg-background text-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"

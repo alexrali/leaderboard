@@ -313,16 +313,16 @@ export function DayProgressSection({ data }: DayProgressProps) {
               </CardDescription>
             </CardHeader>
             <CardContent className="p-0">
-              <Table>
+              <Table aria-label="Progreso por hora - rutas completadas y porcentaje del día">
                 <TableHeader>
                   <TableRow className="bg-muted/40 hover:bg-muted/40">
-                    <TableHead className="text-muted-foreground pl-5 text-xs font-medium tracking-wide uppercase">
+                    <TableHead className="text-muted-foreground pl-5 text-xs font-medium tracking-wide uppercase" scope="col">
                       Hora
                     </TableHead>
-                    <TableHead className="text-muted-foreground text-right text-xs font-medium tracking-wide uppercase">
+                    <TableHead className="text-muted-foreground text-right text-xs font-medium tracking-wide uppercase" scope="col">
                       Rutas
                     </TableHead>
-                    <TableHead className="text-muted-foreground pr-5 text-right text-xs font-medium tracking-wide uppercase">
+                    <TableHead className="text-muted-foreground pr-5 text-right text-xs font-medium tracking-wide uppercase" scope="col">
                       % del día
                     </TableHead>
                   </TableRow>

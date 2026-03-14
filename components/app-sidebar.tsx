@@ -58,7 +58,7 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ activeSection = "overview", onSectionChange }: AppSidebarProps) {
-  const { isMobile } = useSidebar()
+  const { isMobile, setOpenMobile } = useSidebar()
   const displayName = useAppStore((s) => s.settings.userProfile.displayName)
   const userRole = useAppStore((s) => s.settings.userProfile.role)
   const router = useRouter()
@@ -68,6 +68,17 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
     await supabase.auth.signOut()
     router.refresh()
     router.push("/login")
+  }
+
+  function handleSectionChange(section?: string) {
+    // Only call onSectionChange if a section is provided
+    if (section) {
+      onSectionChange?.(section)
+    }
+    // Always close mobile sidebar after menu item selection
+    if (isMobile) {
+      setOpenMobile(false)
+    }
   }
 
   return (
@@ -97,7 +108,7 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
               <SidebarMenuButton
                 tooltip="Panel"
                 isActive={activeSection === "panel"}
-                onClick={() => onSectionChange?.("panel")}
+                onClick={() => handleSectionChange("panel")}
               >
                 <LayoutDashboard />
                 <span>Panel</span>
@@ -106,10 +117,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
 
             <Collapsible defaultOpen className="group/collapsible">
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Almacén">
-                  <Package />
-                  <span>Almacén</span>
-                </SidebarMenuButton>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton tooltip="Almacén" onClick={() => handleSectionChange()}>
+                    <Package />
+                    <span>Almacén</span>
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuAction className="data-[state=open]:rotate-90">
                     <ChevronRight />
@@ -121,7 +134,7 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         isActive={activeSection === "overview"}
-                        onClick={() => onSectionChange?.("overview")}
+                        onClick={() => handleSectionChange("overview")}
                       >
                         <span>Resumen Semanal</span>
                       </SidebarMenuSubButton>
@@ -129,7 +142,7 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         isActive={activeSection === "metrics"}
-                        onClick={() => onSectionChange?.("metrics")}
+                        onClick={() => handleSectionChange("metrics")}
                       >
                         <span>Métricas Generales</span>
                       </SidebarMenuSubButton>
@@ -138,7 +151,7 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         isActive={activeSection === "day-progress"}
-                        onClick={() => onSectionChange?.("day-progress")}
+                        onClick={() => handleSectionChange("day-progress")}
                       >
                         <span>Progreso del Día</span>
                       </SidebarMenuSubButton>
@@ -146,7 +159,7 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         isActive={activeSection === "resources"}
-                        onClick={() => onSectionChange?.("resources")}
+                        onClick={() => handleSectionChange("resources")}
                       >
                         <span>Recursos</span>
                       </SidebarMenuSubButton>
@@ -159,10 +172,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
 
             <Collapsible className="group/collapsible">
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Equipo">
-                  <Users />
-                  <span>Equipo</span>
-                </SidebarMenuButton>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton tooltip="Equipo" onClick={() => handleSectionChange()}>
+                    <Users />
+                    <span>Equipo</span>
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuAction className="data-[state=open]:rotate-90">
                     <ChevronRight />
@@ -174,13 +189,13 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         isActive={activeSection === "members"}
-                        onClick={() => onSectionChange?.("members")}
+                        onClick={() => handleSectionChange("members")}
                       >
                         <span>Miembros</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton>
+                      <SidebarMenuSubButton onClick={() => handleSectionChange()}>
                         <span>Roles</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -197,10 +212,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
           <SidebarMenu>
             <Collapsible className="group/collapsible">
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Inventario">
-                  <ClipboardList />
-                  <span>Inventario</span>
-                </SidebarMenuButton>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton tooltip="Inventario" onClick={() => handleSectionChange()}>
+                    <ClipboardList />
+                    <span>Inventario</span>
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuAction className="data-[state=open]:rotate-90">
                     <ChevronRight />
@@ -210,12 +227,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton>
+                      <SidebarMenuSubButton onClick={() => handleSectionChange()}>
                         <span>Stock</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton>
+                      <SidebarMenuSubButton onClick={() => handleSectionChange()}>
                         <span>Movimientos</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -232,10 +249,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
           <SidebarMenu>
             <Collapsible className="group/collapsible">
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Autoservicio">
-                  <ShoppingCart />
-                  <span>Autoservicio</span>
-                </SidebarMenuButton>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton tooltip="Autoservicio" onClick={() => handleSectionChange()}>
+                    <ShoppingCart />
+                    <span>Autoservicio</span>
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuAction className="data-[state=open]:rotate-90">
                     <ChevronRight />
@@ -245,12 +264,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton>
+                      <SidebarMenuSubButton onClick={() => handleSectionChange()}>
                         <span>Punto de Venta</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton>
+                      <SidebarMenuSubButton onClick={() => handleSectionChange()}>
                         <span>Pedidos</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -261,10 +280,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
 
             <Collapsible className="group/collapsible">
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Distribución">
-                  <Truck />
-                  <span>Distribución</span>
-                </SidebarMenuButton>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton tooltip="Distribución" onClick={() => handleSectionChange()}>
+                    <Truck />
+                    <span>Distribución</span>
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuAction className="data-[state=open]:rotate-90">
                     <ChevronRight />
@@ -274,12 +295,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton>
+                      <SidebarMenuSubButton onClick={() => handleSectionChange()}>
                         <span>Rutas</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton>
+                      <SidebarMenuSubButton onClick={() => handleSectionChange()}>
                         <span>Entregas</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -295,7 +316,7 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
           <SidebarGroupLabel>Análisis</SidebarGroupLabel>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="Reportes">
+              <SidebarMenuButton tooltip="Reportes" onClick={() => handleSectionChange()}>
                 <FileText />
                 <span>Reportes</span>
               </SidebarMenuButton>
@@ -303,10 +324,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
 
             <Collapsible className="group/collapsible">
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Analítica">
-                  <TrendingUp />
-                  <span>Analítica</span>
-                </SidebarMenuButton>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton tooltip="Analítica" onClick={() => handleSectionChange()}>
+                    <TrendingUp />
+                    <span>Analítica</span>
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuAction className="data-[state=open]:rotate-90">
                     <ChevronRight />
@@ -316,12 +339,12 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton>
+                      <SidebarMenuSubButton onClick={() => handleSectionChange()}>
                         <span>Rendimiento</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton>
+                      <SidebarMenuSubButton onClick={() => handleSectionChange()}>
                         <span>Tendencias</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -331,7 +354,7 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
             </Collapsible>
 
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="Sprints">
+              <SidebarMenuButton tooltip="Sprints" onClick={() => handleSectionChange()}>
                 <ShoppingBag />
                 <span>Sprints</span>
               </SidebarMenuButton>
@@ -348,14 +371,14 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                   size="sm"
                   tooltip="Configuración"
                   isActive={activeSection === "settings"}
-                  onClick={() => onSectionChange?.("settings")}
+                  onClick={() => handleSectionChange("settings")}
                 >
                   <Settings />
                   <span>Configuración</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton size="sm" tooltip="Ayuda">
+                <SidebarMenuButton size="sm" tooltip="Ayuda" onClick={() => handleSectionChange()}>
                   <HelpCircle />
                   <span>Ayuda</span>
                 </SidebarMenuButton>
@@ -375,7 +398,7 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <Avatar className="h-8 w-8 rounded-lg">
+                  <Avatar className="h-8 w-8 rounded-lg" aria-label={`Avatar for ${displayName}`}>
                     <AvatarFallback className="bg-primary/10 text-primary rounded-lg text-xs font-bold">
                       {displayName.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
@@ -395,7 +418,7 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
               >
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                    <Avatar className="h-8 w-8 rounded-lg">
+                    <Avatar className="h-8 w-8 rounded-lg" aria-label={`Avatar for ${displayName}`}>
                       <AvatarFallback className="bg-primary/10 text-primary rounded-lg text-xs font-bold">
                         {displayName.slice(0, 2).toUpperCase()}
                       </AvatarFallback>

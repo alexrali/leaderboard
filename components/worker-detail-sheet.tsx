@@ -80,7 +80,7 @@ export function WorkerDetailDrawer({
       <DrawerContent className="flex max-h-[85vh] flex-col">
         <DrawerHeader className="px-6 pt-4 pb-3">
           <div className="flex items-center gap-3">
-            <Avatar className="border-muted size-10 border-2">
+            <Avatar className="border-muted size-10 border-2" aria-label={`Avatar for ${member.name}`}>
               <AvatarFallback className="bg-secondary text-secondary-foreground text-sm font-semibold">
                 {member.avatar}
               </AvatarFallback>

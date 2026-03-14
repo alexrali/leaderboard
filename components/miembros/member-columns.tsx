@@ -37,15 +37,15 @@ export function buildColumns(
           row.original.worker_name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
         return (
           <button
-            className="flex items-center gap-2 text-left hover:underline"
+            className="flex items-center gap-2 text-left hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none rounded min-w-0"
             onClick={() => onRowClick(row.original)}
           >
-            <Avatar className="h-7 w-7">
+            <Avatar className="h-7 w-7 shrink-0" aria-label={`Avatar for ${row.original.worker_name}`}>
               <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
                 {initials}
               </AvatarFallback>
             </Avatar>
-            <span className="font-medium text-sm">{row.original.worker_name}</span>
+            <span className="font-medium text-sm truncate">{row.original.worker_name}</span>
           </button>
         )
       },
