@@ -1,9 +1,9 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { Fragment, useCallback, useMemo, useState } from "react"
 import { motion } from "framer-motion"
 import { useSriAgentRanking } from "@/hooks/use-sri-queries"
-import { generateAgentSignals, groupSignalsByAgent, type AgentSignal } from "@/lib/sri-signals"
+import { generateAgentSignals, groupSignalsByAgent, type AgentSignalDisplay } from "@/lib/sri-signals"
 import { formatCurrency } from "@/lib/format"
 import { useAppStore } from "@/lib/store"
 import { PageFadeIn, staggerContainer, staggerItem } from "../animations"
@@ -59,10 +59,10 @@ function SignalBadge({ count, level }: SignalBadgeProps) {
 }
 
 interface SignalTableProps {
-  signals: AgentSignal[]
+  signals: AgentSignalDisplay[]
   signalLevel: "ALTO" | "MEDIO" | "POSITIVO"
   actionType: SignalActionType
-  onAction: (signal: AgentSignal) => void
+  onAction: (signal: AgentSignalDisplay) => void
 }
 
 function SignalTable({ signals, signalLevel, actionType, onAction }: SignalTableProps) {
@@ -85,21 +85,28 @@ function SignalTable({ signals, signalLevel, actionType, onAction }: SignalTable
     POSITIVO: "Replicar",
   }
 
+  const handleActionClick = useCallback(
+    (signal: AgentSignalDisplay) => {
+      onAction(signal)
+    },
+    [onAction]
+  )
+
   return (
     <div className="mb-8">
       <h3 className="mb-4 text-lg font-semibold text-neutral-900">
         {signalLevel} — {sectionTitles[signalLevel]}
       </h3>
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full text-sm" aria-label={`Señales de nivel ${signalLevel}`}>
           <thead>
             <tr className="border-b border-neutral-200 text-left">
-              <th className="pb-2 font-medium text-neutral-700">Agente</th>
-              <th className="pb-2 font-medium text-neutral-700">Peer Group</th>
-              <th className="pb-2 font-medium text-neutral-700">Tipo</th>
-              <th className="pb-2 font-medium text-neutral-700">Detalle</th>
-              <th className="pb-2 font-medium text-neutral-700">Revenue</th>
-              <th className="pb-2 font-medium text-neutral-700">Acción</th>
+              <th scope="col" className="pb-2 font-medium text-neutral-700">Agente</th>
+              <th scope="col" className="pb-2 font-medium text-neutral-700">Peer Group</th>
+              <th scope="col" className="pb-2 font-medium text-neutral-700">Tipo</th>
+              <th scope="col" className="pb-2 font-medium text-neutral-700">Detalle</th>
+              <th scope="col" className="pb-2 font-medium text-neutral-700">Revenue</th>
+              <th scope="col" className="pb-2 font-medium text-neutral-700">Acción</th>
             </tr>
           </thead>
           <tbody>
@@ -115,7 +122,7 @@ function SignalTable({ signals, signalLevel, actionType, onAction }: SignalTable
                 <td className="py-3">
                   <button
                     type="button"
-                    onClick={() => onAction(signal)}
+                    onClick={() => handleActionClick(signal)}
                     className="rounded-md border border-neutral-300 px-3 py-1 text-xs font-medium text-neutral-700 hover:bg-neutral-50"
                   >
                     {actionLabels[actionType]}
@@ -133,7 +140,7 @@ function SignalTable({ signals, signalLevel, actionType, onAction }: SignalTable
 export function AlertasPage() {
   const sriMonth = useAppStore((s) => s.sriMonth)
   const { data: agents, isLoading } = useSriAgentRanking(sriMonth)
-  const [selectedSignal, setSelectedSignal] = useState<AgentSignal | null>(null)
+  const [selectedSignal, setSelectedSignal] = useState<AgentSignalDisplay | null>(null)
   const [modalType, setModalType] = useState<SignalActionType>("plan")
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -154,23 +161,22 @@ export function AlertasPage() {
     return groupSignalsByAgent(signals)
   }, [signals])
 
-  const handleAction = (signal: AgentSignal, actionType: SignalActionType) => {
+  const handleAction = useCallback((signal: AgentSignalDisplay, actionType: SignalActionType) => {
     setSelectedSignal(signal)
     setModalType(actionType)
     setIsModalOpen(true)
-  }
+  }, [])
 
-  const handleModalClose = () => {
+  const handleModalClose = useCallback(() => {
     setIsModalOpen(false)
     setSelectedSignal(null)
-  }
+  }, [])
 
-  const handleModalSave = (data: { title: string; description: string }) => {
-    console.log("Saving action:", { type: modalType, signal: selectedSignal, data })
+  const handleModalSave = useCallback((data: { title: string; description: string }) => {
     // TODO: Implement save logic (create plan, share practice, or configure monitoring)
     setIsModalOpen(false)
     setSelectedSignal(null)
-  }
+  }, [modalType, selectedSignal])
 
   if (isLoading) {
     return (
@@ -250,14 +256,14 @@ export function AlertasPage() {
           <div>
             <h3 className="mb-4 text-lg font-semibold text-neutral-900">Resumen por Agente</h3>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm" aria-label="Resumen de señales por agente">
                 <thead>
                   <tr className="border-b border-neutral-200 text-left">
-                    <th className="pb-2 font-medium text-neutral-700">Agente</th>
-                    <th className="pb-2 font-medium text-neutral-700">Peer Group</th>
-                    <th className="pb-2 font-medium text-neutral-700">ALTO</th>
-                    <th className="pb-2 font-medium text-neutral-700">MEDIO</th>
-                    <th className="pb-2 font-medium text-neutral-700">POSITIVO</th>
+                    <th scope="col" className="pb-2 font-medium text-neutral-700">Agente</th>
+                    <th scope="col" className="pb-2 font-medium text-neutral-700">Peer Group</th>
+                    <th scope="col" className="pb-2 font-medium text-neutral-700">ALTO</th>
+                    <th scope="col" className="pb-2 font-medium text-neutral-700">MEDIO</th>
+                    <th scope="col" className="pb-2 font-medium text-neutral-700">POSITIVO</th>
                   </tr>
                 </thead>
                 <tbody>

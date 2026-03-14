@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ScaleIn } from "./animations"
 
 export type SignalActionType = "plan" | "share" | "monitor"
@@ -34,6 +34,83 @@ export function SignalActionModal({
 }: SignalActionModalProps) {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+  const modalRef = useRef<HTMLDivElement>(null)
+  const titleInputRef = useRef<HTMLInputElement>(null)
+  const previousActiveElementRef = useRef<HTMLElement | null>(null)
+
+  // Handle ESC key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose()
+      }
+    }
+
+    document.addEventListener("keydown", handleEscape)
+    return () => document.removeEventListener("keydown", handleEscape)
+  }, [isOpen, onClose])
+
+  // Focus management
+  useEffect(() => {
+    if (isOpen) {
+      // Store the previously focused element
+      previousActiveElementRef.current = document.activeElement as HTMLElement
+
+      // Focus the first input after a short delay to ensure the modal is rendered
+      setTimeout(() => {
+        titleInputRef.current?.focus()
+      }, 50)
+
+      // Prevent body scroll
+      document.body.style.overflow = "hidden"
+    } else {
+      // Restore focus to the trigger element when modal closes
+      if (previousActiveElementRef.current) {
+        previousActiveElementRef.current.focus()
+      }
+
+      // Restore body scroll
+      document.body.style.overflow = ""
+
+      // Reset form
+      setTitle("")
+      setDescription("")
+    }
+
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [isOpen])
+
+  // Focus trap
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== "Tab") return
+
+    const focusableElements = modalRef.current?.querySelectorAll<
+      HTMLElement
+    >(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+
+    if (!focusableElements || focusableElements.length === 0) return
+
+    const firstElement = focusableElements[0]
+    const lastElement = focusableElements[focusableElements.length - 1]
+
+    if (e.shiftKey) {
+      // Shift + Tab
+      if (document.activeElement === firstElement) {
+        e.preventDefault()
+        lastElement.focus()
+      }
+    } else {
+      // Tab
+      if (document.activeElement === lastElement) {
+        e.preventDefault()
+        firstElement.focus()
+      }
+    }
+  }
 
   if (!isOpen) return null
 
@@ -46,13 +123,31 @@ export function SignalActionModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      onClick={onClose}
+    >
       <ScaleIn>
-        <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-          <h2 className="mb-1 text-xl font-semibold text-neutral-900">
+        <div
+          ref={modalRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+          className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg"
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={handleKeyDown}
+        >
+          <h2
+            id="modal-title"
+            className="mb-1 text-xl font-semibold text-neutral-900"
+          >
             {actionTypeLabels[type]}
           </h2>
-          <p className="mb-4 text-sm text-neutral-600">
+          <p
+            id="modal-description"
+            className="mb-4 text-sm text-neutral-600"
+          >
             {agentName} · ID: {agentId} · {signalLevel}
           </p>
 
@@ -67,6 +162,7 @@ export function SignalActionModal({
               Título
             </label>
             <input
+              ref={titleInputRef}
               id="title"
               type="text"
               value={title}
@@ -93,11 +189,7 @@ export function SignalActionModal({
           <div className="flex justify-end gap-3">
             <button
               type="button"
-              onClick={() => {
-                onClose()
-                setTitle("")
-                setDescription("")
-              }}
+              onClick={onClose}
               className="rounded-md border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
             >
               Cancelar

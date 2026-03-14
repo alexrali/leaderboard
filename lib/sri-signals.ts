@@ -1,6 +1,17 @@
 import type { AgentWithApiScore } from "./supabase"
 
-export interface AgentSignal {
+// Signal threshold constants
+export const SIGNAL_THRESHOLDS = {
+  RETENTION_MIN: 80, // Minimum retention rate (%)
+  DORMANT_MAX: 15, // Maximum dormant portfolio (%)
+  CONCENTRATION_MAX: 60, // Maximum concentration top3 (%)
+  CPI_MIN: 70, // Minimum CPI (%)
+  PEER_REVENUE_HIGH: 50, // High peer revenue weight (%)
+  PEER_REVENUE_LEADER: 60, // Leader threshold (%)
+  CROSS_SELL_EXCELLENT: 90, // Excellent cross-sell rate (%)
+} as const
+
+export interface AgentSignalDisplay {
   agentId: string
   agentName: string
   peerGroup: number
@@ -45,8 +56,8 @@ export function calculatePeerCrossSellAverage(
 /**
  * Generate signals from agent data based on business rules
  */
-export function generateAgentSignals(agents: AgentWithApiScore[]): AgentSignal[] {
-  const signals: AgentSignal[] = []
+export function generateAgentSignals(agents: AgentWithApiScore[]): AgentSignalDisplay[] {
+  const signals: AgentSignalDisplay[] = []
 
   for (const agent of agents) {
     const retention = agent.client_retention_rate || 0
@@ -59,47 +70,47 @@ export function generateAgentSignals(agents: AgentWithApiScore[]): AgentSignal[]
     const peerPctRevenue = agent.peer_pct_total_revenue || 0
 
     // CRITICAL (ALTO) signals
-    if (retention < 80) {
+    if (retention < SIGNAL_THRESHOLDS.RETENTION_MIN) {
       signals.push({
         agentId: agent.agent_id,
         agentName: agent.agent_name,
         peerGroup: agent.peer_group,
         level: "ALTO",
         type: "Retención",
-        message: `Retención por debajo de 80% (${retention.toFixed(1)}%)`,
+        message: `Retención por debajo de ${SIGNAL_THRESHOLDS.RETENTION_MIN}% (${retention.toFixed(1)}%)`,
         value: retention,
         revenue,
       })
     }
 
-    if (dormant > 15) {
+    if (dormant > SIGNAL_THRESHOLDS.DORMANT_MAX) {
       signals.push({
         agentId: agent.agent_id,
         agentName: agent.agent_name,
         peerGroup: agent.peer_group,
         level: "ALTO",
         type: "Dormido",
-        message: `Cartera dormida por encima de 15% (${dormant.toFixed(1)}%)`,
+        message: `Cartera dormida por encima de ${SIGNAL_THRESHOLDS.DORMANT_MAX}% (${dormant.toFixed(1)}%)`,
         value: dormant,
         revenue,
       })
     }
 
-    if (concentration > 60) {
+    if (concentration > SIGNAL_THRESHOLDS.CONCENTRATION_MAX) {
       signals.push({
         agentId: agent.agent_id,
         agentName: agent.agent_name,
         peerGroup: agent.peer_group,
         level: "ALTO",
         type: "Concentración",
-        message: `Concentración por encima de 60% (${concentration.toFixed(1)}%)`,
+        message: `Concentración por encima de ${SIGNAL_THRESHOLDS.CONCENTRATION_MAX}% (${concentration.toFixed(1)}%)`,
         value: concentration,
         revenue,
       })
     }
 
     // WARNING (MEDIO) signals
-    if (cpi < 70 && retention >= 80) {
+    if (cpi < SIGNAL_THRESHOLDS.CPI_MIN && retention >= SIGNAL_THRESHOLDS.RETENTION_MIN) {
       const peerAvg = calculatePeerCpiAverage(agent.peer_group, agents)
       signals.push({
         agentId: agent.agent_id,
@@ -107,13 +118,13 @@ export function generateAgentSignals(agents: AgentWithApiScore[]): AgentSignal[]
         peerGroup: agent.peer_group,
         level: "MEDIO",
         type: "CPI",
-        message: `CPI por debajo de 70% (${cpi.toFixed(1)}%). Promedio peer: ${peerAvg.toFixed(1)}%`,
+        message: `CPI por debajo de ${SIGNAL_THRESHOLDS.CPI_MIN}% (${cpi.toFixed(1)}%). Promedio peer: ${peerAvg.toFixed(1)}%`,
         value: cpi,
         revenue,
       })
     }
 
-    if (revenueGrowth < 0 && peerPctRevenue > 50) {
+    if (revenueGrowth < 0 && peerPctRevenue > SIGNAL_THRESHOLDS.PEER_REVENUE_HIGH) {
       signals.push({
         agentId: agent.agent_id,
         agentName: agent.agent_name,
@@ -127,7 +138,7 @@ export function generateAgentSignals(agents: AgentWithApiScore[]): AgentSignal[]
     }
 
     // POSITIVE (POSITIVO) signals
-    if (peerPctRevenue >= 60) {
+    if (peerPctRevenue >= SIGNAL_THRESHOLDS.PEER_REVENUE_LEADER) {
       signals.push({
         agentId: agent.agent_id,
         agentName: agent.agent_name,
@@ -140,7 +151,7 @@ export function generateAgentSignals(agents: AgentWithApiScore[]): AgentSignal[]
       })
     }
 
-    if (crossSell > 90) {
+    if (crossSell > SIGNAL_THRESHOLDS.CROSS_SELL_EXCELLENT) {
       const peerAvg = calculatePeerCrossSellAverage(agent.peer_group, agents)
       signals.push({
         agentId: agent.agent_id,
@@ -162,7 +173,7 @@ export function generateAgentSignals(agents: AgentWithApiScore[]): AgentSignal[]
  * Group signals by agent for summary table
  */
 export function groupSignalsByAgent(
-  signals: AgentSignal[]
+  signals: AgentSignalDisplay[]
 ): Map<string, { alto: number; medio: number; positivo: number }> {
   const grouped = new Map<string, { alto: number; medio: number; positivo: number }>()
 
