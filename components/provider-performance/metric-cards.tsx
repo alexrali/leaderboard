@@ -50,7 +50,7 @@ function AnimatedStat({
 
 export function MetricCards() {
   return (
-    <div className="flex flex-wrap items-start gap-x-10 gap-y-6 lg:gap-x-14">
+    <div className="flex flex-wrap items-start gap-x-6 gap-y-6 sm:gap-x-10 lg:gap-x-14">
       {/* Primary Stats */}
       {stats.map((stat, index) => (
         <AnimatedStat
