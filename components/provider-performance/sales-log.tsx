@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
+import type { ProviderTransaction } from "@/lib/provider-types"
 
 interface Sale {
   time: string
@@ -15,15 +16,19 @@ interface Sale {
   profit: number
 }
 
+interface SalesLogProps {
+  initialTransactions?: ProviderTransaction[]
+}
+
 const initialSales: Sale[] = [
-  { time: "14:32:18", orderId: "+4608366", amount: 4128895, channel: "ONLINE", product: "MacBook Pro 14\"", qty: 1, margin: 0.65, rep: "—", profit: 2499 },
-  { time: "14:31:45", orderId: "+4152898", amount: 4152898, channel: "STORE", product: "Nike Air Max", qty: 2, margin: 0.44, rep: "Store #12", profit: 340 },
-  { time: "14:30:22", orderId: "+3982091", amount: 3982091, channel: "B2B", product: "Office Chairs x50", qty: 50, margin: 0.58, rep: "J. Martinez", profit: 8750 },
-  { time: "14:29:58", orderId: "+3170094", amount: 3170094, channel: "ONLINE", product: "Sony WH-1000XM5", qty: 1, margin: 0.41, rep: "—", profit: 349 },
-  { time: "14:28:31", orderId: "+2890122", amount: 2890122, channel: "STORE", product: "Lululemon Set", qty: 1, margin: 0.52, rep: "Store #7", profit: 198 },
+  { time: "14:32:18", orderId: "+4608366", amount: 41.29, channel: "ONLINE", product: "MacBook Pro 14\"", qty: 1, margin: 0.65, rep: "—", profit: 2499 },
+  { time: "14:31:45", orderId: "+4152898", amount: 41.53, channel: "STORE", product: "Nike Air Max", qty: 2, margin: 0.44, rep: "Store #12", profit: 340 },
+  { time: "14:30:22", orderId: "+3982091", amount: 39.82, channel: "B2B", product: "Office Chairs x50", qty: 50, margin: 0.58, rep: "J. Martinez", profit: 8750 },
+  { time: "14:29:58", orderId: "+3170094", amount: 31.70, channel: "ONLINE", product: "Sony WH-1000XM5", qty: 1, margin: 0.41, rep: "—", profit: 349 },
+  { time: "14:28:31", orderId: "+2890122", amount: 28.90, channel: "STORE", product: "Lululemon Set", qty: 1, margin: 0.52, rep: "Store #7", profit: 198 },
 ]
 
-const newSalesPool: Omit<Sale, "time" | "orderId" | "amount">[] = [
+const fallbackPool: Omit<Sale, "time" | "orderId" | "amount">[] = [
   { channel: "ONLINE", product: "iPhone 15 Pro", qty: 1, margin: 0.52, rep: "—", profit: 1199 },
   { channel: "STORE", product: "Dyson V15", qty: 1, margin: 0.38, rep: "Store #7", profit: 749 },
   { channel: "B2B", product: "Dell Monitors x20", qty: 20, margin: 0.45, rep: "S. Kim", profit: 5800 },
@@ -32,6 +37,22 @@ const newSalesPool: Omit<Sale, "time" | "orderId" | "amount">[] = [
   { channel: "B2B", product: "Herman Miller x10", qty: 10, margin: 0.35, rep: "A. Thompson", profit: 12500 },
   { channel: "ONLINE", product: "PS5 Bundle", qty: 1, margin: 0.28, rep: "—", profit: 549 },
 ]
+
+function txToSale(tx: ProviderTransaction): Sale {
+  const d = new Date(tx.transaction_time)
+  const time = d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })
+  return {
+    time,
+    orderId: tx.folio || String(tx.id),
+    amount: tx.revenue,
+    channel: tx.channel === 'distribucion' ? 'B2B' : 'STORE',
+    product: tx.descripcion.length > 28 ? tx.descripcion.slice(0, 28) + '…' : tx.descripcion,
+    qty: Math.round(tx.units_pieces),
+    margin: (tx.margin_pct ?? 0) / 100,
+    rep: tx.sales_rep?.trim() || tx.store_id || '—',
+    profit: Math.round(tx.profit),
+  }
+}
 
 function getChannelIndicator(channel: string) {
   switch (channel) {
@@ -46,23 +67,29 @@ function getChannelIndicator(channel: string) {
   }
 }
 
-export function SalesLog() {
-  const [sales, setSales] = useState<Sale[]>(initialSales)
+export function SalesLog({ initialTransactions = [] }: SalesLogProps) {
+  const [sales, setSales] = useState<Sale[]>(() =>
+    initialTransactions.length > 0
+      ? initialTransactions.slice(0, 5).map(txToSale)
+      : initialSales
+  )
   const [newRowId, setNewRowId] = useState<string | null>(null)
+
+  const livePool = initialTransactions.length > 0
+    ? initialTransactions.slice(5, 25).map(txToSale)
+    : fallbackPool
 
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date()
-      const time = now.toLocaleTimeString("en-US", { hour12: false })
-      const randomSale = newSalesPool[Math.floor(Math.random() * newSalesPool.length)]
+      const time = now.toLocaleTimeString("es-MX", { hour12: false })
+      const randomSale = livePool[Math.floor(Math.random() * livePool.length)]
       const orderId = `+${Math.floor(Math.random() * 1000000) + 4000000}`
-      const amount = Math.floor(Math.random() * 2000000) + 3000000
 
       const newSale: Sale = {
         ...randomSale,
         time,
         orderId,
-        amount,
       }
 
       setNewRowId(orderId)
@@ -72,7 +99,7 @@ export function SalesLog() {
     }, 6000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="animate-in fade-in duration-700 delay-700">
@@ -91,8 +118,8 @@ export function SalesLog() {
             <div className="grid grid-cols-[70px_80px_80px_1fr_50px_50px_50px_100px_80px] gap-3 px-4 py-2.5 bg-stone-50/80 border-b border-stone-200/60 text-[9px] uppercase tracking-[0.1em] text-muted-foreground/60 font-medium">
               <span>Time</span>
               <span>ID</span>
-              <span>Channel</span>
-              <span>Product</span>
+              <span>Canal</span>
+              <span>Producto</span>
               <span className="text-right">n</span>
               <span className="text-right">f</span>
               <span className="text-right">%</span>
