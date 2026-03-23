@@ -44,7 +44,7 @@ function ChannelColumn({
     <div
       className={cn(
         "flex-1 py-5 px-6 animate-in fade-in slide-in-from-bottom-3 duration-500",
-        !isLast && "border-r border-stone-200/60"
+        !isLast && "border-b sm:border-b-0 sm:border-r border-stone-200/60"
       )}
       style={{ animationDelay: `${delay}ms` }}
     >
@@ -87,7 +87,7 @@ export function ChannelGrid() {
       </div>
 
       {/* Channel Columns */}
-      <div className="flex bg-background">
+      <div className="flex flex-col sm:flex-row bg-background">
         {channels.map((channel, index) => (
           <ChannelColumn
             key={channel.label}
