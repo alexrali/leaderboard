@@ -87,6 +87,7 @@ export function SalesLog({ initialTransactions = [] }: SalesLogProps) {
       const orderId = `+${Math.floor(Math.random() * 1000000) + 4000000}`
 
       const newSale: Sale = {
+        amount: 0,
         ...randomSale,
         time,
         orderId,
