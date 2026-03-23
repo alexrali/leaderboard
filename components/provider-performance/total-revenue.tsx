@@ -1,10 +1,15 @@
 "use client"
 
 import { useAnimatedCounter } from "@/hooks/use-animated-counter"
+import type { ProviderSummary } from "@/lib/provider-types"
 
-export function TotalRevenue() {
-  const revenue = useAnimatedCounter(847392, 2500, 300)
-  const orders = useAnimatedCounter(2847, 2000, 500)
+interface TotalRevenueProps {
+  summary?: ProviderSummary | null
+}
+
+export function TotalRevenue({ summary }: TotalRevenueProps) {
+  const revenue = useAnimatedCounter(summary?.total_revenue ?? 0, 2500, 300)
+  const orders = useAnimatedCounter(summary?.total_orders ?? 0, 2000, 500)
 
   return (
     <div className="space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -17,7 +22,11 @@ export function TotalRevenue() {
         </h2>
       </div>
       <div className="flex items-center gap-3 text-sm text-muted-foreground font-mono">
-        <span className="text-emerald-600 font-semibold">+12.4%</span>
+        <span className="text-emerald-600 font-semibold">
+          {summary?.ytd_growth_pct != null
+            ? `${summary.ytd_growth_pct > 0 ? '+' : ''}${summary.ytd_growth_pct.toFixed(1)}% YTD`
+            : '—'}
+        </span>
         <span className="tabular-nums">{orders.toLocaleString()} orders</span>
         <span className="text-border/60">·</span>
         <span>tracking 24/7</span>
