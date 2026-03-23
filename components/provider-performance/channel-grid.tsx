@@ -2,39 +2,27 @@
 
 import { useAnimatedCounter } from "@/hooks/use-animated-counter"
 import { cn } from "@/lib/utils"
+import type { ProviderChannel } from "@/lib/provider-types"
 
-const channels = [
-  {
-    icon: "▲",
-    label: "ONLINE STORE",
-    condition: "Revenue > $400K",
-    amount: 42847,
-    deployed: "$440.2K deployed",
-  },
-  {
-    icon: "●",
-    label: "RETAIL STORES",
-    condition: "$280K - $320K range",
-    amount: 28392,
-    deployed: "$288.5K deployed",
-    color: "text-amber-600",
-  },
-  {
-    icon: "▼",
-    label: "B2B SALES",
-    condition: "Revenue < $150K",
-    amount: 18653,
-    deployed: "$118.7K deployed",
-    color: "text-red-600",
-  },
-]
+interface ChannelGridProps {
+  channels?: ProviderChannel[]
+}
+
+type ChannelDisplay = {
+  icon: string
+  label: string
+  condition: string
+  amount: number
+  deployed: string
+  color?: string
+}
 
 function ChannelColumn({
   channel,
   delay,
   isLast
 }: {
-  channel: typeof channels[0]
+  channel: ChannelDisplay
   delay: number
   isLast: boolean
 }) {
@@ -73,7 +61,21 @@ function ChannelColumn({
   )
 }
 
-export function ChannelGrid() {
+export function ChannelGrid({ channels: channelData }: ChannelGridProps) {
+  const ICONS = ['▲', '●', '▼']
+  const COLORS = ['text-emerald-600', 'text-amber-600', 'text-red-600']
+
+  const channels: ChannelDisplay[] = (channelData ?? []).map((ch, i) => ({
+    icon: ICONS[i] ?? '●',
+    label: ch.displayName.toUpperCase(),
+    condition: `${ch.units.toLocaleString()} pzas · ${ch.orders.toLocaleString()} órdenes · ${ch.locations} ${ch.channel === 'distribucion' ? 'clientes' : 'tiendas'}`,
+    amount: Math.round(ch.revenue),
+    deployed: `$${Math.round(ch.revenue / 1000).toLocaleString()}K MTD`,
+    color: COLORS[i],
+  }))
+
+  const totalRevenue = (channelData ?? []).reduce((s, c) => s + c.revenue, 0)
+
   return (
     <div className="animate-in fade-in duration-700 delay-500">
       {/* Zone Header Bar - INSIDE the zone */}
@@ -82,7 +84,7 @@ export function ChannelGrid() {
           Sales Channel Performance Grid
         </p>
         <p className="text-[11px] text-muted-foreground font-mono">
-          $847K distributed across channels
+          ${Math.round(totalRevenue / 1000).toLocaleString()}K distribuidos en canales
         </p>
       </div>
 
