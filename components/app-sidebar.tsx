@@ -19,6 +19,7 @@ import {
   LogOut,
   BadgeCheck,
   Bell,
+  BarChart2,
 } from "lucide-react"
 import {
   Sidebar,
@@ -415,6 +416,17 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 </CollapsibleContent>
               </SidebarMenuItem>
             </Collapsible>
+
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip="Proveedores"
+                isActive={activeSection === "provider-performance"}
+                onClick={() => handleSectionChange("provider-performance")}
+              >
+                <BarChart2 />
+                <span>Proveedores</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
 
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="Sprints" onClick={() => handleSectionChange()}>

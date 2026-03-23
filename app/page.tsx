@@ -28,6 +28,7 @@ import { ClientesPage } from "@/components/sri/pages/clientes-page"
 import { PortafolioPage } from "@/components/sri/pages/portafolio-page"
 import { MetasPage } from "@/components/sri/pages/metas-page"
 import { AlertasPage } from "@/components/sri/pages/alertas-page"
+import { ProviderPerformancePage } from "@/components/provider-performance/index"
 import { useAppStore } from "@/lib/store"
 import { useSettingsSync } from "@/hooks/use-settings-sync"
 import {
@@ -106,6 +107,7 @@ function PageContent() {
     "sri-portafolio": "Portafolio",
     "sri-metas": "Metas",
     "sri-alertas": "Alertas",
+    "provider-performance": "Desempeño de Proveedores",
   }
 
   return (
@@ -247,6 +249,7 @@ function PageContent() {
             )}
 
             {activeSection === "settings" && <SettingsPage />}
+            {activeSection === "provider-performance" && <ProviderPerformancePage />}
 
             {!EXCLUDED_SECTIONS.includes(activeSection) && (
               <footer className="border-border/20 flex items-center justify-between border-t pb-4 pt-6">
