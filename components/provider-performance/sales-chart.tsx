@@ -1,24 +1,29 @@
 "use client"
 
 import { Area, AreaChart, XAxis, YAxis, ReferenceLine, ResponsiveContainer, Tooltip, ReferenceDot } from "recharts"
+import type { ProviderDailyPoint } from "@/lib/provider-types"
 
-const chartData = [
-  { date: "Jan 1", revenue: 0 },
-  { date: "Jan 8", revenue: 45000 },
-  { date: "Jan 15", revenue: 82000 },
-  { date: "Jan 22", revenue: 145000 },
-  { date: "Jan 29", revenue: 198000 },
-  { date: "Feb 5", revenue: 267000 },
-  { date: "Feb 12", revenue: 342000 },
-  { date: "Feb 19", revenue: 425000 },
-  { date: "Feb 26", revenue: 498000 },
-  { date: "Mar 5", revenue: 589000 },
-  { date: "Mar 12", revenue: 692000 },
-  { date: "Mar 19", revenue: 778000 },
-  { date: "Mar 23", revenue: 847392 },
-]
+interface SalesChartProps {
+  data?: ProviderDailyPoint[]
+}
 
-export function SalesChart() {
+export function SalesChart({ data }: SalesChartProps) {
+  const chartData = data ?? []
+
+  const maxRevenue = chartData.length > 0 ? Math.max(...chartData.map(d => d.revenue)) : 900000
+  const yDomain: [number, number] = [-maxRevenue * 0.05, maxRevenue * 1.15]
+  const yTicks = [
+    0,
+    Math.round(maxRevenue * 0.25 / 100000) * 100000,
+    Math.round(maxRevenue * 0.5 / 100000) * 100000,
+    Math.round(maxRevenue * 0.75 / 100000) * 100000,
+    Math.round(maxRevenue / 100000) * 100000,
+  ]
+
+  const lastPoint = chartData[chartData.length - 1]
+  const currentRevenue = lastPoint?.revenue ?? 0
+  const currentLabel = lastPoint?.weekLabel ?? ''
+
   return (
     <div className="animate-in fade-in duration-1000 delay-500">
       <div className="flex items-center justify-between mb-4">
@@ -38,7 +43,7 @@ export function SalesChart() {
               </linearGradient>
             </defs>
             <XAxis
-              dataKey="date"
+              dataKey="weekLabel"
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 9, fill: 'hsl(var(--muted-foreground))' }}
@@ -52,11 +57,11 @@ export function SalesChart() {
               tick={{ fontSize: 9, fill: 'hsl(var(--muted-foreground))' }}
               tickMargin={8}
               tickFormatter={(value) => `$${(value / 1000).toFixed(0)}K`}
-              domain={[-100000, 900000]}
-              ticks={[0, 200000, 400000, 600000, 800000]}
+              domain={yDomain}
+              ticks={yTicks}
             />
             <ReferenceLine
-              y={847392}
+              y={currentRevenue}
               stroke="hsl(var(--foreground))"
               strokeDasharray="2 4"
               strokeOpacity={0.12}
@@ -71,7 +76,7 @@ export function SalesChart() {
                 if (active && payload && payload.length) {
                   return (
                     <div className="bg-background/95 backdrop-blur-sm border border-border/50 px-3 py-2 shadow-lg">
-                      <p className="text-[10px] text-muted-foreground mb-1">{payload[0].payload.date}</p>
+                      <p className="text-[10px] text-muted-foreground mb-1">{payload[0].payload.weekLabel}</p>
                       <p className="font-mono text-sm font-semibold">
                         ${Number(payload[0].value).toLocaleString()}
                       </p>
@@ -90,30 +95,34 @@ export function SalesChart() {
               animationDuration={2000}
               animationBegin={800}
             />
-            <ReferenceDot
-              x="Mar 23"
-              y={847392}
-              r={4}
-              fill="hsl(var(--foreground))"
-              stroke="hsl(var(--background))"
-              strokeWidth={2}
-            />
+            {currentLabel && (
+              <ReferenceDot
+                x={currentLabel}
+                y={currentRevenue}
+                r={4}
+                fill="hsl(var(--foreground))"
+                stroke="hsl(var(--background))"
+                strokeWidth={2}
+              />
+            )}
           </AreaChart>
         </ResponsiveContainer>
 
         {/* Current Value Marker */}
-        <div className="absolute right-0 top-[15%] flex items-center gap-2 animate-in fade-in duration-1000 delay-1500">
-          <div className="h-px w-6 bg-foreground/20" />
-          <div className="bg-foreground text-background text-[10px] font-mono px-2 py-1">
-            $847,392
+        {currentRevenue > 0 && (
+          <div className="absolute right-0 top-[15%] flex items-center gap-2 animate-in fade-in duration-1000 delay-1500">
+            <div className="h-px w-6 bg-foreground/20" />
+            <div className="bg-foreground text-background text-[10px] font-mono px-2 py-1">
+              ${currentRevenue.toLocaleString()}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Bottom reference */}
         <div className="absolute right-0 bottom-[12%] flex items-center gap-2">
           <div className="h-px w-6 bg-foreground/10" />
           <div className="text-[9px] font-mono text-muted-foreground/40 tabular-nums">
-            $-100K
+            $0
           </div>
         </div>
       </div>
