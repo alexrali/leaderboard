@@ -1,19 +1,11 @@
 "use client"
 
 import { useAnimatedCounter } from "@/hooks/use-animated-counter"
+import type { ProviderSummary } from "@/lib/provider-types"
 
-const stats = [
-  { label: "Orders", value: 44, suffix: "", sublabel: "executed" },
-  { label: "Conv. Rate", value: 84.1, suffix: "%", sublabel: "self-tracked", decimals: 1 },
-  { label: "Avg Order", value: 3.5, prefix: "$", suffix: "K", sublabel: "per sale", decimals: 1 },
-  { label: "Avg Margin", value: 5.0, prefix: "+", suffix: "¢", sublabel: "surface Δ", decimals: 1 },
-]
-
-const volatilityCards = [
-  { label: "YTD Growth", value: "58.5%", sublabel: "on-chain 30d" },
-  { label: "Target Hit", value: "44.5%", sublabel: "Polymarket" },
-  { label: "Vol. Spread", value: "+14.0%", sublabel: "mispricing" },
-]
+interface MetricCardsProps {
+  summary?: ProviderSummary | null
+}
 
 function AnimatedStat({
   label,
@@ -48,11 +40,38 @@ function AnimatedStat({
   )
 }
 
-export function MetricCards() {
+export function MetricCards({ summary }: MetricCardsProps) {
+  const stats = [
+    { label: "Órdenes", value: summary?.total_orders ?? 0, suffix: "", sublabel: "en el mes", delay: 600 },
+    { label: "Categorías", value: summary?.active_categories ?? 0, suffix: "", sublabel: "activas", delay: 700 },
+    { label: "Ticket Prom.", value: summary?.avg_order_value ?? 0, prefix: "$", suffix: "", sublabel: "por orden", decimals: 0, delay: 800 },
+    { label: "Margen Prom.", value: summary?.avg_margin_pct ?? 0, suffix: "%", sublabel: "bruto", decimals: 1, delay: 900 },
+  ]
+
+  const volatilityCards = [
+    {
+      label: "Crec. YTD",
+      value: summary?.ytd_growth_pct != null ? `${summary.ytd_growth_pct > 0 ? '+' : ''}${summary.ytd_growth_pct.toFixed(1)}%` : '—',
+      sublabel: "vs año anterior",
+    },
+    {
+      label: "Meta Alcanzada",
+      value: summary?.target_hit_pct != null ? `${summary.target_hit_pct.toFixed(1)}%` : '—',
+      sublabel: "del objetivo",
+    },
+    {
+      label: "Mejor Día",
+      value: summary?.best_day_revenue != null
+        ? `$${(summary.best_day_revenue / 1000).toFixed(0)}K`
+        : '—',
+      sublabel: summary?.best_day_date ?? '',
+    },
+  ]
+
   return (
     <div className="flex flex-wrap items-start gap-x-6 gap-y-6 sm:gap-x-10 lg:gap-x-14">
       {/* Primary Stats */}
-      {stats.map((stat, index) => (
+      {stats.map((stat) => (
         <AnimatedStat
           key={stat.label}
           label={stat.label}
@@ -61,7 +80,7 @@ export function MetricCards() {
           suffix={stat.suffix}
           sublabel={stat.sublabel}
           decimals={stat.decimals}
-          delay={index * 150 + 600}
+          delay={stat.delay}
         />
       ))}
 
