@@ -10,7 +10,7 @@ import { SalesLog } from "@/components/provider-performance/sales-log"
 
 export function ProviderPerformancePage() {
   return (
-    <div className="bg-stone-50 rounded-xl overflow-hidden">
+    <div className="bg-stone-50 overflow-hidden -mx-4 -my-8 md:-mx-6 lg:-mx-8 lg:-my-10">
       <DashboardHeader />
 
       {/* Main Dashboard Body */}
