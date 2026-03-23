@@ -85,54 +85,58 @@ export function SalesLog() {
 
       {/* Table Structure */}
       <div className="bg-background">
-        {/* Header Row */}
-        <div className="grid grid-cols-[70px_80px_80px_1fr_50px_50px_50px_100px_80px] gap-3 px-4 py-2.5 bg-stone-50/80 border-b border-stone-200/60 text-[9px] uppercase tracking-[0.1em] text-muted-foreground/60 font-medium">
-          <span>Time</span>
-          <span>ID</span>
-          <span>Channel</span>
-          <span>Product</span>
-          <span className="text-right">n</span>
-          <span className="text-right">f</span>
-          <span className="text-right">%</span>
-          <span>Rep</span>
-          <span className="text-right">P&L</span>
-        </div>
+        <div className="overflow-x-auto">
+          <div className="min-w-[680px]">
+            {/* Header Row */}
+            <div className="grid grid-cols-[70px_80px_80px_1fr_50px_50px_50px_100px_80px] gap-3 px-4 py-2.5 bg-stone-50/80 border-b border-stone-200/60 text-[9px] uppercase tracking-[0.1em] text-muted-foreground/60 font-medium">
+              <span>Time</span>
+              <span>ID</span>
+              <span>Channel</span>
+              <span>Product</span>
+              <span className="text-right">n</span>
+              <span className="text-right">f</span>
+              <span className="text-right">%</span>
+              <span>Rep</span>
+              <span className="text-right">P&L</span>
+            </div>
 
-        {/* Data Rows */}
-        <div className="font-mono text-[11px]">
-          {sales.map((sale, index) => {
-            const indicator = getChannelIndicator(sale.channel)
-            return (
-              <div
-                key={sale.orderId + sale.time + index}
-                className={cn(
-                  "grid grid-cols-[70px_80px_80px_1fr_50px_50px_50px_100px_80px] gap-3 px-4 py-2.5 transition-all duration-500",
-                  sale.orderId === newRowId
-                    ? "bg-amber-400/25 animate-in fade-in slide-in-from-top-2 duration-500"
-                    : index % 2 === 0 ? "bg-stone-50/50" : "bg-background",
-                  "border-b border-stone-100 last:border-b-0"
-                )}
-              >
-                <span className="text-muted-foreground tabular-nums">{sale.time}</span>
-                <span className="text-muted-foreground tabular-nums">{sale.orderId}</span>
-                <span className="flex items-center gap-1.5">
-                  <span className={cn("text-[9px]", indicator.color)}>{indicator.symbol}</span>
-                  <span className={indicator.color}>{indicator.label}</span>
-                </span>
-                <span className="truncate">{sale.product}</span>
-                <span className="text-right text-muted-foreground tabular-nums">{sale.qty}</span>
-                <span className="text-right text-muted-foreground tabular-nums">{(sale.margin * 0.7).toFixed(2)}</span>
-                <span className="text-right text-muted-foreground tabular-nums">{(sale.margin * 100).toFixed(0)}%</span>
-                <span className="text-muted-foreground truncate">{sale.rep}</span>
-                <span className={cn(
-                  "text-right font-semibold tabular-nums",
-                  sale.profit > 1000 ? "text-emerald-600" : "text-foreground"
-                )}>
-                  +${sale.profit.toLocaleString()}
-                </span>
-              </div>
-            )
-          })}
+            {/* Data Rows */}
+            <div className="font-mono text-[11px]">
+              {sales.map((sale, index) => {
+                const indicator = getChannelIndicator(sale.channel)
+                return (
+                  <div
+                    key={sale.orderId + sale.time + index}
+                    className={cn(
+                      "grid grid-cols-[70px_80px_80px_1fr_50px_50px_50px_100px_80px] gap-3 px-4 py-2.5 transition-all duration-500",
+                      sale.orderId === newRowId
+                        ? "bg-amber-400/25 animate-in fade-in slide-in-from-top-2 duration-500"
+                        : index % 2 === 0 ? "bg-stone-50/50" : "bg-background",
+                      "border-b border-stone-100 last:border-b-0"
+                    )}
+                  >
+                    <span className="text-muted-foreground tabular-nums">{sale.time}</span>
+                    <span className="text-muted-foreground tabular-nums">{sale.orderId}</span>
+                    <span className="flex items-center gap-1.5">
+                      <span className={cn("text-[9px]", indicator.color)}>{indicator.symbol}</span>
+                      <span className={indicator.color}>{indicator.label}</span>
+                    </span>
+                    <span className="truncate">{sale.product}</span>
+                    <span className="text-right text-muted-foreground tabular-nums">{sale.qty}</span>
+                    <span className="text-right text-muted-foreground tabular-nums">{(sale.margin * 0.7).toFixed(2)}</span>
+                    <span className="text-right text-muted-foreground tabular-nums">{(sale.margin * 100).toFixed(0)}%</span>
+                    <span className="text-muted-foreground truncate">{sale.rep}</span>
+                    <span className={cn(
+                      "text-right font-semibold tabular-nums",
+                      sale.profit > 1000 ? "text-emerald-600" : "text-foreground"
+                    )}>
+                      +${sale.profit.toLocaleString()}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </div>
       </div>
 
