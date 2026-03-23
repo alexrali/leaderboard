@@ -87,6 +87,18 @@ function mapHermesEventRow(row: HermesEventRow): HermesEventRecord {
 
 export function coerceHermesEventInput(input: unknown): unknown {
   if (!isRecord(input)) return input
+
+  // Detect and unwrap double-nested payloads: when `payload` itself looks like
+  // a full event envelope (contains its own `type` and `payload` keys), hoist
+  // the inner payload to prevent variables from resolving as null/empty.
+  if (isRecord(input.payload) && typeof input.payload.type === "string" && isRecord(input.payload.payload)) {
+    return {
+      ...input,
+      payload: input.payload.payload,
+      source: input.source ?? "api",
+    }
+  }
+
   if (input.source !== undefined) return input
 
   return {

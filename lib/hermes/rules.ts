@@ -192,6 +192,7 @@ export function evaluateHermesCondition(condition: HermesRuleCondition, payload:
 
 function extractHermesRuleData(rule: HermesRuleRecord, event: HermesEventRecord): Record<string, unknown> {
   const extracted: Record<string, unknown> = {
+    ...event.payload,
     eventId: event.id,
     eventType: event.type,
     eventSource: event.source,

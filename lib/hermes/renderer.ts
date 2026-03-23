@@ -81,21 +81,41 @@ function coerceTemplateVariableType(value: unknown, type: HermesTemplateVariable
   }
 }
 
-function parseVariableExpression(expression: string) {
-  const helperMatch = expression.match(/^\s*(.+?)\s*\|\s*(\w+)(?:\s+(.+))?\s*$/)
+function stripThisPrefix(path: string): string {
+  return path.startsWith("this.") ? path.slice(5) : path
+}
 
-  if (!helperMatch) {
+function parseVariableExpression(expression: string) {
+  // Pipe syntax: {{path | helper arg1 arg2}}
+  const pipeMatch = expression.match(/^\s*(.+?)\s*\|\s*(\w+)(?:\s+(.+))?\s*$/)
+
+  if (pipeMatch) {
     return {
-      path: expression.trim(),
-      helper: undefined,
-      helperArgs: [] as string[],
+      path: stripThisPrefix(pipeMatch[1].trim()),
+      helper: pipeMatch[2],
+      helperArgs: pipeMatch[3] ? pipeMatch[3].trim().split(/\s+/) : [],
+    }
+  }
+
+  // Handlebars-style syntax: {{helper path arg1 arg2}}
+  const hbMatch = expression.trim().match(/^(\w+)\s+(.+)$/)
+  if (hbMatch) {
+    const candidateHelper = hbMatch[1]
+    const knownHelpers = ["formatDate", "formatNumber", "formatCurrency", "truncate", "upper", "lower", "capitalize"]
+    if (knownHelpers.includes(candidateHelper)) {
+      const remaining = hbMatch[2].trim().split(/\s+/)
+      return {
+        path: stripThisPrefix(remaining[0]),
+        helper: candidateHelper,
+        helperArgs: remaining.slice(1),
+      }
     }
   }
 
   return {
-    path: helperMatch[1].trim(),
-    helper: helperMatch[2],
-    helperArgs: helperMatch[3] ? helperMatch[3].trim().split(/\s+/) : [],
+    path: stripThisPrefix(expression.trim()),
+    helper: undefined,
+    helperArgs: [] as string[],
   }
 }
 
