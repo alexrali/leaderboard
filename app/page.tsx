@@ -43,7 +43,7 @@ import type { TeamMember } from "@/lib/leaderboard-data"
 
 const VIEW_MODES = ["daily", "weekly"] as const
 
-const EXCLUDED_SECTIONS = ["settings", "account", "notifications"]
+const EXCLUDED_SECTIONS = ["settings", "account", "notifications", "provider-performance"]
 
 function getISOWeek(date: Date): number {
   const tmp = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))

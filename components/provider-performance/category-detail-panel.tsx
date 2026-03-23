@@ -9,9 +9,9 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Bar, BarChart } from "recharts"
+import { Area, AreaChart, ResponsiveContainer, XAxis, Tooltip } from "recharts"
 import { cn } from "@/lib/utils"
-import { TrendingUp, TrendingDown, Package, Users, Store, ShoppingCart } from "lucide-react"
+import { TrendingUp, TrendingDown, Package, Users, ShoppingCart } from "lucide-react"
 
 export interface CategoryData {
   name: string
