@@ -10,13 +10,13 @@ import { SalesLog } from "@/components/provider-performance/sales-log"
 
 export function ProviderPerformancePage() {
   return (
-    <div className="bg-stone-50 rounded-xl overflow-hidden border border-stone-200/80">
+    <div className="bg-stone-50 rounded-xl overflow-hidden">
       <DashboardHeader />
 
       {/* Main Dashboard Body */}
       <div>
         {/* Top Section: Main Zone + Sidebar */}
-        <div className="flex border-y border-stone-200/80">
+        <div className="flex flex-col lg:flex-row border-y border-stone-200/80">
 
           {/* LEFT: Main Content Zone */}
           <div className="flex-1 bg-background min-w-0">
@@ -35,7 +35,7 @@ export function ProviderPerformancePage() {
           </div>
 
           {/* RIGHT: Sidebar Zone */}
-          <div className="w-72 xl:w-80 shrink-0 border-l border-stone-200/80 bg-stone-100/70">
+          <div className="w-full lg:w-72 xl:w-80 lg:shrink-0 border-t lg:border-t-0 lg:border-l border-stone-200/80 bg-stone-100/70">
             <ProviderSidebar />
           </div>
         </div>
