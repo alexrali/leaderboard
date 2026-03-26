@@ -8,6 +8,16 @@ interface TotalRevenueProps {
 }
 
 export function TotalRevenue({ summary }: TotalRevenueProps) {
+  if (!summary) {
+    return (
+      <div className="space-y-3">
+        <div className="h-3 w-32 bg-muted animate-pulse rounded" />
+        <div className="h-14 w-56 bg-muted animate-pulse rounded" />
+        <div className="h-4 w-48 bg-muted animate-pulse rounded" />
+      </div>
+    )
+  }
+
   const revenue = useAnimatedCounter(summary?.total_revenue ?? 0, 2500, 300)
   const orders = useAnimatedCounter(summary?.total_orders ?? 0, 2000, 500)
 

@@ -108,17 +108,24 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
       <div className="h-full animate-in fade-in slide-in-from-right-4 duration-700 delay-300">
 
         {/* ANNUAL TARGET Section */}
-        <div className="px-5 pt-5 pb-4">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium mb-3">
-            Objetivo Anual
-          </p>
-          <p className="text-[42px] font-mono font-bold tracking-tighter leading-none">
-            ${(targetValue / 1000000).toFixed(1)}M
-          </p>
-          <p className="text-[11px] text-muted-foreground mt-2 leading-relaxed">
-            todos los canales y categorías
-          </p>
-        </div>
+        {!summary ? (
+          <div className="px-5 pt-5 pb-4">
+            <div className="h-3 w-24 bg-muted animate-pulse rounded mb-3" />
+            <div className="h-10 w-32 bg-muted animate-pulse rounded" />
+          </div>
+        ) : (
+          <div className="px-5 pt-5 pb-4">
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium mb-3">
+              Objetivo Anual
+            </p>
+            <p className="text-[42px] font-mono font-bold tracking-tighter leading-none">
+              ${(targetValue / 1000000).toFixed(1)}M
+            </p>
+            <p className="text-[11px] text-muted-foreground mt-2 leading-relaxed">
+              todos los canales y categorías
+            </p>
+          </div>
+        )}
 
         <div className="border-t border-stone-200/80" />
 

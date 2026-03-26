@@ -40,6 +40,20 @@ function AnimatedStat({
 }
 
 export function MetricCards({ summary }: MetricCardsProps) {
+  if (!summary) {
+    return (
+      <div className="flex flex-wrap items-start gap-x-6 gap-y-6 sm:gap-x-10 lg:gap-x-14">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="text-center">
+            <div className="h-3 w-16 bg-muted animate-pulse rounded mx-auto mb-2" />
+            <div className="h-7 w-12 bg-muted animate-pulse rounded mx-auto mb-1" />
+            <div className="h-3 w-20 bg-muted animate-pulse rounded mx-auto" />
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   const stats = [
     { label: "Órdenes", value: summary?.total_orders ?? 0, suffix: "", sublabel: "en el mes" },
     { label: "Categorías", value: summary?.active_categories ?? 0, suffix: "", sublabel: "activas" },

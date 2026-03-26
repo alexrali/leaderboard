@@ -52,44 +52,23 @@ function PeriodToggle({ value, onChange }: { value: Period; onChange: (v: Period
 export function ProviderPerformancePage() {
   const [period, setPeriod] = useState<Period>('mtd')
 
-  const { data: summary, isLoading: l1, error: e1 } = useProviderSummary(period)
+  const { data: summary, error: e1 } = useProviderSummary(period)
   const { data: annualSummaryData } = useProviderSummary('ytd')
   const annualSummary = period === 'ytd' ? summary : annualSummaryData
-  const { data: dailySeries, isLoading: l2, error: e2 } = useProviderDailySeries(90)
-  const { data: channels, isLoading: l3, error: e3 } = useProviderChannels()
-  const { data: categories, isLoading: l4, error: e4 } = useProviderCategories(5)
-  const { data: transactions, isLoading: l5, error: e5 } = useProviderTransactions(50)
+  const { data: dailySeries } = useProviderDailySeries(90)
+  const { data: channels } = useProviderChannels()
+  const { data: categories } = useProviderCategories(5)
+  const { data: transactions } = useProviderTransactions(50)
   const { data: yoySeries } = useProviderYoYSeries()
   const { data: velocity } = useProviderCategoryVelocity()
 
-  const isLoading = l1 || l2 || l3 || l4 || l5
-  const hasError = [e1, e2, e3, e4, e5].some(Boolean)
-
-  if (isLoading) {
-    return (
-      <div className="bg-stone-50 overflow-hidden -mx-4 -my-8 md:-mx-6 lg:-mx-8 lg:-my-10 flex items-center justify-center" style={{ minHeight: '60vh' }}>
-        <div className="flex flex-col items-center gap-3">
-          <div className="size-8 animate-spin rounded-full border-2 border-stone-400 border-t-transparent" />
-          <span className="text-muted-foreground text-sm font-mono">cargando datos de proveedor…</span>
-        </div>
-      </div>
-    )
-  }
-
-  if (hasError) {
-    return (
-      <div className="bg-stone-50 overflow-hidden -mx-4 -my-8 md:-mx-6 lg:-mx-8 lg:-my-10 flex items-center justify-center" style={{ minHeight: '60vh' }}>
-        <div className="flex flex-col gap-2">
-          <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-muted-foreground">ERR_LOAD_FAILED</p>
-          <p className="text-sm font-mono text-foreground">Error cargando datos del proveedor.</p>
-          <p className="text-xs text-muted-foreground font-mono">Intenta de nuevo en unos minutos.</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="bg-stone-50 overflow-hidden -mx-4 -my-8 md:-mx-6 lg:-mx-8 lg:-my-10">
+      {e1 && (
+        <div className="px-6 py-3 border-b border-destructive/30 bg-destructive/5">
+          <p className="text-xs text-destructive font-mono">Error cargando datos del proveedor. Intenta de nuevo.</p>
+        </div>
+      )}
       <DashboardHeader summary={annualSummary ?? summary} />
 
       {/* Main Dashboard Body */}

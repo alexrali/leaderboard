@@ -56,6 +56,25 @@ function ChannelColumn({
 }
 
 export function ChannelGrid({ channels: channelData }: ChannelGridProps) {
+  if (!channelData || channelData.length === 0) {
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center justify-between px-6 py-3 bg-muted/30">
+          <div className="h-3 w-40 bg-muted animate-pulse rounded" />
+          <div className="h-3 w-32 bg-muted animate-pulse rounded" />
+        </div>
+        <div className="flex flex-col sm:flex-row bg-muted/20 p-6 gap-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="flex-1 space-y-2">
+              <div className="h-3 w-20 bg-muted animate-pulse rounded" />
+              <div className="h-8 w-24 bg-muted animate-pulse rounded" />
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   const ICONS = ['▲', '●', '▼']
   const COLORS = ['text-emerald-600', 'text-amber-600', 'text-red-600']
 

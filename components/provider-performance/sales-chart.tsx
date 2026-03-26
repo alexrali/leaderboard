@@ -13,6 +13,15 @@ interface SalesChartProps {
 type ChartMode = 'cumulative' | 'yoy'
 
 export function SalesChart({ data, yoyData }: SalesChartProps) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="space-y-4">
+        <div className="h-3 w-40 bg-muted animate-pulse rounded" />
+        <div className="h-[280px] bg-muted/30 animate-pulse rounded" />
+      </div>
+    )
+  }
+
   const [mode, setMode] = useState<ChartMode>('cumulative')
   const uid = useId().replace(/:/g, '')
   const currentYear = new Date().getFullYear()
