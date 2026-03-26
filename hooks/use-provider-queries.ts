@@ -9,6 +9,8 @@ import {
   getProviderCategories,
   getProviderTransactions,
   getCategoryDetail,
+  getProviderYoYSeries,
+  getProviderCategoryVelocity,
 } from '@/lib/provider-queries'
 
 const STALE_5M = 5 * 60 * 1000
@@ -58,6 +60,22 @@ export function useCategoryDetail(categoryCode: string | null) {
     queryKey: ['provider-category-detail', categoryCode],
     queryFn: () => getCategoryDetail(categoryCode!),
     enabled: !!categoryCode,
+    staleTime: STALE_5M,
+  })
+}
+
+export function useProviderCategoryVelocity() {
+  return useQuery({
+    queryKey: ['provider-category-velocity'],
+    queryFn: () => getProviderCategoryVelocity(),
+    staleTime: STALE_5M,
+  })
+}
+
+export function useProviderYoYSeries() {
+  return useQuery({
+    queryKey: ['provider-yoy-series'],
+    queryFn: () => getProviderYoYSeries(),
     staleTime: STALE_5M,
   })
 }

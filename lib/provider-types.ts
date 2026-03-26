@@ -64,6 +64,21 @@ export interface ProviderTransaction {
   margin_pct: number
 }
 
+export interface ProviderCategoryVelocity {
+  category_code: string
+  category_name: string
+  current_month_revenue: number
+  prior_month_revenue: number
+  velocity_pct: number | null
+}
+
+export interface ProviderYoYPoint {
+  week_num: number
+  weekLabel: string
+  revenue_current: number
+  revenue_prior: number
+}
+
 export interface CategoryDetail {
   category_code: string
   category_name: string

@@ -9,6 +9,8 @@ import type {
   ProviderCategory,
   ProviderTransaction,
   CategoryDetail,
+  ProviderYoYPoint,
+  ProviderCategoryVelocity,
 } from '@/lib/provider-types'
 
 const PROVIDER_CODE = '0128'
@@ -31,109 +33,63 @@ export async function getProviderSummary(
   return data as ProviderSummary
 }
 
+// getProviderDailySeries — uses RPC instead of fetching 10K rows client-side
 export async function getProviderDailySeries(days = 90): Promise<ProviderDailyPoint[]> {
   const supabase = createClient()
   const since = new Date()
   since.setDate(since.getDate() - days)
-
-  const { data, error } = await supabase
-    .from('provider_sales_daily')
-    .select('date, revenue')
-    .eq('provider_code', PROVIDER_CODE)
-    .gte('date', since.toISOString().split('T')[0])
-    .order('date', { ascending: true })
+  const { data, error } = await supabase.rpc('get_provider_weekly_series', {
+    p_provider_code: PROVIDER_CODE,
+    p_since: since.toISOString().split('T')[0],
+  })
   if (error) throw new Error(error.message)
 
-  // Aggregate to weekly buckets (Sunday-start)
-  const weekly: Record<string, { date: string; revenue: number }> = {}
-  for (const row of (data ?? [])) {
-    const d = new Date(row.date + 'T12:00:00')
-    const weekStart = new Date(d)
-    weekStart.setDate(d.getDate() - d.getDay())
-    const key = weekStart.toISOString().split('T')[0]
-    if (!weekly[key]) weekly[key] = { date: key, revenue: 0 }
-    weekly[key].revenue += Number(row.revenue)
-  }
-
-  // Sort and build cumulative running total
-  const weeks = Object.values(weekly).sort((a, b) => a.date.localeCompare(b.date))
   let cumulative = 0
-  return weeks.map(w => {
-    cumulative += w.revenue
-    const d = new Date(w.date + 'T12:00:00')
+  return (data ?? []).map((w: any) => {
+    cumulative += Number(w.revenue)
+    const d = new Date(w.week_start + 'T12:00:00')
     const weekLabel = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-    return { date: w.date, weekLabel, revenue: Math.round(cumulative) }
+    return { date: w.week_start, weekLabel, revenue: Math.round(cumulative) }
   })
 }
 
+// getProviderChannels — uses RPC instead of fetching 2.5K rows client-side
 export async function getProviderChannels(): Promise<ProviderChannel[]> {
   const supabase = createClient()
   const firstOfMonth = new Date()
   firstOfMonth.setDate(1)
-
-  const { data, error } = await supabase
-    .from('provider_sales_daily')
-    .select('channel, revenue, units_pieces, orders, store_id, client_code')
-    .eq('provider_code', PROVIDER_CODE)
-    .gte('date', firstOfMonth.toISOString().split('T')[0])
+  const { data, error } = await supabase.rpc('get_provider_channels', {
+    p_provider_code: PROVIDER_CODE,
+    p_since: firstOfMonth.toISOString().split('T')[0],
+  })
   if (error) throw new Error(error.message)
-
-  const byChannel: Record<string, ProviderChannel> = {}
-  const locationSets: Record<string, Set<string>> = {}
-
-  for (const row of (data ?? [])) {
-    const ch = row.channel
-    if (!byChannel[ch]) {
-      byChannel[ch] = {
-        channel: ch,
-        displayName: ch === 'distribucion' ? 'Almacén / Distribución' : 'Autoservicio / Tiendas',
-        revenue: 0, units: 0, orders: 0, locations: 0,
-      }
-      locationSets[ch] = new Set()
-    }
-    byChannel[ch].revenue += Number(row.revenue)
-    byChannel[ch].units += Number(row.units_pieces ?? 0)
-    byChannel[ch].orders += Number(row.orders)
-    const loc = row.store_id || row.client_code || ''
-    if (loc) locationSets[ch].add(loc)
-  }
-
-  for (const ch of Object.keys(byChannel)) {
-    byChannel[ch].locations = locationSets[ch]?.size ?? 0
-  }
-
-  return Object.values(byChannel).sort((a, b) => b.revenue - a.revenue)
+  return (data ?? []).map((row: any) => ({
+    channel: row.channel,
+    displayName: row.channel === 'distribucion' ? 'Almacén / Distribución' : 'Autoservicio / Tiendas',
+    revenue: Number(row.revenue),
+    units: Number(row.units_pieces),
+    orders: Number(row.orders),
+    locations: Number(row.locations),
+  }))
 }
 
+// getProviderCategories — uses RPC instead of fetching 52K rows client-side
 export async function getProviderCategories(limit = 5): Promise<ProviderCategory[]> {
   const supabase = createClient()
-  const { data, error } = await supabase
-    .from('provider_sales_daily')
-    .select('category_code, category_name, revenue, units_pieces, orders')
-    .eq('provider_code', PROVIDER_CODE)
-    .not('category_code', 'is', null)
-    .neq('category_code', '')
+  const { data, error } = await supabase.rpc('get_provider_categories', {
+    p_provider_code: PROVIDER_CODE,
+    p_year: new Date().getFullYear(),
+    p_limit: limit,
+  })
   if (error) throw new Error(error.message)
-
-  const byCat: Record<string, ProviderCategory> = {}
-  for (const row of (data ?? [])) {
-    const code = row.category_code
-    if (!byCat[code]) {
-      byCat[code] = {
-        category_code: code,
-        category_name: normalizeName(row.category_name ?? ''),
-        revenue: 0, units: 0, orders: 0, share: 0,
-      }
-    }
-    byCat[code].revenue += Number(row.revenue)
-    byCat[code].units += Number(row.units_pieces ?? 0)
-    byCat[code].orders += Number(row.orders)
-  }
-
-  const sorted = Object.values(byCat).sort((a, b) => b.revenue - a.revenue)
-  const top = sorted.slice(0, limit)
-  const topTotal = top.reduce((s, c) => s + c.revenue, 0)
-  return top.map(c => ({ ...c, share: topTotal > 0 ? c.revenue / topTotal : 0 }))
+  return (data ?? []).map((row: any) => ({
+    category_code: row.category_code,
+    category_name: normalizeName(row.category_name ?? ''),
+    revenue: Number(row.revenue),
+    units: Number(row.units_pieces),
+    orders: Number(row.orders),
+    share: Number(row.share),
+  }))
 }
 
 export async function getProviderTransactions(limit = 50): Promise<ProviderTransaction[]> {
@@ -151,110 +107,44 @@ export async function getProviderTransactions(limit = 50): Promise<ProviderTrans
   })) as ProviderTransaction[]
 }
 
+// getCategoryDetail — uses RPC instead of fetching 21K rows client-side
 export async function getCategoryDetail(categoryCode: string): Promise<CategoryDetail | null> {
   const supabase = createClient()
+  const { data, error } = await supabase.rpc('get_provider_category_detail', {
+    p_provider_code: PROVIDER_CODE,
+    p_category_code: categoryCode,
+  })
+  if (error) throw new Error(error.message)
+  return data as CategoryDetail
+}
 
-  const sixMonthsAgo = new Date()
-  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
-
-  // Fetch daily rows for this category (last 6 months)
-  const { data: dailyRows, error: dailyErr } = await supabase
-    .from('provider_sales_daily')
-    .select('date, channel, revenue, units_pieces, orders, sales_rep')
-    .eq('provider_code', PROVIDER_CODE)
-    .eq('category_code', categoryCode)
-    .gte('date', sixMonthsAgo.toISOString().split('T')[0])
-  if (dailyErr) throw new Error(dailyErr.message)
-  const rows = dailyRows ?? []
-
-  // Totals
-  const totalRevenue = rows.reduce((s, r) => s + Number(r.revenue), 0)
-  const totalUnits = rows.reduce((s, r) => s + Number(r.units_pieces ?? 0), 0)
-  const totalOrders = rows.reduce((s, r) => s + Number(r.orders), 0)
-
-  // Monthly aggregation (group by month, last 6 buckets)
-  const byMonth: Record<string, { key: string; label: string; revenue: number; orders: number }> = {}
-  for (const r of rows) {
-    const d = new Date(r.date + 'T12:00:00')
-    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
-    const label = d.toLocaleDateString('en-US', { month: 'short' })
-    if (!byMonth[key]) byMonth[key] = { key, label, revenue: 0, orders: 0 }
-    byMonth[key].revenue += Number(r.revenue)
-    byMonth[key].orders += Number(r.orders)
-  }
-  const monthlyData = Object.values(byMonth)
-    .sort((a, b) => a.key.localeCompare(b.key))
-    .slice(-6)
-    .map(m => ({ month: m.label, revenue: Math.round(m.revenue), orders: m.orders }))
-
-  // Channel split
-  const byChannel: Record<string, number> = {}
-  for (const r of rows) {
-    byChannel[r.channel] = (byChannel[r.channel] ?? 0) + Number(r.revenue)
-  }
-  const channelSplit = Object.entries(byChannel).map(([ch, rev]) => ({
-    channel: ch === 'distribucion' ? 'Distribución' : 'Autoservicio',
-    percentage: totalRevenue > 0 ? Math.round((rev / totalRevenue) * 100) : 0,
-    revenue: Math.round(rev),
+// getProviderCategoryVelocity — month-over-month velocity per category
+export async function getProviderCategoryVelocity(): Promise<ProviderCategoryVelocity[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase.rpc('get_provider_category_velocity', {
+    p_provider_code: PROVIDER_CODE,
+  })
+  if (error) throw new Error(error.message)
+  return (data ?? []).map((row: any) => ({
+    category_code: row.category_code,
+    category_name: normalizeName(row.category_name ?? ''),
+    current_month_revenue: Number(row.current_month_revenue),
+    prior_month_revenue: Number(row.prior_month_revenue),
+    velocity_pct: row.velocity_pct != null ? Number(row.velocity_pct) : null,
   }))
+}
 
-  // Top reps (distribucion channel only)
-  const byRep: Record<string, { sales: number; deals: number }> = {}
-  for (const r of rows) {
-    if (r.channel !== 'distribucion' || !r.sales_rep?.trim()) continue
-    if (!byRep[r.sales_rep]) byRep[r.sales_rep] = { sales: 0, deals: 0 }
-    byRep[r.sales_rep].sales += Number(r.revenue)
-    byRep[r.sales_rep].deals += Number(r.orders)
-  }
-  const topReps = Object.entries(byRep)
-    .map(([name, v]) => ({ name, sales: Math.round(v.sales), deals: v.deals }))
-    .sort((a, b) => b.sales - a.sales)
-    .slice(0, 3)
-
-  // Top products: get SKU codes for this category, then aggregate transactions
-  const { data: productCodes } = await supabase
-    .from('provider_products')
-    .select('product_code')
-    .eq('category_code', categoryCode)
-  const codes = (productCodes ?? []).map((p: { product_code: string }) => p.product_code)
-
-  let topProducts: CategoryDetail['topProducts'] = []
-  if (codes.length > 0) {
-    const { data: txRows } = await supabase
-      .from('provider_sales_transactions')
-      .select('clave, descripcion, revenue, units_pieces')
-      .eq('provider_code', PROVIDER_CODE)
-      .in('clave', codes)
-    const byProduct: Record<string, { name: string; revenue: number; units: number }> = {}
-    for (const t of (txRows ?? [])) {
-      if (!byProduct[t.clave]) {
-        byProduct[t.clave] = { name: normalizeName(t.descripcion ?? t.clave), revenue: 0, units: 0 }
-      }
-      byProduct[t.clave].revenue += Number(t.revenue)
-      byProduct[t.clave].units += Number(t.units_pieces ?? 0)
-    }
-    topProducts = Object.entries(byProduct)
-      .map(([clave, v]) => ({ clave, name: v.name, revenue: Math.round(v.revenue), units: Math.round(v.units) }))
-      .sort((a, b) => b.revenue - a.revenue)
-      .slice(0, 4)
-  }
-
-  // Get canonical category name
-  const { data: catRow } = await supabase
-    .from('provider_categories')
-    .select('category_name')
-    .eq('category_code', categoryCode)
-    .maybeSingle()
-
-  return {
-    category_code: categoryCode,
-    category_name: normalizeName(catRow?.category_name ?? categoryCode),
-    revenue: Math.round(totalRevenue),
-    units: Math.round(totalUnits),
-    orders: totalOrders,
-    topProducts,
-    monthlyData,
-    channelSplit,
-    topReps,
-  }
+// getProviderYoYSeries — year-over-year weekly comparison
+export async function getProviderYoYSeries(): Promise<ProviderYoYPoint[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase.rpc('get_provider_yoy_series', {
+    p_provider_code: PROVIDER_CODE,
+  })
+  if (error) throw new Error(error.message)
+  return (data ?? []).map((row: any) => ({
+    week_num: Number(row.week_num),
+    weekLabel: `Sem ${row.week_num}`,
+    revenue_current: Number(row.revenue_current),
+    revenue_prior: Number(row.revenue_prior),
+  }))
 }
