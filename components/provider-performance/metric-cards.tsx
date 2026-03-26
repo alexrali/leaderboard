@@ -20,7 +20,6 @@ function AnimatedStat({
   suffix?: string
   sublabel: string
   decimals?: number
-  delay?: number
 }) {
   const displayValue = decimals
     ? value.toFixed(decimals)

@@ -55,7 +55,7 @@ export function SalesLog({ initialTransactions = [] }: SalesLogProps) {
     <div className="animate-in fade-in duration-700 delay-700">
       {/* Header with title */}
       <div className="px-6 py-3 border-b border-border bg-muted/40">
-        <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
+        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
           Registro de Ejecución
         </p>
       </div>
@@ -63,7 +63,7 @@ export function SalesLog({ initialTransactions = [] }: SalesLogProps) {
       {/* Table Structure */}
       <div className="bg-background">
         {/* Header Row */}
-        <div className="grid grid-cols-[60px_1fr_50px_80px] sm:grid-cols-[70px_80px_80px_1fr_50px_50px_100px_80px] gap-3 px-4 py-2.5 bg-muted/40 border-b border-border text-[9px] uppercase tracking-[0.1em] text-muted-foreground font-medium">
+        <div className="grid grid-cols-[60px_1fr_50px_80px] sm:grid-cols-[70px_80px_80px_1fr_50px_50px_100px_80px] gap-3 px-4 py-2.5 bg-muted/40 border-b border-border text-xs uppercase tracking-[0.1em] text-muted-foreground font-medium">
           <span>Hora</span>
           <span className="hidden sm:block">ID</span>
           <span className="hidden sm:block">Canal</span>
@@ -95,7 +95,7 @@ export function SalesLog({ initialTransactions = [] }: SalesLogProps) {
                 <span className="text-muted-foreground tabular-nums">{sale.time}</span>
                 <span className="hidden sm:block text-muted-foreground tabular-nums">{sale.orderId}</span>
                 <span className="hidden sm:block flex items-center gap-1.5">
-                  <span className={cn("text-[9px]", indicator.color)}>{indicator.symbol}</span>
+                  <span className={cn("text-xs", indicator.color)}>{indicator.symbol}</span>
                   <span className={indicator.color}>{indicator.label}</span>
                 </span>
                 <span className="truncate">{sale.product}</span>

@@ -50,7 +50,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
 
         {isLoading && (
           <div className="flex items-center justify-center py-20">
-            <div className="size-6 animate-spin rounded-full border-2 border-stone-400 border-t-transparent" />
+            <div className="size-6 animate-spin rounded-full border-2 border-border border-t-transparent" />
           </div>
         )}
 

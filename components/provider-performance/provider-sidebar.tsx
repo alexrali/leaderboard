@@ -34,6 +34,7 @@ function CategorySlide({
       "absolute inset-0 flex flex-col justify-between transition-all duration-500 cursor-pointer group",
       isActive ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4 pointer-events-none"
     )}
+    aria-hidden={!isActive}
     onClick={onClick}
     >
       <div>
@@ -127,7 +128,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
           </div>
         )}
 
-        <div className="border-t border-stone-200/80" />
+        <div className="border-t border-border" />
 
         {/* Category Slideshow Section */}
         <div className="px-5 py-4">
@@ -168,7 +169,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
           </div>
         </div>
 
-        <div className="border-t border-stone-200/80" />
+        <div className="border-t border-border" />
 
         {/* SESSION MILESTONES Section */}
         <div className="px-5 py-4">
@@ -195,7 +196,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
           </div>
         </div>
 
-        <div className="border-t border-stone-200/80" />
+        <div className="border-t border-border" />
 
         {/* Category Velocity Grid */}
         <div className="px-5 py-4">
@@ -205,7 +206,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
             </p>
             <p className="text-[10px] text-muted-foreground font-mono">mes actual vs anterior</p>
           </div>
-          <div className="divide-y divide-stone-200/60 border border-stone-200/60">
+          <div className="divide-y divide-border border border-border/60" role="listbox" aria-label="Categorías por velocidad">
             {categorySlides.map((cat, index) => {
               const vel = velocity.find(v => v.category_code === cat.category_code)
               const pct = vel?.velocity_pct ?? null
@@ -219,7 +220,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
                   onClick={() => handleSelectFromPicker(index)}
                   className={cn(
                     "w-full flex items-center justify-between px-3 py-2 transition-colors duration-150",
-                    isActive ? "bg-foreground text-background" : "bg-background hover:bg-stone-50"
+                    isActive ? "bg-foreground text-background" : "bg-background hover:bg-muted/50"
                   )}
                 >
                   <div className="flex items-center gap-2 min-w-0">

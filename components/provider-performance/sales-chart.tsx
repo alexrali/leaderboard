@@ -80,7 +80,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
           {mode === 'cumulative' ? 'Curva de Ingresos — Acumulada' : 'Revenue — Año vs Año'}
         </p>
         {hasYoY && (
-          <div className="flex border border-stone-200/80 divide-x divide-stone-200/80" role="tablist" aria-label="Modo de gráfico">
+          <div className="flex border border-border divide-x divide-border" role="tablist" aria-label="Modo de gráfico">
             <button
               role="tab"
               aria-selected={mode === 'cumulative'}

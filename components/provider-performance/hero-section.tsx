@@ -22,7 +22,7 @@ function PeriodToggle({
   ]
   return (
     <div
-      className="flex border border-stone-200/80 divide-x divide-stone-200/80"
+      className="flex border border-border divide-x divide-border"
       role="tablist"
       aria-label="Período"
     >

@@ -27,7 +27,7 @@ function ChannelColumn({
     <div
       className={cn(
         "flex-1 py-5 px-6",
-        !isLast && "border-b sm:border-b-0 sm:border-r border-stone-200/60"
+        !isLast && "border-b sm:border-b-0 sm:border-r border-border/60"
       )}
     >
       {/* Icon and Label */}
@@ -92,7 +92,7 @@ export function ChannelGrid({ channels: channelData }: ChannelGridProps) {
   return (
     <div className="animate-in fade-in duration-700 delay-500">
       {/* Zone Header Bar - INSIDE the zone */}
-      <div className="flex items-center justify-between px-6 py-3 bg-stone-50/80 border-b border-stone-200/60">
+      <div className="flex items-center justify-between px-6 py-3 bg-muted/40 border-b border-border/60">
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
           Rendimiento por Canal de Venta
         </p>
