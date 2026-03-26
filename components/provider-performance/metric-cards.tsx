@@ -27,7 +27,7 @@ function AnimatedStat({
 
   return (
     <div className="text-center">
-      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium mb-1.5">
+      <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-1.5">
         {label}
       </p>
       <p className="text-2xl font-mono font-bold tabular-nums">
@@ -103,7 +103,7 @@ export function MetricCards({ summary }: MetricCardsProps) {
         <div
           key={card.label}
         >
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium mb-1.5">
+          <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-1.5">
             {card.label}
           </p>
           <p className="text-xl font-mono font-bold tabular-nums">{card.value}</p>

@@ -46,13 +46,13 @@ function CategorySlide({
       </div>
       <div className="flex items-end justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">Participación</p>
+          <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground mb-1">Participación</p>
           <p className="text-3xl font-mono font-bold">{(category.share * 100).toFixed(0)}%</p>
         </div>
       </div>
 
       <div className="absolute bottom-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity">
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+        <div className="flex items-center gap-1 text-[9px] text-muted-foreground">
           <span>Ver detalles</span>
           <ChevronRight className="h-3 w-3" />
         </div>
@@ -116,7 +116,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
           </div>
         ) : (
           <div className="px-5 pt-5 pb-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium mb-3">
+            <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-3">
               Objetivo Anual
             </p>
             <p className="text-[42px] font-mono font-bold tracking-tighter leading-none">
@@ -132,7 +132,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
 
         {/* Category Slideshow Section */}
         <div className="px-5 py-4">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium mb-3">
+          <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-3">
             Enfoque por Categoría
           </p>
 
@@ -173,7 +173,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
 
         {/* SESSION MILESTONES Section */}
         <div className="px-5 py-4">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium mb-3">
+          <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-3">
             Hitos
           </p>
 
@@ -201,10 +201,10 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
         {/* Category Velocity Grid */}
         <div className="px-5 py-4">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
+            <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
               Velocidad MoM
             </p>
-            <p className="text-[10px] text-muted-foreground font-mono">mes actual vs anterior</p>
+            <p className="text-[8px] text-muted-foreground font-mono">mes actual vs anterior</p>
           </div>
           <div className="divide-y divide-border border border-border/60" role="listbox" aria-label="Categorías por velocidad">
             {categorySlides.map((cat, index) => {
@@ -225,13 +225,13 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <span className={cn(
-                      "text-[10px] font-mono tabular-nums w-5 text-left shrink-0",
+                      "text-[8px] font-mono tabular-nums w-5 text-left shrink-0",
                       isActive ? "text-background/50" : "text-muted-foreground"
                     )}>
                       {String(index + 1).padStart(2, '0')}
                     </span>
                     <span className={cn(
-                      "text-[10px] font-mono truncate",
+                      "text-[8px] font-mono truncate",
                       isActive ? "text-background" : "text-foreground"
                     )}>
                       {cat.name}
@@ -239,14 +239,14 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <span className={cn(
-                      "font-mono text-[10px] tabular-nums",
+                      "font-mono text-[8px] tabular-nums",
                       isActive ? "text-background/70" : "text-muted-foreground"
                     )}>
                       {(cat.share * 100).toFixed(0)}%
                     </span>
                     {pct != null && (
                       <span className={cn(
-                        "text-xs font-mono tabular-nums w-10 text-right",
+                        "text-[9px] font-mono tabular-nums w-10 text-right",
                         isActive
                           ? "text-background/60"
                           : pct > 5 ? "text-emerald-600"
@@ -261,7 +261,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
               )
             })}
           </div>
-          <p className="text-[10px] text-muted-foreground font-mono mt-2 text-right">
+          <p className="text-[8px] text-muted-foreground font-mono mt-2 text-right">
             toca para detalle
           </p>
         </div>

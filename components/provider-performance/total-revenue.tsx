@@ -23,7 +23,7 @@ export function TotalRevenue({ summary }: TotalRevenueProps) {
 
   return (
     <div className="space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
+      <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
         Ingresos Totales
       </p>
       <div className="flex items-baseline gap-4">

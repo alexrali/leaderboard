@@ -39,7 +39,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
         <SheetHeader className="pb-0">
           <div className="flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-foreground animate-pulse" />
-            <SheetDescription className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
+            <SheetDescription className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
               Detalle de Categoría
             </SheetDescription>
           </div>
@@ -59,7 +59,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
             {/* Hero Stats */}
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-1">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
+                <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   Ingresos Totales
                 </p>
                 <p className="text-4xl font-mono font-bold tracking-tight">
@@ -68,7 +68,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
                 <p className="text-[10px] text-muted-foreground">últimos 6 meses</p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
+                <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   Piezas Vendidas
                 </p>
                 <p className="text-4xl font-mono font-bold tracking-tight">
@@ -83,23 +83,23 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
               <div className="text-center">
                 <ShoppingCart className="h-4 w-4 mx-auto text-muted-foreground mb-1.5" />
                 <p className="text-lg font-mono font-bold">{ordersCounter.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider">Órdenes</p>
+                <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Órdenes</p>
               </div>
               <div className="text-center">
                 <Package className="h-4 w-4 mx-auto text-muted-foreground mb-1.5" />
                 <p className="text-lg font-mono font-bold">{avgTicket}</p>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider">Ticket Prom.</p>
+                <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Ticket Prom.</p>
               </div>
               <div className="text-center">
                 <Users className="h-4 w-4 mx-auto text-muted-foreground mb-1.5" />
                 <p className="text-lg font-mono font-bold">{detail.topReps.length}</p>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider">Top Reps</p>
+                <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Top Reps</p>
               </div>
             </div>
 
             {/* Revenue Trend Chart */}
             <div className="space-y-3">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
+              <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                 Tendencia de Ingresos — 6 Meses
               </p>
               <div className="h-36 w-full bg-muted/20 rounded-lg p-2">
@@ -146,7 +146,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
 
             {/* Channel Distribution */}
             <div className="space-y-3">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
+              <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                 Distribución por Canal
               </p>
               <div className="space-y-2">
@@ -173,16 +173,16 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
             {/* Top Products */}
             {detail.topProducts.length > 0 && (
               <div className="space-y-3">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
+                <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   Productos Destacados
                 </p>
                 <div className="border border-border/50 rounded-lg overflow-hidden">
                   <Table>
                     <TableHeader>
                       <TableRow className="hover:bg-transparent border-b border-border/30">
-                        <TableHead className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-medium h-8">Producto</TableHead>
-                        <TableHead className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-medium h-8 text-right">Pzas</TableHead>
-                        <TableHead className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-medium h-8 text-right">Ingreso</TableHead>
+                        <TableHead className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-medium h-8">Producto</TableHead>
+                        <TableHead className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-medium h-8 text-right">Pzas</TableHead>
+                        <TableHead className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-medium h-8 text-right">Ingreso</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -202,7 +202,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
             {/* Top Sales Reps */}
             {detail.topReps.length > 0 && (
               <div className="space-y-3">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
+                <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   Top Representantes
                 </p>
                 <div className="space-y-2">

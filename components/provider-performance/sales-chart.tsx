@@ -76,7 +76,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
   return (
     <div className="animate-in fade-in duration-1000 delay-500">
       <div className="flex items-center justify-between mb-4">
-        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
+        <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
           {mode === 'cumulative' ? 'Curva de Ingresos — Acumulada' : 'Revenue — Año vs Año'}
         </p>
         {hasYoY && (
@@ -86,7 +86,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
               aria-selected={mode === 'cumulative'}
               onClick={() => setMode('cumulative')}
               className={cn(
-                "px-2.5 py-1 text-xs font-mono uppercase tracking-[0.12em] transition-colors duration-150",
+                "px-2.5 py-1 text-[9px] font-mono uppercase tracking-[0.12em] transition-colors duration-150",
                 mode === 'cumulative'
                   ? "bg-foreground text-background"
                   : "text-muted-foreground hover:text-muted-foreground"
@@ -99,7 +99,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
               aria-selected={mode === 'yoy'}
               onClick={() => setMode('yoy')}
               className={cn(
-                "px-2.5 py-1 text-xs font-mono uppercase tracking-[0.12em] transition-colors duration-150",
+                "px-2.5 py-1 text-[9px] font-mono uppercase tracking-[0.12em] transition-colors duration-150",
                 mode === 'yoy'
                   ? "bg-foreground text-background"
                   : "text-muted-foreground hover:text-muted-foreground"
@@ -289,11 +289,11 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
           <div className="absolute right-0 top-[10%] flex flex-col gap-1 animate-in fade-in duration-1000 delay-500">
             <div className="flex items-center gap-2">
               <div className="h-px w-6 bg-foreground" />
-              <span className="text-xs font-mono text-foreground">{currentYear}</span>
+              <span className="text-[9px] font-mono text-foreground">{currentYear}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="h-px w-6 bg-muted-foreground/40 border-t border-dashed" />
-              <span className="text-xs font-mono text-muted-foreground">{priorYear}</span>
+              <span className="text-[9px] font-mono text-muted-foreground">{priorYear}</span>
             </div>
           </div>
         )}
@@ -302,7 +302,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
         {mode === 'cumulative' && (
           <div className="absolute right-0 bottom-[12%] flex items-center gap-2">
             <div className="h-px w-6 bg-foreground/10" />
-            <div className="text-xs font-mono text-muted-foreground tabular-nums">
+            <div className="text-[9px] font-mono text-muted-foreground tabular-nums">
               $0
             </div>
           </div>

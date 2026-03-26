@@ -33,7 +33,7 @@ function PeriodToggle({
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
           className={cn(
-            "px-3 py-1.5 text-xs font-mono uppercase tracking-[0.14em] transition-colors duration-150",
+            "px-3 py-1.5 text-[9px] font-mono uppercase tracking-[0.14em] transition-colors duration-150",
             value === o.value
               ? "bg-foreground text-background"
               : "text-muted-foreground hover:text-muted-foreground bg-transparent",
