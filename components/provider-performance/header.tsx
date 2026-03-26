@@ -1,12 +1,25 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Play } from "lucide-react"
 import { useLiveClock } from "@/hooks/use-live-clock"
-import { cn } from "@/lib/utils"
+import type { ProviderSummary } from '@/lib/provider-types'
 
-export function DashboardHeader() {
+interface DashboardHeaderProps {
+  summary?: ProviderSummary | null
+}
+
+export function DashboardHeader({ summary }: DashboardHeaderProps) {
   const time = useLiveClock()
+
+  const now = new Date()
+  const quarter = `Q${Math.ceil((now.getMonth() + 1) / 3)} ${now.getFullYear()}`
+
+  const bestDay = summary?.best_day_revenue
+    ? `$${(summary.best_day_revenue / 1000).toFixed(1)}K`
+    : '—'
+
+  const target = summary?.target_amount
+    ? `$${(summary.target_amount / 1000000).toFixed(1)}M`
+    : '—'
 
   return (
     <header className="border-b border-border/40 px-6 lg:px-8 py-3 bg-background sticky top-0 z-50">
@@ -17,49 +30,27 @@ export function DashboardHeader() {
             SALES<span className="text-muted-foreground">.track</span>
           </h1>
           <div className="hidden md:flex items-center gap-1.5 text-[11px] text-muted-foreground font-mono">
-            <span>Q1 2026</span>
+            <span>{quarter}</span>
             <span className="text-border">·</span>
-            <span>multi-channel retail</span>
+            <span>distribución + autoservicio</span>
             <span className="text-border">·</span>
-            <span>5 categories</span>
+            <span>{summary?.active_categories ?? '—'} categorías</span>
             <span className="text-border">·</span>
-            <span>12 active reps</span>
+            <span>{summary?.active_reps ?? '—'} agentes activos</span>
           </div>
         </div>
 
         {/* Right: Controls + Stats + Clock */}
         <div className="flex items-center gap-6 lg:gap-8">
-          {/* Live Button */}
-          <Button
-            variant="outline"
-            size="sm"
-            className={cn(
-              "gap-2 h-7 px-3 font-mono text-[10px] uppercase tracking-wider",
-              "border-emerald-500/40 text-emerald-600 hover:bg-emerald-500/5 hover:border-emerald-500/60",
-              "transition-all duration-300"
-            )}
-          >
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-            </span>
-            <Play className="h-2.5 w-2.5 fill-current" />
-            <span>LIVE</span>
-          </Button>
-
           {/* Header Stats */}
           <div className="hidden lg:flex items-center gap-6">
             <div className="text-right">
               <p className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Best Day</p>
-              <p className="text-sm font-mono font-semibold tabular-nums">$47.2K</p>
+              <p className="text-sm font-mono font-semibold tabular-nums">{bestDay}</p>
             </div>
             <div className="text-right">
               <p className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Target</p>
-              <p className="text-sm font-mono font-semibold tabular-nums">$2.5M</p>
-            </div>
-            <div className="text-right">
-              <p className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Frequency</p>
-              <p className="text-sm font-mono font-semibold tabular-nums">1 / 2min</p>
+              <p className="text-sm font-mono font-semibold tabular-nums">{target}</p>
             </div>
           </div>
 
