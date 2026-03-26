@@ -1,14 +1,12 @@
 "use client"
 
-import { useState } from "react"
-import { cn } from "@/lib/utils"
 import { DashboardHeader } from "@/components/provider-performance/header"
-import { TotalRevenue } from "@/components/provider-performance/total-revenue"
 import { MetricCards } from "@/components/provider-performance/metric-cards"
 import { SalesChart } from "@/components/provider-performance/sales-chart"
 import { ProviderSidebar } from "@/components/provider-performance/provider-sidebar"
 import { ChannelGrid } from "@/components/provider-performance/channel-grid"
 import { SalesLog } from "@/components/provider-performance/sales-log"
+import { HeroSection } from "@/components/provider-performance/hero-section"
 import {
   useProviderSummary,
   useProviderDailySeries,
@@ -19,42 +17,9 @@ import {
   useProviderCategoryVelocity,
 } from "@/hooks/use-provider-queries"
 
-type Period = 'mtd' | 'qtd' | 'ytd'
-
-function PeriodToggle({ value, onChange }: { value: Period; onChange: (v: Period) => void }) {
-  const options: { value: Period; label: string }[] = [
-    { value: 'mtd', label: 'Mes' },
-    { value: 'qtd', label: 'Trim' },
-    { value: 'ytd', label: 'Año' },
-  ]
-  return (
-    <div className="flex border border-stone-200/80 divide-x divide-stone-200/80" role="tablist" aria-label="Período">
-      {options.map(o => (
-        <button
-          key={o.value}
-          role="tab"
-          aria-selected={value === o.value}
-          onClick={() => onChange(o.value)}
-          className={cn(
-            "px-3 py-1.5 text-[9px] font-mono uppercase tracking-[0.14em] transition-colors duration-150",
-            value === o.value
-              ? "bg-foreground text-background"
-              : "text-muted-foreground hover:text-muted-foreground bg-transparent"
-          )}
-        >
-          {o.label}
-        </button>
-      ))}
-    </div>
-  )
-}
-
 export function ProviderPerformancePage() {
-  const [period, setPeriod] = useState<Period>('mtd')
-
-  const { data: summary, error: e1 } = useProviderSummary(period)
-  const { data: annualSummaryData } = useProviderSummary('ytd')
-  const annualSummary = period === 'ytd' ? summary : annualSummaryData
+  const { data: summary, error: e1 } = useProviderSummary('mtd')
+  const { data: annualSummary } = useProviderSummary('ytd')
   const { data: dailySeries } = useProviderDailySeries(90)
   const { data: channels } = useProviderChannels()
   const { data: categories } = useProviderCategories(5)
@@ -78,12 +43,7 @@ export function ProviderPerformancePage() {
 
           {/* LEFT: Main Content Zone */}
           <div className="flex-1 bg-background min-w-0">
-            <div className="px-6 pt-6 pb-5">
-              <div className="flex items-start justify-between">
-                <TotalRevenue summary={summary} />
-                <PeriodToggle value={period} onChange={setPeriod} />
-              </div>
-            </div>
+            <HeroSection />
             <div className="px-6 pb-5">
               <MetricCards summary={summary} />
             </div>
@@ -108,7 +68,7 @@ export function ProviderPerformancePage() {
         <div className="flex items-center justify-end px-6 py-4 border-t border-stone-200/60">
           <p className="text-[11px] text-muted-foreground font-mono tabular-nums">
             {summary
-              ? `— ${summary.total_orders.toLocaleString()} órdenes · $0 → $${Math.round(summary.total_revenue).toLocaleString()} · ${period.toUpperCase()}`
+              ? `— ${summary.total_orders.toLocaleString()} órdenes · $0 → $${Math.round(summary.total_revenue).toLocaleString()} · MTD`
               : '—'}
           </p>
         </div>
