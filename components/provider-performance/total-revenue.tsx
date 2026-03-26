@@ -17,7 +17,7 @@ export function TotalRevenue({ summary }: TotalRevenueProps) {
         Total Revenue
       </p>
       <div className="flex items-baseline gap-4">
-        <h2 className="text-6xl md:text-[80px] font-bold tracking-tighter font-mono leading-none">
+        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold tracking-tighter font-mono leading-none">
           ${revenue.toLocaleString()}
         </h2>
       </div>
