@@ -1,6 +1,5 @@
 "use client"
 
-import { useAnimatedCounter } from "@/hooks/use-animated-counter"
 import { cn } from "@/lib/utils"
 import type { ProviderChannel } from "@/lib/provider-types"
 
@@ -19,22 +18,17 @@ type ChannelDisplay = {
 
 function ChannelColumn({
   channel,
-  delay,
   isLast
 }: {
   channel: ChannelDisplay
-  delay: number
   isLast: boolean
 }) {
-  const animatedAmount = useAnimatedCounter(channel.amount, 2000, delay)
-
   return (
     <div
       className={cn(
-        "flex-1 py-5 px-6 animate-in fade-in slide-in-from-bottom-3 duration-500",
+        "flex-1 py-5 px-6",
         !isLast && "border-b sm:border-b-0 sm:border-r border-stone-200/60"
       )}
-      style={{ animationDelay: `${delay}ms` }}
     >
       {/* Icon and Label */}
       <div className="flex items-center gap-2 mb-1.5">
@@ -52,7 +46,7 @@ function ChannelColumn({
         "text-[32px] font-mono font-bold tracking-tight tabular-nums leading-none",
         channel.color || "text-foreground"
       )}>
-        +${animatedAmount.toLocaleString()}
+        ${channel.amount.toLocaleString()}
       </p>
 
       {/* Deployed */}
@@ -94,7 +88,6 @@ export function ChannelGrid({ channels: channelData }: ChannelGridProps) {
           <ChannelColumn
             key={channel.label}
             channel={channel}
-            delay={index * 150 + 800}
             isLast={index === channels.length - 1}
           />
         ))}

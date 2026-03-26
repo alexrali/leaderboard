@@ -1,6 +1,5 @@
 "use client"
 
-import { useAnimatedCounter } from "@/hooks/use-animated-counter"
 import type { ProviderSummary } from "@/lib/provider-types"
 
 interface MetricCardsProps {
@@ -14,7 +13,6 @@ function AnimatedStat({
   suffix = "",
   sublabel,
   decimals = 0,
-  delay = 0
 }: {
   label: string
   value: number
@@ -24,12 +22,13 @@ function AnimatedStat({
   decimals?: number
   delay?: number
 }) {
-  const animatedValue = useAnimatedCounter(Math.floor(value * (decimals ? Math.pow(10, decimals) : 1)), 1800, delay)
-  const displayValue = decimals ? (animatedValue / Math.pow(10, decimals)).toFixed(decimals) : animatedValue
+  const displayValue = decimals
+    ? value.toFixed(decimals)
+    : Math.floor(value).toLocaleString()
 
   return (
-    <div className="text-center animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: `${delay}ms` }}>
-      <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-1.5">
+    <div className="text-center">
+      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium mb-1.5">
         {label}
       </p>
       <p className="text-2xl font-mono font-bold tabular-nums">
@@ -42,10 +41,10 @@ function AnimatedStat({
 
 export function MetricCards({ summary }: MetricCardsProps) {
   const stats = [
-    { label: "Órdenes", value: summary?.total_orders ?? 0, suffix: "", sublabel: "en el mes", delay: 600 },
-    { label: "Categorías", value: summary?.active_categories ?? 0, suffix: "", sublabel: "activas", delay: 700 },
-    { label: "Ticket Prom.", value: summary?.avg_order_value ?? 0, prefix: "$", suffix: "", sublabel: "por orden", decimals: 0, delay: 800 },
-    { label: "Margen Prom.", value: summary?.avg_margin_pct ?? 0, suffix: "%", sublabel: "bruto", decimals: 1, delay: 900 },
+    { label: "Órdenes", value: summary?.total_orders ?? 0, suffix: "", sublabel: "en el mes" },
+    { label: "Categorías", value: summary?.active_categories ?? 0, suffix: "", sublabel: "activas" },
+    { label: "Ticket Prom.", value: summary?.avg_order_value ?? 0, prefix: "$", suffix: "", sublabel: "por orden", decimals: 0 },
+    { label: "Margen Prom.", value: summary?.avg_margin_pct ?? 0, suffix: "%", sublabel: "bruto", decimals: 1 },
   ]
 
   const volatilityCards = [
@@ -80,7 +79,6 @@ export function MetricCards({ summary }: MetricCardsProps) {
           suffix={stat.suffix}
           sublabel={stat.sublabel}
           decimals={stat.decimals}
-          delay={stat.delay}
         />
       ))}
 
@@ -88,11 +86,9 @@ export function MetricCards({ summary }: MetricCardsProps) {
       <div className="hidden lg:block w-px h-12 bg-border/30 self-center" />
 
       {/* Volatility Cards */}
-      {volatilityCards.map((card, index) => (
+      {volatilityCards.map((card) => (
         <div
           key={card.label}
-          className="animate-in fade-in slide-in-from-bottom-2 duration-500"
-          style={{ animationDelay: `${index * 100 + 1000}ms` }}
         >
           <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-1.5">
             {card.label}
