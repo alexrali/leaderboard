@@ -33,7 +33,7 @@ function ChannelColumn({
       {/* Icon and Label */}
       <div className="flex items-center gap-2 mb-1.5">
         <span className={cn("text-[10px]", channel.color || "text-foreground")}>{channel.icon}</span>
-        <span className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-medium">
+        <span className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-medium">
           {channel.label}
         </span>
       </div>
@@ -74,7 +74,7 @@ export function ChannelGrid({ channels: channelData }: ChannelGridProps) {
     <div className="animate-in fade-in duration-700 delay-500">
       {/* Zone Header Bar - INSIDE the zone */}
       <div className="flex items-center justify-between px-6 py-3 bg-stone-50/80 border-b border-stone-200/60">
-        <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
+        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
           Rendimiento por Canal de Venta
         </p>
         <p className="text-[11px] text-muted-foreground font-mono">

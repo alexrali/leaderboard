@@ -45,11 +45,11 @@ export function DashboardHeader({ summary }: DashboardHeaderProps) {
           {/* Header Stats */}
           <div className="hidden lg:flex items-center gap-6">
             <div className="text-right">
-              <p className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Mejor Día</p>
+              <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Mejor Día</p>
               <p className="text-sm font-mono font-semibold tabular-nums">{bestDay}</p>
             </div>
             <div className="text-right">
-              <p className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Meta</p>
+              <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Meta</p>
               <p className="text-sm font-mono font-semibold tabular-nums">{target}</p>
             </div>
           </div>
