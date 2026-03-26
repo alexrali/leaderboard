@@ -5,11 +5,12 @@ import { useAnimatedCounter } from "@/hooks/use-animated-counter"
 import { cn } from "@/lib/utils"
 import { ChevronRight, ExternalLink } from "lucide-react"
 import { CategoryDetailPanel } from "@/components/provider-performance/category-detail-panel"
-import type { ProviderCategory, ProviderSummary } from "@/lib/provider-types"
+import type { ProviderCategory, ProviderSummary, ProviderCategoryVelocity } from "@/lib/provider-types"
 
 interface ProviderSidebarProps {
   categories?: ProviderCategory[]
   summary?: ProviderSummary | null
+  velocity?: ProviderCategoryVelocity[]
 }
 
 type CategorySlideData = {
@@ -59,8 +60,9 @@ function CategorySlide({
   )
 }
 
-export function ProviderSidebar({ categories = [], summary }: ProviderSidebarProps) {
+export function ProviderSidebar({ categories = [], summary, velocity = [] }: ProviderSidebarProps) {
   const [activeSlide, setActiveSlide] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
   const [selectedCategoryCode, setSelectedCategoryCode] = useState<string | null>(null)
   const targetValue = useAnimatedCounter(summary?.target_amount ?? 0, 2500, 200)
 
@@ -85,12 +87,12 @@ export function ProviderSidebar({ categories = [], summary }: ProviderSidebarPro
   ]
 
   useEffect(() => {
-    if (categorySlides.length === 0) return
+    if (categorySlides.length === 0 || isPaused) return
     const interval = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % categorySlides.length)
     }, 4000)
     return () => clearInterval(interval)
-  }, [categorySlides.length])
+  }, [categorySlides.length, isPaused])
 
   const handleCategoryClick = (code: string) => {
     setSelectedCategoryCode(code)
@@ -126,7 +128,11 @@ export function ProviderSidebar({ categories = [], summary }: ProviderSidebarPro
             Category Focus
           </p>
 
-          <div className="h-28 relative overflow-hidden">
+          <div
+            className="h-28 relative overflow-hidden"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
             {categorySlides.map((category, index) => (
               <CategorySlide
                 key={category.category_code}
@@ -181,31 +187,69 @@ export function ProviderSidebar({ categories = [], summary }: ProviderSidebarPro
 
         <div className="border-t border-stone-200/80" />
 
-        {/* Quick Category Picker */}
+        {/* Category Velocity Grid */}
         <div className="px-5 py-4">
           <div className="flex items-center justify-between mb-3">
             <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
-              Quick Select
+              Velocidad MoM
             </p>
-            <p className="text-[8px] text-muted-foreground">tap for details</p>
+            <p className="text-[8px] text-muted-foreground/60 font-mono">mes actual vs anterior</p>
           </div>
-          <div className="grid grid-cols-5 gap-px bg-stone-200/60">
-            {categorySlides.map((cat, index) => (
-              <button
-                key={cat.category_code}
-                onClick={() => handleSelectFromPicker(index)}
-                className={cn(
-                  "py-2 px-1 text-center transition-all duration-200",
-                  index === activeSlide
-                    ? "bg-foreground text-background"
-                    : "bg-background hover:bg-stone-50"
-                )}
-              >
-                <p className="text-[7px] text-inherit opacity-60 truncate">{cat.name.slice(0, 4)}</p>
-                <p className="font-mono text-[10px] font-bold tabular-nums">{(cat.share * 100).toFixed(0)}%</p>
-              </button>
-            ))}
+          <div className="divide-y divide-stone-200/60 border border-stone-200/60">
+            {categorySlides.map((cat, index) => {
+              const vel = velocity.find(v => v.category_code === cat.category_code)
+              const pct = vel?.velocity_pct ?? null
+              const isActive = index === activeSlide
+              return (
+                <button
+                  key={cat.category_code}
+                  onClick={() => handleSelectFromPicker(index)}
+                  className={cn(
+                    "w-full flex items-center justify-between px-3 py-2 transition-colors duration-150",
+                    isActive ? "bg-foreground text-background" : "bg-background hover:bg-stone-50"
+                  )}
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className={cn(
+                      "text-[8px] font-mono tabular-nums w-5 text-left shrink-0",
+                      isActive ? "text-background/50" : "text-muted-foreground/40"
+                    )}>
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <span className={cn(
+                      "text-[10px] font-mono truncate",
+                      isActive ? "text-background" : "text-foreground"
+                    )}>
+                      {cat.name}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className={cn(
+                      "font-mono text-[10px] tabular-nums",
+                      isActive ? "text-background/70" : "text-muted-foreground"
+                    )}>
+                      {(cat.share * 100).toFixed(0)}%
+                    </span>
+                    {pct != null && (
+                      <span className={cn(
+                        "text-[9px] font-mono tabular-nums w-10 text-right",
+                        isActive
+                          ? "text-background/60"
+                          : pct > 5 ? "text-emerald-600"
+                          : pct < -5 ? "text-red-500"
+                          : "text-muted-foreground/50"
+                      )}>
+                        {pct > 0 ? '+' : ''}{pct.toFixed(0)}%
+                      </span>
+                    )}
+                  </div>
+                </button>
+              )
+            })}
           </div>
+          <p className="text-[8px] text-muted-foreground/40 font-mono mt-2 text-right">
+            toca para detalle
+          </p>
         </div>
       </div>
 
