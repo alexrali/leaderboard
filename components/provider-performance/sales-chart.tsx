@@ -78,7 +78,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
                 "px-2.5 py-1 text-[9px] font-mono uppercase tracking-[0.12em] transition-colors duration-150",
                 mode === 'cumulative'
                   ? "bg-foreground text-background"
-                  : "text-muted-foreground/60 hover:text-muted-foreground"
+                  : "text-muted-foreground hover:text-muted-foreground"
               )}
             >
               Acum
@@ -89,7 +89,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
                 "px-2.5 py-1 text-[9px] font-mono uppercase tracking-[0.12em] transition-colors duration-150",
                 mode === 'yoy'
                   ? "bg-foreground text-background"
-                  : "text-muted-foreground/60 hover:text-muted-foreground"
+                  : "text-muted-foreground hover:text-muted-foreground"
               )}
             >
               YoY
@@ -289,7 +289,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
         {mode === 'cumulative' && (
           <div className="absolute right-0 bottom-[12%] flex items-center gap-2">
             <div className="h-px w-6 bg-foreground/10" />
-            <div className="text-[9px] font-mono text-muted-foreground/40 tabular-nums">
+            <div className="text-[9px] font-mono text-muted-foreground tabular-nums">
               $0
             </div>
           </div>

@@ -37,7 +37,7 @@ function PeriodToggle({ value, onChange }: { value: Period; onChange: (v: Period
             "px-3 py-1.5 text-[9px] font-mono uppercase tracking-[0.14em] transition-colors duration-150",
             value === o.value
               ? "bg-foreground text-background"
-              : "text-muted-foreground/60 hover:text-muted-foreground bg-transparent"
+              : "text-muted-foreground hover:text-muted-foreground bg-transparent"
           )}
         >
           {o.label}
@@ -78,7 +78,7 @@ export function ProviderPerformancePage() {
     return (
       <div className="bg-stone-50 overflow-hidden -mx-4 -my-8 md:-mx-6 lg:-mx-8 lg:-my-10 flex items-center justify-center" style={{ minHeight: '60vh' }}>
         <div className="flex flex-col gap-2">
-          <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-muted-foreground/40">ERR_LOAD_FAILED</p>
+          <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-muted-foreground">ERR_LOAD_FAILED</p>
           <p className="text-sm font-mono text-foreground">Error cargando datos del proveedor.</p>
           <p className="text-xs text-muted-foreground font-mono">Intenta de nuevo en unos minutos.</p>
         </div>

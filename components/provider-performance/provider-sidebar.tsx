@@ -193,7 +193,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
             <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
               Velocidad MoM
             </p>
-            <p className="text-[8px] text-muted-foreground/60 font-mono">mes actual vs anterior</p>
+            <p className="text-[8px] text-muted-foreground font-mono">mes actual vs anterior</p>
           </div>
           <div className="divide-y divide-stone-200/60 border border-stone-200/60">
             {categorySlides.map((cat, index) => {
@@ -212,7 +212,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
                   <div className="flex items-center gap-2 min-w-0">
                     <span className={cn(
                       "text-[8px] font-mono tabular-nums w-5 text-left shrink-0",
-                      isActive ? "text-background/50" : "text-muted-foreground/40"
+                      isActive ? "text-background/50" : "text-muted-foreground"
                     )}>
                       {String(index + 1).padStart(2, '0')}
                     </span>
@@ -247,7 +247,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
               )
             })}
           </div>
-          <p className="text-[8px] text-muted-foreground/40 font-mono mt-2 text-right">
+          <p className="text-[8px] text-muted-foreground font-mono mt-2 text-right">
             toca para detalle
           </p>
         </div>
