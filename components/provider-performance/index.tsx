@@ -28,10 +28,12 @@ function PeriodToggle({ value, onChange }: { value: Period; onChange: (v: Period
     { value: 'ytd', label: 'Año' },
   ]
   return (
-    <div className="flex border border-stone-200/80 divide-x divide-stone-200/80">
+    <div className="flex border border-stone-200/80 divide-x divide-stone-200/80" role="tablist" aria-label="Período">
       {options.map(o => (
         <button
           key={o.value}
+          role="tab"
+          aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
           className={cn(
             "px-3 py-1.5 text-[9px] font-mono uppercase tracking-[0.14em] transition-colors duration-150",
