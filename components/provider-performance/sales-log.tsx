@@ -54,7 +54,7 @@ export function SalesLog({ initialTransactions = [] }: SalesLogProps) {
   return (
     <div className="animate-in fade-in duration-700 delay-700">
       {/* Header with title */}
-      <div className="px-6 py-3 border-b border-stone-200/60 bg-stone-50/50">
+      <div className="px-6 py-3 border-b border-border bg-muted/40">
         <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
           Registro de Ejecución
         </p>
@@ -62,70 +62,56 @@ export function SalesLog({ initialTransactions = [] }: SalesLogProps) {
 
       {/* Table Structure */}
       <div className="bg-background">
-        <div className="overflow-x-auto">
-          <div className="min-w-[680px]">
-            {/* Header Row */}
-            <div className="grid grid-cols-[70px_80px_80px_1fr_50px_50px_50px_100px_80px] gap-3 px-4 py-2.5 bg-stone-50/80 border-b border-stone-200/60 text-[9px] uppercase tracking-[0.1em] text-muted-foreground font-medium">
-              <span>Hora</span>
-              <span>ID</span>
-              <span>Canal</span>
-              <span>Producto</span>
-              <span className="text-right">n</span>
-              <span className="text-right">f</span>
-              <span className="text-right">%</span>
-              <span>Rep</span>
-              <span className="text-right">P&L</span>
-            </div>
-
-            {/* Data Rows */}
-            <div className="font-mono text-[11px]">
-              {sales.length === 0 && (
-                <div className="px-4 py-12 text-center">
-                  <p className="text-xs text-muted-foreground">Sin transacciones recientes.</p>
-                </div>
-              )}
-              {sales.map((sale, index) => {
-                const indicator = getChannelIndicator(sale.channel)
-                return (
-                  <div
-                    key={sale.orderId + sale.time + index}
-                    className={cn(
-                      "grid grid-cols-[70px_80px_80px_1fr_50px_50px_50px_100px_80px] gap-3 px-4 py-2.5 transition-all duration-500",
-                      index % 2 === 0 ? "bg-stone-50/50" : "bg-background",
-                      "border-b border-stone-100 last:border-b-0"
-                    )}
-                  >
-                    <span className="text-muted-foreground tabular-nums">{sale.time}</span>
-                    <span className="text-muted-foreground tabular-nums">{sale.orderId}</span>
-                    <span className="flex items-center gap-1.5">
-                      <span className={cn("text-[9px]", indicator.color)}>{indicator.symbol}</span>
-                      <span className={indicator.color}>{indicator.label}</span>
-                    </span>
-                    <span className="truncate">{sale.product}</span>
-                    <span className="text-right text-muted-foreground tabular-nums">{sale.qty}</span>
-                    <span className="text-right text-muted-foreground tabular-nums">{(sale.margin * 0.7).toFixed(2)}</span>
-                    <span className="text-right text-muted-foreground tabular-nums">{(sale.margin * 100).toFixed(0)}%</span>
-                    <span className="text-muted-foreground truncate">{sale.rep}</span>
-                    <span className={cn(
-                      "text-right font-semibold tabular-nums",
-                      sale.profit > 1000 ? "text-emerald-600" : "text-foreground"
-                    )}>
-                      +${sale.profit.toLocaleString()}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
+        {/* Header Row */}
+        <div className="grid grid-cols-[60px_1fr_50px_80px] sm:grid-cols-[70px_80px_80px_1fr_50px_50px_100px_80px] gap-3 px-4 py-2.5 bg-muted/40 border-b border-border text-[9px] uppercase tracking-[0.1em] text-muted-foreground font-medium">
+          <span>Hora</span>
+          <span className="hidden sm:block">ID</span>
+          <span className="hidden sm:block">Canal</span>
+          <span>Producto</span>
+          <span className="text-right">Cant.</span>
+          <span className="hidden sm:block text-right">Margen</span>
+          <span className="hidden sm:block">Rep</span>
+          <span className="text-right">Utilidad</span>
         </div>
-      </div>
 
-      {/* Footer Quote */}
-      <div className="flex items-center justify-end mt-4">
-        <p className="text-[11px] italic text-muted-foreground">
-          &ldquo;Don&apos;t stop until it&apos;s profitable.&rdquo;{" "}
-          <span className="not-italic font-semibold text-foreground">It never stopped.</span>
-        </p>
+        {/* Data Rows */}
+        <div className="font-mono text-[11px]">
+          {sales.length === 0 && (
+            <div className="px-4 py-12 text-center">
+              <p className="text-xs text-muted-foreground">Sin transacciones recientes.</p>
+            </div>
+          )}
+          {sales.map((sale, index) => {
+            const indicator = getChannelIndicator(sale.channel)
+            return (
+              <div
+                key={sale.orderId + sale.time + index}
+                className={cn(
+                  "grid grid-cols-[60px_1fr_50px_80px] sm:grid-cols-[70px_80px_80px_1fr_50px_50px_100px_80px] gap-3 px-4 py-2.5 transition-all duration-500",
+                  index % 2 === 0 ? "bg-muted/30" : "bg-background",
+                  "border-b border-border last:border-b-0"
+                )}
+              >
+                <span className="text-muted-foreground tabular-nums">{sale.time}</span>
+                <span className="hidden sm:block text-muted-foreground tabular-nums">{sale.orderId}</span>
+                <span className="hidden sm:block flex items-center gap-1.5">
+                  <span className={cn("text-[9px]", indicator.color)}>{indicator.symbol}</span>
+                  <span className={indicator.color}>{indicator.label}</span>
+                </span>
+                <span className="truncate">{sale.product}</span>
+                <span className="text-right text-muted-foreground tabular-nums">{sale.qty}</span>
+                <span className="hidden sm:block text-right text-muted-foreground tabular-nums">{(sale.margin * 100).toFixed(0)}%</span>
+                <span className="hidden sm:block text-muted-foreground truncate">{sale.rep}</span>
+                <span className={cn(
+                  "text-right font-semibold tabular-nums",
+                  sale.profit > 1000 ? "text-emerald-600" : "text-foreground"
+                )}>
+                  +${sale.profit.toLocaleString()}
+                </span>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
