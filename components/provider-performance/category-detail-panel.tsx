@@ -1,5 +1,6 @@
 "use client"
 
+import { useId } from "react"
 import {
   Sheet,
   SheetContent,
@@ -21,6 +22,7 @@ interface CategoryDetailPanelProps {
 }
 
 export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: CategoryDetailPanelProps) {
+  const uid = useId().replace(/:/g, '')
   const { data: detail, isLoading } = useCategoryDetail(categoryCode)
 
   const revenueCounter = useAnimatedCounter(detail?.revenue ?? 0, 1500, 100)
@@ -104,7 +106,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={detail.monthlyData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
                     <defs>
-                      <linearGradient id="catFill" x1="0" y1="0" x2="0" y2="1">
+                      <linearGradient id={`catFill-${uid}`} x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor="currentColor" stopOpacity={0.15} />
                         <stop offset="100%" stopColor="currentColor" stopOpacity={0} />
                       </linearGradient>
@@ -135,7 +137,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
                       dataKey="revenue"
                       stroke="currentColor"
                       strokeWidth={1.5}
-                      fill="url(#catFill)"
+                      fill={`url(#catFill-${uid})`}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
