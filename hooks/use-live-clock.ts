@@ -8,7 +8,7 @@ export function useLiveClock() {
   useEffect(() => {
     const updateTime = () => {
       const now = new Date()
-      setTime(now.toLocaleTimeString("en-US", {
+      setTime(now.toLocaleTimeString("es-MX", {
         hour12: false,
         hour: "2-digit",
         minute: "2-digit",
