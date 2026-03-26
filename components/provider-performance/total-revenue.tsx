@@ -14,7 +14,7 @@ export function TotalRevenue({ summary }: TotalRevenueProps) {
   return (
     <div className="space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
-        Total Revenue
+        Ingresos Totales
       </p>
       <div className="flex items-baseline gap-4">
         <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold tracking-tighter font-mono leading-none">
@@ -27,11 +27,11 @@ export function TotalRevenue({ summary }: TotalRevenueProps) {
             ? `${summary.ytd_growth_pct > 0 ? '+' : ''}${summary.ytd_growth_pct.toFixed(1)}% YTD`
             : '—'}
         </span>
-        <span className="tabular-nums">{orders.toLocaleString()} orders</span>
+        <span className="tabular-nums">{orders.toLocaleString()} órdenes</span>
         <span className="text-border/60">·</span>
-        <span>tracking 24/7</span>
+        <span>seguimiento 24/7</span>
         <span className="text-border/60">·</span>
-        <span>no manual entry since Jan</span>
+        <span>sin captura manual desde ene</span>
       </div>
     </div>
   )

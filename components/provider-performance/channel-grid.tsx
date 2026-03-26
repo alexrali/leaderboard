@@ -75,7 +75,7 @@ export function ChannelGrid({ channels: channelData }: ChannelGridProps) {
       {/* Zone Header Bar - INSIDE the zone */}
       <div className="flex items-center justify-between px-6 py-3 bg-stone-50/80 border-b border-stone-200/60">
         <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
-          Sales Channel Performance Grid
+          Rendimiento por Canal de Venta
         </p>
         <p className="text-[11px] text-muted-foreground font-mono">
           ${Math.round(totalRevenue / 1000).toLocaleString()}K distribuidos en canales

@@ -40,7 +40,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
           <div className="flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-foreground animate-pulse" />
             <SheetDescription className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
-              Category Deep Dive
+              Detalle de Categoría
             </SheetDescription>
           </div>
           <SheetTitle className="text-3xl font-mono font-bold tracking-tight">
@@ -60,7 +60,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-1">
                 <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
-                  Total Revenue
+                  Ingresos Totales
                 </p>
                 <p className="text-4xl font-mono font-bold tracking-tight">
                   ${revenueCounter.toLocaleString()}
@@ -100,7 +100,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
             {/* Revenue Trend Chart */}
             <div className="space-y-3">
               <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
-                Revenue Trend — 6 Months
+                Tendencia de Ingresos — 6 Meses
               </p>
               <div className="h-36 w-full bg-muted/20 rounded-lg p-2">
                 <ResponsiveContainer width="100%" height="100%">
@@ -147,7 +147,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
             {/* Channel Distribution */}
             <div className="space-y-3">
               <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
-                Channel Distribution
+                Distribución por Canal
               </p>
               <div className="space-y-2">
                 {detail.channelSplit.map((ch, idx) => (
@@ -174,7 +174,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
             {detail.topProducts.length > 0 && (
               <div className="space-y-3">
                 <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
-                  Top Products
+                  Productos Destacados
                 </p>
                 <div className="border border-border/50 rounded-lg overflow-hidden">
                   <Table>
@@ -182,7 +182,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
                       <TableRow className="hover:bg-transparent border-b border-border/30">
                         <TableHead className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-medium h-8">Producto</TableHead>
                         <TableHead className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-medium h-8 text-right">Pzas</TableHead>
-                        <TableHead className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-medium h-8 text-right">Revenue</TableHead>
+                        <TableHead className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-medium h-8 text-right">Ingreso</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>

@@ -68,7 +68,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
     <div className="animate-in fade-in duration-1000 delay-500">
       <div className="flex items-center justify-between mb-4">
         <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
-          {mode === 'cumulative' ? 'Revenue Curve — Cumulative' : 'Revenue — Año vs Año'}
+          {mode === 'cumulative' ? 'Curva de Ingresos — Acumulada' : 'Revenue — Año vs Año'}
         </p>
         {hasYoY && (
           <div className="flex border border-stone-200/80 divide-x divide-stone-200/80">

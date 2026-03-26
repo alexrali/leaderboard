@@ -56,7 +56,7 @@ export function SalesLog({ initialTransactions = [] }: SalesLogProps) {
       {/* Header with title */}
       <div className="px-6 py-3 border-b border-stone-200/60 bg-stone-50/50">
         <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
-          Execution Log — Live Feed
+          Registro de Ejecución
         </p>
       </div>
 
@@ -66,7 +66,7 @@ export function SalesLog({ initialTransactions = [] }: SalesLogProps) {
           <div className="min-w-[680px]">
             {/* Header Row */}
             <div className="grid grid-cols-[70px_80px_80px_1fr_50px_50px_50px_100px_80px] gap-3 px-4 py-2.5 bg-stone-50/80 border-b border-stone-200/60 text-[9px] uppercase tracking-[0.1em] text-muted-foreground font-medium">
-              <span>Time</span>
+              <span>Hora</span>
               <span>ID</span>
               <span>Canal</span>
               <span>Producto</span>

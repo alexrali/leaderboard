@@ -41,11 +41,11 @@ function CategorySlide({
           <h3 className="text-2xl font-mono font-bold">{category.name}</h3>
           <ExternalLink className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
-        <p className="text-sm text-muted-foreground mt-1">{category.revenue} revenue</p>
+        <p className="text-sm text-muted-foreground mt-1">{category.revenue} ingresos</p>
       </div>
       <div className="flex items-end justify-between">
         <div>
-          <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground mb-1">Share</p>
+          <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground mb-1">Participación</p>
           <p className="text-3xl font-mono font-bold">{(category.share * 100).toFixed(0)}%</p>
         </div>
       </div>
@@ -125,7 +125,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
         {/* Category Slideshow Section */}
         <div className="px-5 py-4">
           <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-3">
-            Category Focus
+            Enfoque por Categoría
           </p>
 
           <div
@@ -163,7 +163,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
         {/* SESSION MILESTONES Section */}
         <div className="px-5 py-4">
           <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-3">
-            Milestones
+            Hitos
           </p>
 
           <div className="space-y-2">
