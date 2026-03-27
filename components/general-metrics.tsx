@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
-import { TrendingUp, TrendingDown, Minus, Flame, Award, Zap } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useCallback, useMemo, useState } from "react"
+import { TrendingUp, TrendingDown, Minus, Flame, Award, Zap, Clock, Target } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -15,15 +15,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { CardSkeleton, TableSkeleton } from "@/components/ui/loading-skeleton"
+import { ErrorBoundary } from "@/components/ui/error-boundary"
+import { useAnimatedCounter } from "@/hooks/use-animated-counter"
 import type { TeamMember } from "@/lib/leaderboard-data"
 import { WorkerDetailDrawer } from "@/components/worker-detail-sheet"
+
+// ─── Trend icon (shared badge for trend columns) ──────────────────────────────
 
 function TrendIcon({ trend, value }: { trend: TeamMember["trend"]; value: number }) {
   if (trend === "up")
     return (
       <span
         className="bg-success/10 text-success inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium"
-        aria-label={`Tendencia positiva: +${value}% con respecto al período anterior`}
+        aria-label={`Tendencia positiva: +${value}% con respecto al periodo anterior`}
       >
         <TrendingUp className="size-3" aria-hidden="true" />
         {"+"}
@@ -34,7 +39,7 @@ function TrendIcon({ trend, value }: { trend: TeamMember["trend"]; value: number
     return (
       <span
         className="bg-destructive/10 text-destructive inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium"
-        aria-label={`Tendencia negativa: -${value}% con respecto al período anterior`}
+        aria-label={`Tendencia negativa: -${value}% con respecto al periodo anterior`}
       >
         <TrendingDown className="size-3" aria-hidden="true" />
         {"-"}
@@ -44,7 +49,7 @@ function TrendIcon({ trend, value }: { trend: TeamMember["trend"]; value: number
   return (
     <span
       className="bg-muted text-muted-foreground inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium"
-      aria-label={`Tendencia estable: ${value}% con respecto al período anterior`}
+      aria-label={`Tendencia estable: ${value}% con respecto al periodo anterior`}
     >
       <Minus className="size-3" aria-hidden="true" />
       {value}%
@@ -52,7 +57,9 @@ function TrendIcon({ trend, value }: { trend: TeamMember["trend"]; value: number
   )
 }
 
-function RankBadge({ rank, name }: { rank: number; name: string }) {
+// ─── Rank badge (with staggered entrance animation) ────────────────────────────
+
+function RankBadge({ rank, name, index }: { rank: number; name: string; index: number }) {
   const styles: Record<number, string> = {
     1: "bg-amber-100 text-amber-700 border-amber-200",
     2: "bg-slate-100 text-slate-600 border-slate-200",
@@ -63,16 +70,17 @@ function RankBadge({ rank, name }: { rank: number; name: string }) {
     <Tooltip>
       <TooltipTrigger asChild>
         <div
-          className={`flex size-8 items-center justify-center rounded-full border text-xs font-bold ${
+          className={`flex size-8 items-center justify-center rounded-full border text-xs font-bold animate-in fade-in slide-in-from-bottom-2 duration-500 ${
             styles[rank] ?? "bg-muted text-muted-foreground border-border"
           }`}
+          style={{ animationDelay: `${index * 80}ms`, animationFillMode: "both" }}
         >
           {rank}
         </div>
       </TooltipTrigger>
       <TooltipContent side="right">
         <span>
-          {rank === 1 ? "Gold" : rank === 2 ? "Silver" : rank === 3 ? "Bronze" : `#${rank}`}
+          {rank === 1 ? "Oro" : rank === 2 ? "Plata" : rank === 3 ? "Bronce" : `#${rank}`}
           {" - "}
           {name}
         </span>
@@ -81,105 +89,133 @@ function RankBadge({ rank, name }: { rank: number; name: string }) {
   )
 }
 
-interface GeneralMetricsProps {
-  members: TeamMember[]
-  viewMode?: "daily" | "weekly"
-}
+// ─── KPI Card with animated counter ────────────────────────────────────────────
 
-export function GeneralMetrics({ members, viewMode = "daily" }: GeneralMetricsProps) {
-  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
-  const [sheetOpen, setSheetOpen] = useState(false)
-  const totalTasks = members.reduce((acc, m) => acc + m.score, 0)
-  const avgEfficiency =
-    members.length > 0
-      ? Math.round(members.reduce((acc, m) => acc + m.efficiency, 0) / members.length)
-      : 0
-  const totalHours = members.reduce((acc, m) => acc + m.hoursLogged, 0).toFixed(1)
-  const topStreak = members.length > 0 ? Math.max(...members.map((m) => m.streak)) : 0
+function KpiCard({
+  label,
+  numericValue,
+  formatter,
+  unit,
+  icon: Icon,
+  delay = 0,
+  children,
+}: {
+  label: string
+  numericValue: number
+  formatter: (v: number) => string
+  unit?: string
+  icon: React.ElementType
+  delay?: number
+  children?: React.ReactNode
+}) {
+  const animatedValue = useAnimatedCounter(numericValue, {
+    duration: 1500,
+    delay,
+    decimals: numericValue % 1 !== 0 ? 1 : 0,
+  })
 
   return (
-    <section className="flex flex-col gap-6" aria-labelledby="general-metrics-heading">
-      <div className="flex items-center gap-2.5">
-        <Award className="text-primary size-4" />
-        <h2 id="general-metrics-heading" className="text-foreground text-base font-semibold">
-          Métricas Generales
-        </h2>
-      </div>
+    <Card className="rounded-2xl">
+      <CardHeader className="px-5 pt-5 pb-1">
+        <div className="flex items-center justify-between">
+          <CardDescription className="text-xs tracking-wide uppercase">{label}</CardDescription>
+          <div className="bg-primary/8 text-primary flex size-7 items-center justify-center rounded-lg">
+            <Icon className="size-3.5" />
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="px-5 pt-1 pb-5">
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-foreground text-2xl font-bold tabular-nums">
+            {formatter(animatedValue)}
+          </span>
+          {unit && <span className="text-muted-foreground text-sm">{unit}</span>}
+        </div>
+        {children}
+      </CardContent>
+    </Card>
+  )
+}
 
-      {/* Summary KPIs */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Card className="rounded-2xl">
-          <CardHeader className="px-5 pt-5 pb-1">
-            <CardDescription className="text-xs tracking-wide uppercase">
-              UE Total (Equipo)
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="px-5 pt-0 pb-5">
-            <div className="flex items-baseline gap-2">
-              <CardTitle className="text-3xl font-bold">
-                {totalTasks.toLocaleString("es-MX")}
-              </CardTitle>
-              <span className="text-muted-foreground text-sm">UE</span>
-            </div>
-          </CardContent>
-        </Card>
+// ─── Summary KPI cards section ─────────────────────────────────────────────────
 
-        <Card className="rounded-2xl">
-          <CardHeader className="px-5 pt-5 pb-1">
-            <CardDescription className="text-xs tracking-wide uppercase">
-              Eficiencia Promedio
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="px-5 pt-0 pb-5">
-            <CardTitle className="text-3xl font-bold">{avgEfficiency}%</CardTitle>
-            <Progress value={avgEfficiency} className="mt-3 h-1.5 rounded-full" />
-          </CardContent>
-        </Card>
+function KpiCardsSection({
+  totalUE,
+  avgEfficiency,
+  totalHours,
+  topStreak,
+  streakName,
+}: {
+  totalUE: number
+  avgEfficiency: number
+  totalHours: number
+  topStreak: number
+  streakName: string
+}) {
+  return (
+    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <KpiCard
+        label="UE Total (Equipo)"
+        numericValue={totalUE}
+        formatter={(v) => v.toLocaleString("es-MX")}
+        unit="UE"
+        icon={Target}
+        delay={0}
+      />
+      <KpiCard
+        label="Eficiencia Promedio"
+        numericValue={avgEfficiency}
+        formatter={(v) => `${v}%`}
+        icon={Zap}
+        delay={100}
+      >
+        <Progress value={avgEfficiency} className="mt-3 h-1.5 rounded-full" />
+      </KpiCard>
+      <KpiCard
+        label="Horas Trabajadas"
+        numericValue={totalHours}
+        formatter={(v) => v.toLocaleString("es-MX", { maximumFractionDigits: 1 })}
+        unit="hrs"
+        icon={Clock}
+        delay={200}
+      >
+        <div className="mt-3 flex items-center gap-1.5">
+          <Zap className="text-warning size-3.5" />
+          <span className="text-muted-foreground text-xs">Acumulado del equipo</span>
+        </div>
+      </KpiCard>
+      <KpiCard
+        label="Mejor Racha"
+        numericValue={topStreak}
+        formatter={(v) => String(v)}
+        unit="dias"
+        icon={Flame}
+        delay={300}
+      >
+        <div className="mt-3 flex items-center gap-1.5">
+          <Flame className="text-primary size-3.5" />
+          <span className="text-muted-foreground text-xs">{streakName}</span>
+        </div>
+      </KpiCard>
+    </div>
+  )
+}
 
-        <Card className="rounded-2xl">
-          <CardHeader className="px-5 pt-5 pb-1">
-            <CardDescription className="text-xs tracking-wide uppercase">
-              Horas Trabajadas
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="px-5 pt-0 pb-5">
-            <div className="flex items-baseline gap-2">
-              <CardTitle className="text-3xl font-bold">{totalHours}</CardTitle>
-              <span className="text-muted-foreground text-sm">hrs</span>
-            </div>
-            <div className="mt-3 flex items-center gap-1.5">
-              <Zap className="text-warning size-3.5" />
-              <span className="text-muted-foreground text-xs">Acumulado del equipo</span>
-            </div>
-          </CardContent>
-        </Card>
+// ─── Ranking table section ─────────────────────────────────────────────────────
 
-        <Card className="rounded-2xl">
-          <CardHeader className="px-5 pt-5 pb-1">
-            <CardDescription className="text-xs tracking-wide uppercase">
-              Mejor Racha
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="px-5 pt-0 pb-5">
-            <div className="flex items-baseline gap-2">
-              <CardTitle className="text-3xl font-bold">{topStreak}</CardTitle>
-              <span className="text-muted-foreground text-sm">días</span>
-            </div>
-            <div className="mt-3 flex items-center gap-1.5">
-              <Flame className="text-primary size-3.5" />
-              <span className="text-muted-foreground text-xs">
-                {members.find((m) => m.streak === topStreak)?.name ?? "—"}
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Ranking Table */}
-      <Card className="overflow-hidden rounded-2xl">
-        <CardContent className="p-0">
-          <Table aria-label="Ranking del equipo - métricas de rendimiento por surtidor">
-            <TableHeader>
+function RankingTableSection({
+  members,
+  onRowClick,
+}: {
+  members: TeamMember[]
+  onRowClick: (member: TeamMember) => void
+}) {
+  return (
+    <Card className="overflow-hidden rounded-2xl">
+      <CardContent className="p-0">
+        <div className="max-h-[520px] overflow-y-auto scroll-smooth">
+          <Table aria-label="Ranking del equipo - metricas de rendimiento por surtidor">
+            <TableHeader className="sticky top-0 z-10">
               <TableRow className="bg-muted/40 hover:bg-muted/40">
                 <TableHead className="text-muted-foreground w-16 pl-5 text-xs font-medium tracking-wide uppercase" scope="col">
                   Pos.
@@ -217,17 +253,24 @@ export function GeneralMetrics({ members, viewMode = "daily" }: GeneralMetricsPr
               </TableRow>
             </TableHeader>
             <TableBody>
-              {members.map((member) => (
+              {members.map((member, idx) => (
                 <TableRow
                   key={member.id}
-                  className="hover:bg-muted/60 cursor-pointer transition-colors"
-                  onClick={() => {
-                    setSelectedMember(member)
-                    setSheetOpen(true)
+                  className="hover:bg-muted/60 cursor-pointer transition-colors animate-in fade-in slide-in-from-bottom-1 duration-300"
+                  style={{ animationDelay: `${idx * 60}ms`, animationFillMode: "both" }}
+                  onClick={() => onRowClick(member)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault()
+                      onRowClick(member)
+                    }
                   }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Ver detalle de ${member.name}`}
                 >
                   <TableCell className="pl-5">
-                    <RankBadge rank={member.rank} name={member.name} />
+                    <RankBadge rank={member.rank} name={member.name} index={idx} />
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3 min-w-0">
@@ -288,7 +331,7 @@ export function GeneralMetrics({ members, viewMode = "daily" }: GeneralMetricsPr
                       </TooltipTrigger>
                       <TooltipContent>
                         <span>
-                          {member.name}: {member.efficiency}% efficiency
+                          {member.name}: {member.efficiency}% eficiencia
                         </span>
                       </TooltipContent>
                     </Tooltip>
@@ -306,8 +349,101 @@ export function GeneralMetrics({ members, viewMode = "daily" }: GeneralMetricsPr
               ))}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+// ─── Main component ────────────────────────────────────────────────────────────
+
+interface GeneralMetricsProps {
+  members: TeamMember[]
+  viewMode?: "daily" | "weekly"
+  /** When true, shows loading skeletons instead of real content */
+  loading?: boolean
+}
+
+export function GeneralMetrics({ members, viewMode = "daily", loading }: GeneralMetricsProps) {
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const { totalTasks, avgEfficiency, totalHours, topStreak, streakName } = useMemo(() => {
+    const totalTasks = members.reduce((acc, m) => acc + m.score, 0)
+    const avgEfficiency =
+      members.length > 0
+        ? Math.round(members.reduce((acc, m) => acc + m.efficiency, 0) / members.length)
+        : 0
+    const totalHours = parseFloat(members.reduce((acc, m) => acc + m.hoursLogged, 0).toFixed(1))
+    const topStreak = members.length > 0 ? Math.max(...members.map((m) => m.streak)) : 0
+    const streakName = members.find((m) => m.streak === topStreak)?.name ?? "--"
+    return { totalTasks, avgEfficiency, totalHours, topStreak, streakName }
+  }, [members])
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="flex flex-col gap-6" aria-labelledby="general-metrics-heading">
+        <div className="flex items-center gap-2.5">
+          <div className="size-4 animate-pulse rounded bg-muted" />
+          <div className="h-4 w-40 animate-pulse rounded bg-muted" />
+        </div>
+        <CardSkeleton cards={4} className="grid grid-cols-2 gap-4 lg:grid-cols-4" />
+        <TableSkeleton rows={6} columns={7} />
+      </section>
+    )
+  }
+
+  // Empty state
+  if (members.length === 0) {
+    return (
+      <section className="flex flex-col gap-6" aria-labelledby="general-metrics-heading">
+        <div className="flex items-center gap-2.5">
+          <Award className="text-primary size-4" />
+          <h2 id="general-metrics-heading" className="text-foreground text-base font-semibold">
+            Metricas Generales
+          </h2>
+        </div>
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <Award className="text-muted-foreground/40 mb-3 size-10" />
+          <p className="text-muted-foreground text-sm">No hay datos de rendimiento disponibles.</p>
+          <p className="text-muted-foreground/60 mt-1 text-xs">
+            Los datos apareceran una vez que el ETL procese el periodo actual.
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  const handleRowClick = useCallback((member: TeamMember) => {
+    setSelectedMember(member)
+    setSheetOpen(true)
+  }, [])
+
+  return (
+    <section className="flex flex-col gap-6" aria-labelledby="general-metrics-heading">
+      <div className="flex items-center gap-2.5">
+        <Award className="text-primary size-4" />
+        <h2 id="general-metrics-heading" className="text-foreground text-base font-semibold">
+          Metricas Generales
+        </h2>
+      </div>
+
+      {/* Summary KPIs */}
+      <ErrorBoundary title="Indicadores Clave">
+        <KpiCardsSection
+          totalUE={totalTasks}
+          avgEfficiency={avgEfficiency}
+          totalHours={totalHours}
+          topStreak={topStreak}
+          streakName={streakName}
+        />
+      </ErrorBoundary>
+
+      {/* Ranking Table */}
+      <ErrorBoundary title="Ranking del Equipo">
+        <RankingTableSection members={members} onRowClick={handleRowClick} />
+      </ErrorBoundary>
+
       <WorkerDetailDrawer
         member={selectedMember}
         open={sheetOpen}

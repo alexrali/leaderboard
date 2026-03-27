@@ -50,12 +50,17 @@ function buildGrid(data: TeamDayCell[], days: number): Array<TeamDayCell | null>
   return cells
 }
 
-const DAY_LABELS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
+const DAY_LABELS = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"]
 
 export function ContributionHeatmap({ data, onDayClick, selectedDate }: ContributionHeatmapProps) {
   const thresholds = getQuantileThresholds(data)
   const cells = buildGrid(data, 60)
   const totalCols = Math.ceil(cells.length / 7)
+
+  // Compute aggregate stats for the subtitle
+  const daysWithActivity = data.filter((d) => d.teamUE > 0).length
+  const totalUE = data.reduce((sum, d) => sum + d.teamUE, 0)
+  const avgUE = daysWithActivity > 0 ? totalUE / daysWithActivity : 0
 
   // Build month label positions
   const monthLabels: Array<{ col: number; label: string }> = []
@@ -73,13 +78,29 @@ export function ContributionHeatmap({ data, onDayClick, selectedDate }: Contribu
     }
   })
 
+  const todayStr = format(new Date(), "yyyy-MM-dd")
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-3 duration-500 delay-100">
+      {/* Header */}
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
+            Actividad del Equipo
+          </p>
+          <p className="text-[10px] text-muted-foreground mt-0.5">
+            {daysWithActivity} días activos &middot;{" "}
+            {avgUE.toLocaleString("es-MX", { maximumFractionDigits: 0 })} UE promedio/día
+          </p>
+        </div>
+        <span className="text-[10px] text-muted-foreground">60 días</span>
+      </div>
+
       <ScrollArea className="w-full">
         <div className="inline-block pb-2">
           {/* Month labels */}
           <div
-            className="mb-1 grid text-[10px] text-muted-foreground"
+            className="mb-1.5 grid text-[10px] text-muted-foreground"
             style={{ gridTemplateColumns: `28px repeat(${totalCols}, 14px)`, gap: "2px" }}
           >
             <div />
@@ -89,7 +110,7 @@ export function ContributionHeatmap({ data, onDayClick, selectedDate }: Contribu
             })}
           </div>
 
-          {/* Day rows (Mon=0 … Sun=6) */}
+          {/* Day rows (Mon=0 ... Sun=6) */}
           {DAY_LABELS.map((dayLabel, row) => (
             <div
               key={dayLabel}
@@ -102,7 +123,8 @@ export function ContributionHeatmap({ data, onDayClick, selectedDate }: Contribu
                 if (!cell) return <div key={col} className="size-[14px] rounded-sm" />
 
                 const isSelected = cell.date === selectedDate
-                const label = format(parseISO(cell.date), "EEE d MMM", { locale: es })
+                const dayNum = format(parseISO(cell.date), "d 'de' MMMM yyyy", { locale: es })
+                const isToday = cell.date === todayStr
 
                 return (
                   <div key={col} className="relative size-[14px]">
@@ -111,21 +133,34 @@ export function ContributionHeatmap({ data, onDayClick, selectedDate }: Contribu
                         <button
                           onClick={() => onDayClick(cell.date)}
                           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-[44px] rounded-sm transition-all hover:ring-2 hover:ring-white/30 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
-                          aria-label={`${label}: ${cell.teamUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })} UE`}
+                          aria-label={`${dayNum}: ${cell.teamUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })} UE`}
                         >
                           {/* Visual cell - 14x14px */}
                           <span
-                            className={`block size-[14px] rounded-sm ${getCellColor(cell, thresholds)} ${isSelected ? "ring-2 ring-white/60" : ""}`}
+                            className={`block size-[14px] rounded-sm ${getCellColor(cell, thresholds)} ${isSelected ? "ring-2 ring-white/60" : ""} ${isToday ? "outline outline-1 outline-offset-1 outline-foreground/30" : ""}`}
                             aria-hidden="true"
                           />
                         </button>
                       </TooltipTrigger>
-                      <TooltipContent side="top" className="text-xs">
-                        <p className="font-semibold capitalize">{label}</p>
-                        <p className="text-muted-foreground">
-                          {cell.teamUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })} UE ·{" "}
-                          {cell.activeWorkers} trabajadores
-                        </p>
+                      <TooltipContent side="top" className="text-xs max-w-[200px]">
+                        <div className="space-y-1">
+                          <p className="font-semibold capitalize">{dayNum}</p>
+                          <div className="flex items-center gap-3 text-muted-foreground">
+                            <span>
+                              <span className="text-foreground font-mono font-bold">
+                                {cell.teamUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })}
+                              </span>{" "}
+                              UE
+                            </span>
+                            <span>
+                              <span className="text-foreground font-mono font-bold">{cell.activeWorkers}</span>{" "}
+                              trabajadores
+                            </span>
+                          </div>
+                          {isToday && (
+                            <p className="text-[10px] text-muted-foreground/60">Hoy</p>
+                          )}
+                        </div>
                       </TooltipContent>
                     </Tooltip>
                   </div>
@@ -145,7 +180,7 @@ export function ContributionHeatmap({ data, onDayClick, selectedDate }: Contribu
         <div className="size-[10px] rounded-sm bg-[#006d32]" />
         <div className="size-[10px] rounded-sm bg-[#26a641]" />
         <div className="size-[10px] rounded-sm bg-[#39d353]" />
-        <span className="text-[10px] text-muted-foreground">Más</span>
+        <span className="text-[10px] text-muted-foreground">Mas</span>
       </div>
     </div>
   )
