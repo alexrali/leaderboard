@@ -13,25 +13,24 @@ import {
   ReferenceLine,
   ReferenceArea,
 } from "recharts"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Network } from "lucide-react"
-import { CardHeaderContent, InsightBanner, Legend } from "../shared/card-header"
+import { ZoneHeaderBar, ZoneInsight, Legend } from "../shared/zone-header"
+import { DI_COLORS, CHART } from "../shared/di-tokens"
 import { storePerformanceData } from "../mock-data/network"
 import type { StorePerformance } from "../mock-data/network"
 
 const getStatusColor = (status: StorePerformance["status"]) => {
   switch (status) {
     case "alto-rendimiento":
-      return "#22C55E"
+      return CHART.growth
     case "objetivo-crecimiento":
-      return "#3B82F6"
+      return CHART.total
     case "en-riesgo":
-      return "#F59E0B"
+      return CHART.opportunity
     case "inactivo":
-      return "#9CA3AF"
+      return DI_COLORS.slate
     default:
-      return "#64748B"
+      return DI_COLORS.slate
   }
 }
 
@@ -61,9 +60,8 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
           </div>
           {data.growth !== undefined && (
             <div
-              className={`pt-1 border-t border-border text-sm font-medium ${
-                data.growth > 0 ? "text-[#22C55E]" : "text-[#EF4444]"
-              }`}
+              className="pt-1 border-t border-border text-sm font-medium"
+              style={{ color: data.growth > 0 ? CHART.growth : CHART.decline }}
             >
               {data.growth > 0 ? "+" : ""}
               {data.growth}% Crecimiento
@@ -82,46 +80,37 @@ export function MapaRendimientoRed() {
   const highlightedStores = storePerformanceData.filter((s) => s.tag)
 
   return (
-    <Card className="bg-card border-border shadow-sm">
-      <CardHeader className="pb-4">
-        <CardHeaderContent
-          icon={Network}
-          iconColor="#3B82F6"
-          title="Mapa de Rendimiento de Red"
-          description="Distribución de mercado vs índice de rentabilidad"
-          actions={
-            <Legend
-              items={[
-                { color: "#22C55E", label: "Alto Rendimiento" },
-                { color: "#3B82F6", label: "Objetivo Crecimiento" },
-                { color: "#F59E0B", label: "En Riesgo" },
-                { color: "#9CA3AF", label: "Inactivo" },
-              ]}
-            />
-          }
-        />
-        <div className="mt-4">
-          <InsightBanner
-            message="3 sucursales representan 42% de ingresos perdidos"
-            variant="warning"
+    <div className="animate-in fade-in duration-500" style={{ animationDelay: "0ms" }}>
+      <ZoneHeaderBar
+        title="RENDIMIENTO DE RED"
+        right={
+          <Legend
+            items={[
+              { color: CHART.growth, label: "Alto Rendimiento" },
+              { color: CHART.total, label: "Objetivo Crecimiento" },
+              { color: CHART.opportunity, label: "En Riesgo" },
+              { color: DI_COLORS.slate, label: "Inactivo" },
+            ]}
           />
-        </div>
-      </CardHeader>
-      <CardContent>
+        }
+      />
+      <ZoneInsight
+        message="3 sucursales representan 42% de ingresos perdidos"
+        variant="warning"
+      />
+      <div className="px-6 py-5">
         <div className="relative h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
             <ScatterChart margin={{ top: 20, right: 30, bottom: 40, left: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" opacity={0.5} />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
 
-              {/* Áreas de cuadrante */}
-              <ReferenceArea x1={0} x2={300} y1={20} y2={35} fill="#22C55E" fillOpacity={0.03} />
-              <ReferenceArea x1={300} x2={500} y1={20} y2={35} fill="#22C55E" fillOpacity={0.06} />
-              <ReferenceArea x1={0} x2={300} y1={5} y2={20} fill="#64748B" fillOpacity={0.03} />
-              <ReferenceArea x1={300} x2={500} y1={5} y2={20} fill="#F59E0B" fillOpacity={0.03} />
+              <ReferenceArea x1={0} x2={300} y1={20} y2={35} fill={CHART.growth} fillOpacity={0.03} />
+              <ReferenceArea x1={300} x2={500} y1={20} y2={35} fill={CHART.growth} fillOpacity={0.06} />
+              <ReferenceArea x1={0} x2={300} y1={5} y2={20} fill={DI_COLORS.slate} fillOpacity={0.03} />
+              <ReferenceArea x1={300} x2={500} y1={5} y2={20} fill={CHART.opportunity} fillOpacity={0.03} />
 
-              {/* Divisores de cuadrante */}
-              <ReferenceLine x={300} stroke="#CBD5E1" strokeDasharray="4 4" />
-              <ReferenceLine y={20} stroke="#CBD5E1" strokeDasharray="4 4" />
+              <ReferenceLine x={300} stroke="hsl(var(--border))" strokeDasharray="4 4" />
+              <ReferenceLine y={20} stroke="hsl(var(--border))" strokeDasharray="4 4" />
 
               <XAxis
                 type="number"
@@ -129,13 +118,13 @@ export function MapaRendimientoRed() {
                 name="Ingresos"
                 domain={[0, 500]}
                 tickLine={false}
-                axisLine={{ stroke: "#CBD5E1" }}
-                tick={{ fill: "#64748B", fontSize: 11 }}
+                axisLine={{ stroke: "hsl(var(--border))" }}
+                tick={{ fill: DI_COLORS.slate, fontSize: 11 }}
                 label={{
                   value: "Volumen de Ingresos ($K)",
                   position: "bottom",
                   offset: 20,
-                  style: { fill: "#64748B", fontSize: 11, fontWeight: 500 },
+                  style: { fill: DI_COLORS.slate, fontSize: 11, fontWeight: 500 },
                 }}
               />
               <YAxis
@@ -144,14 +133,14 @@ export function MapaRendimientoRed() {
                 name="Margen"
                 domain={[5, 35]}
                 tickLine={false}
-                axisLine={{ stroke: "#CBD5E1" }}
-                tick={{ fill: "#64748B", fontSize: 11 }}
+                axisLine={{ stroke: "hsl(var(--border))" }}
+                tick={{ fill: DI_COLORS.slate, fontSize: 11 }}
                 label={{
                   value: "Margen de Ganancia (%)",
                   angle: -90,
                   position: "insideLeft",
                   offset: 10,
-                  style: { fill: "#64748B", fontSize: 11, fontWeight: 500 },
+                  style: { fill: DI_COLORS.slate, fontSize: 11, fontWeight: 500 },
                 }}
               />
               <Tooltip content={<CustomTooltip />} />
@@ -165,7 +154,7 @@ export function MapaRendimientoRed() {
                     key={entry.id}
                     fill={getStatusColor(entry.status)}
                     fillOpacity={hoveredStore === entry.id ? 1 : 0.7}
-                    stroke={entry.tag ? "#1F2937" : "transparent"}
+                    stroke={entry.tag ? "hsl(var(--foreground))" : "transparent"}
                     strokeWidth={entry.tag ? 2 : 0}
                     r={Math.sqrt(entry.volume) / 12}
                   />
@@ -174,22 +163,20 @@ export function MapaRendimientoRed() {
             </ScatterChart>
           </ResponsiveContainer>
 
-          {/* Etiquetas de cuadrante */}
           <div className="absolute top-8 left-16 text-[10px] font-medium text-muted-foreground bg-card/80 px-2 py-1 rounded">
             Expandir Distribución
           </div>
-          <div className="absolute top-8 right-16 text-[10px] font-medium text-[#22C55E] bg-card/80 px-2 py-1 rounded">
+          <div className="absolute top-8 right-16 text-[10px] font-medium bg-card/80 px-2 py-1 rounded" style={{ color: CHART.growth }}>
             Top Performers
           </div>
           <div className="absolute bottom-16 left-16 text-[10px] font-medium text-muted-foreground bg-card/80 px-2 py-1 rounded">
             Subdesarrollado
           </div>
-          <div className="absolute bottom-16 right-16 text-[10px] font-medium text-[#F59E0B] bg-card/80 px-2 py-1 rounded">
+          <div className="absolute bottom-16 right-16 text-[10px] font-medium bg-card/80 px-2 py-1 rounded" style={{ color: CHART.opportunity }}>
             Ajustar Precios
           </div>
         </div>
 
-        {/* Sucursales destacadas */}
         <div className="flex gap-3 mt-4 flex-wrap">
           {highlightedStores.map((store) => (
             <div
@@ -203,9 +190,8 @@ export function MapaRendimientoRed() {
               <span className="text-sm font-medium text-foreground">{store.name}</span>
               {store.growth !== undefined && (
                 <span
-                  className={`text-xs font-medium ${
-                    store.growth > 0 ? "text-[#22C55E]" : "text-[#EF4444]"
-                  }`}
+                  className="text-xs font-medium"
+                  style={{ color: store.growth > 0 ? CHART.growth : CHART.decline }}
                 >
                   {store.growth > 0 ? "+" : ""}
                   {store.growth}%
@@ -216,8 +202,8 @@ export function MapaRendimientoRed() {
                   variant="outline"
                   className={`text-[10px] ${
                     store.tag === "Top"
-                      ? "border-[#22C55E]/30 text-[#22C55E] bg-[#22C55E]/5"
-                      : "border-[#F59E0B]/30 text-[#F59E0B] bg-[#F59E0B]/5"
+                      ? "border-green-500/30 text-green-500 bg-green-500/5"
+                      : "border-amber-500/30 text-amber-500 bg-amber-500/5"
                   }`}
                 >
                   {store.tag}
@@ -226,7 +212,7 @@ export function MapaRendimientoRed() {
             </div>
           ))}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

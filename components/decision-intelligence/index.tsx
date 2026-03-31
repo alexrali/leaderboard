@@ -19,21 +19,19 @@ export function DecisionIntelligencePage() {
         providerCode={providerCode}
         onProviderChange={setProviderCode}
       />
-      <main className="p-6 max-w-[1600px] mx-auto">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2 }}
-          >
-            {activeTab === "network" && <RedTiendasView />}
-            {activeTab === "category" && <CrecimientoCategoriasView />}
-            {activeTab === "supply" && <AbastecimientoView />}
-          </motion.div>
-        </AnimatePresence>
-      </main>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.2 }}
+        >
+          {activeTab === "network" && <RedTiendasView />}
+          {activeTab === "category" && <CrecimientoCategoriasView />}
+          {activeTab === "supply" && <AbastecimientoView />}
+        </motion.div>
+      </AnimatePresence>
     </div>
   )
 }

@@ -1,44 +1,33 @@
 "use client"
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import {
-  ArrowRight,
   TrendingDown,
   TrendingUp,
-  Clock,
   AlertCircle,
   AlertTriangle,
   CheckCircle2,
-  Truck,
 } from "lucide-react"
-import { CardHeaderContent } from "../shared/card-header"
+import { CHART } from "../shared/di-tokens"
 import { supplyActions, type SupplyAction } from "../mock-data/supply"
 
 function getUrgencyConfig(urgency: SupplyAction["urgency"]) {
   switch (urgency) {
     case "crítico":
       return {
-        color: "bg-[#FEE2E2] text-[#991B1B] border-[#EF4444]/30",
-        bar: "#EF4444",
-        barOpacity: 1,
+        color: "bg-red-100 text-red-800 border-red-500/30",
         icon: AlertCircle,
         label: "Crítico",
       }
     case "alto":
       return {
-        color: "bg-[#FEF3C7] text-[#92400E] border-[#F59E0B]/30",
-        bar: "#F59E0B",
-        barOpacity: 0.6,
+        color: "bg-amber-100 text-amber-800 border-amber-500/30",
         icon: AlertTriangle,
         label: "Alto",
       }
     case "preventivo":
       return {
-        color: "bg-[#DBEAFE] text-[#1E40AF] border-[#3B82F6]/30",
-        bar: "#3B82F6",
-        barOpacity: 0.6,
+        color: "bg-blue-100 text-blue-800 border-blue-500/30",
         icon: CheckCircle2,
         label: "Preventivo",
       }
@@ -47,128 +36,91 @@ function getUrgencyConfig(urgency: SupplyAction["urgency"]) {
 
 export function AccionesAbastecimiento() {
   return (
-    <Card className="bg-card border-border shadow-sm h-full">
-      <CardHeader className="pb-4">
-        <CardHeaderContent
-          icon={Truck}
-          iconColor="#3B82F6"
-          title="Acciones Prioritarias de Abastecimiento"
-          description="Recomendaciones de reasignación y reposición"
-          badge={
-            <Badge
-              variant="secondary"
-              className="bg-[#DCFCE7] text-[#166534] border-[#22C55E]/30 text-[10px]"
-            >
-              {supplyActions.length} acciones
-            </Badge>
-          }
-        />
-      </CardHeader>
-      <CardContent className="space-y-3 overflow-y-auto max-h-[calc(100vh-280px)]">
-        {supplyActions.map((action, index) => {
-          const urgencyConfig = getUrgencyConfig(action.urgency)
-          const UrgencyIcon = urgencyConfig.icon
-          const isAhorra = action.impact === "Ahorra"
+    <div className="h-full animate-in fade-in slide-in-from-right-4 duration-700 delay-300">
+      <div className="px-5 pt-5 pb-4">
+        <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-1">
+          Acciones de Abastecimiento
+        </p>
+        <p className="text-[11px] text-muted-foreground font-mono">
+          {supplyActions.length} acciones · reasignación y reposición
+        </p>
+      </div>
+      <div className="border-t border-border" />
 
-          return (
-            <div
-              key={action.rank}
-              className="group relative p-4 rounded-xl border border-border bg-card hover:bg-secondary/20 hover:border-border/80 transition-all duration-200 cursor-pointer"
-            >
-              {/* Priority indicator bar */}
+      <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
+        <div className="divide-y divide-border/60">
+          {supplyActions.map((action, index) => {
+            const urgencyConfig = getUrgencyConfig(action.urgency)
+            const UrgencyIcon = urgencyConfig.icon
+            const isAhorra = action.impact === "Ahorra"
+
+            return (
               <div
-                className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
-                style={{
-                  backgroundColor: urgencyConfig.bar,
-                  opacity: urgencyConfig.barOpacity,
-                }}
-              />
+                key={action.rank}
+                className="px-5 py-4 hover:bg-muted/50 transition-colors group relative"
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] font-semibold text-muted-foreground tracking-wider">
+                    #{String(index + 1).padStart(2, "0")}
+                  </span>
+                  <Badge variant="secondary" className={urgencyConfig.color}>
+                    <UrgencyIcon className="h-3 w-3 mr-1" />
+                    {urgencyConfig.label}
+                  </Badge>
+                </div>
+                <h4 className="text-sm font-semibold text-foreground leading-tight group-hover:text-blue-500 transition-colors">
+                  {action.action}
+                </h4>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {action.quantity} unidades de {action.sku}
+                </p>
 
-              {/* Header */}
-              <div className="flex items-start justify-between gap-2 mb-3">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[10px] font-semibold text-muted-foreground tracking-wider">
-                      #{String(index + 1).padStart(2, "0")}
-                    </span>
-                    <Badge variant="secondary" className={urgencyConfig.color}>
-                      <UrgencyIcon className="h-3 w-3 mr-1" />
-                      {urgencyConfig.label}
-                    </Badge>
-                  </div>
-                  <h4 className="text-sm font-semibold text-foreground leading-tight group-hover:text-[#3B82F6] transition-colors">
-                    {action.action}
-                  </h4>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {action.quantity} unidades de {action.sku}
-                  </p>
+                <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground mt-2">
+                  <span className="truncate">{action.source}</span>
+                  <span>→</span>
+                  <span className="truncate">{action.destination}</span>
                 </div>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-md shrink-0">
-                  <Clock className="h-3 w-3" />
-                  {action.timeframe}
-                </div>
-              </div>
 
-              {/* Flow indicator */}
-              <div className="flex items-center gap-2 mb-3 p-2 bg-secondary/50 rounded-lg">
-                <div className="flex-1 text-center">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground">De</p>
-                  <p className="text-sm font-medium text-foreground truncate">{action.source}</p>
-                </div>
-                <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0" />
-                <div className="flex-1 text-center">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Hacia</p>
-                  <p className="text-sm font-medium text-foreground truncate">{action.destination}</p>
-                </div>
-              </div>
-
-              {/* Impact */}
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5 text-xs">
-                  <div className={`p-1 rounded ${isAhorra ? "bg-[#DCFCE7]" : "bg-[#DBEAFE]"}`}>
+                <div className="flex items-center gap-1.5 text-xs mt-2">
+                  <div className={`p-1 rounded ${isAhorra ? "bg-emerald-100" : "bg-blue-100"}`}>
                     {isAhorra ? (
-                      <TrendingUp className="h-3 w-3 text-[#16A34A]" />
+                      <TrendingUp className="h-3 w-3 text-emerald-600" />
                     ) : (
-                      <TrendingDown className="h-3 w-3 text-[#2563EB]" />
+                      <TrendingDown className="h-3 w-3 text-blue-600" />
                     )}
                   </div>
                   <span className="text-muted-foreground">{action.impact}</span>
-                  <span className={`font-semibold ${isAhorra ? "text-[#16A34A]" : "text-[#2563EB]"}`}>
+                  <span className={`font-semibold ${isAhorra ? "text-emerald-600" : "text-blue-600"}`}>
                     {action.impactValue}
                   </span>
                 </div>
-              </div>
 
-              {/* Hover action button */}
-              <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button
-                  size="sm"
-                  className="h-7 text-xs bg-foreground hover:bg-foreground/90 text-background"
-                >
-                  Ejecutar
-                </Button>
+                <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button className="px-2 py-1 text-[10px] font-mono bg-foreground text-background hover:bg-foreground/90 transition-colors">
+                    Ejecutar
+                  </button>
+                </div>
               </div>
-            </div>
-          )
-        })}
-
-        {/* Summary footer */}
-        <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-[#22C55E]/10 to-[#3B82F6]/10 border border-[#22C55E]/20">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                Impacto Potencial Total
-              </p>
-              <p className="text-lg font-bold text-foreground">
-                {supplyActions.map((a) => a.impactValue).filter((v) => v.startsWith("$"))[0] ?? "—"}
-              </p>
-            </div>
-            <Button variant="outline" size="sm" className="text-xs">
-              Ejecutar Todos
-            </Button>
-          </div>
+            )
+          })}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+
+      <div className="border-t border-border px-5 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground mb-1">
+              Impacto Potencial
+            </p>
+            <p className="text-lg font-mono font-bold">
+              {supplyActions.map((a) => a.impactValue).filter((v) => v.startsWith("$"))[0] ?? "—"}
+            </p>
+          </div>
+          <button className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider bg-foreground text-background hover:bg-foreground/90 transition-colors">
+            Ejecutar Todos
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }

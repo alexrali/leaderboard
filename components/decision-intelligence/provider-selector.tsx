@@ -38,7 +38,7 @@ export function ProviderSelector({ value, onValueChange }: ProviderSelectorProps
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="h-8 gap-2 text-sm font-medium"
+          className="h-8 gap-2 text-[11px] font-mono"
         >
           <span>{selected?.name ?? "Seleccionar proveedor"}</span>
           <ChevronsUpDown className="size-3.5 shrink-0 opacity-50" />

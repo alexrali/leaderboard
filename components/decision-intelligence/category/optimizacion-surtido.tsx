@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Package, AlertTriangle, CheckCircle, XCircle } from "lucide-react"
 import {
   ComposedChart,
@@ -16,7 +15,8 @@ import {
   ReferenceLine,
 } from "recharts"
 import { Badge } from "@/components/ui/badge"
-import { CardHeaderContent } from "../shared/card-header"
+import { ZoneHeaderBar } from "../shared/zone-header"
+import { DI_COLORS, CHART } from "../shared/di-tokens"
 import { skuAssortmentData, type SkuAssortment } from "../mock-data/category"
 
 const STATUS_LABELS: Record<SkuAssortment["status"], string> = {
@@ -28,11 +28,11 @@ const STATUS_LABELS: Record<SkuAssortment["status"], string> = {
 
 const getStatusColor = (status: SkuAssortment["status"]) => {
   switch (status) {
-    case "core":       return "#22C55E"
-    case "crecimiento":return "#3B82F6"
-    case "revisión":   return "#F59E0B"
-    case "faltante":   return "#EF4444"
-    default:           return "#64748B"
+    case "core":       return CHART.growth
+    case "crecimiento":return CHART.total
+    case "revisión":   return CHART.opportunity
+    case "faltante":   return CHART.decline
+    default:           return DI_COLORS.slate
   }
 }
 
@@ -125,16 +125,101 @@ export function OptimizacionSurtido({
   const statuses = (["core", "crecimiento", "revisión", "faltante"] as SkuAssortment["status"][])
 
   return (
-    <Card className="border-border/50 shadow-sm">
-      <CardHeader className="pb-4">
-        <CardHeaderContent
-          icon={Package}
-          iconColor="#F59E0B"
-          title="Optimización de Surtido"
-          description="Contribución y distribución de SKU"
-        />
+    <div className="animate-in fade-in duration-500" style={{ animationDelay: '200ms' }}>
+      <ZoneHeaderBar title="OPTIMIZACIÓN DE SURTIDO" />
+      <div className="px-6 py-5">
+        <div className="h-[280px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart
+              data={displayData}
+              margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                className="stroke-border/40"
+                vertical={false}
+              />
+              <XAxis
+                dataKey="name"
+                tickLine={false}
+                axisLine={{ className: "stroke-border/40" }}
+                tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
+                interval={0}
+                angle={-45}
+                textAnchor="end"
+                height={60}
+              />
+              <YAxis
+                yAxisId="left"
+                tickLine={false}
+                axisLine={{ className: "stroke-border/40" }}
+                tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                label={{
+                  value: "Contribución (%)",
+                  angle: -90,
+                  position: "insideLeft",
+                  fontSize: 11,
+                  fill: "hsl(var(--muted-foreground))",
+                }}
+              />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                tickLine={false}
+                axisLine={{ className: "stroke-border/40" }}
+                tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                domain={[0, 100]}
+                label={{
+                  value: "Acumulado (%)",
+                  angle: 90,
+                  position: "insideRight",
+                  fontSize: 11,
+                  fill: "hsl(var(--muted-foreground))",
+                }}
+              />
 
-        {/* Status filters */}
+              <ReferenceLine
+                yAxisId="right"
+                y={80}
+                stroke={CHART.opportunity}
+                strokeDasharray="4 4"
+                label={{
+                  value: "80%",
+                  position: "right",
+                  fontSize: 10,
+                  fill: CHART.opportunity,
+                }}
+              />
+
+              <Tooltip content={<CustomTooltip />} />
+
+              <Bar
+                yAxisId="left"
+                dataKey="contribution"
+                radius={[4, 4, 0, 0]}
+                maxBarSize={40}
+              >
+                {displayData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={getStatusColor(entry.status)}
+                    fillOpacity={entry._dimmed ? 0.2 : 0.8}
+                  />
+                ))}
+              </Bar>
+
+              <Line
+                yAxisId="right"
+                type="monotone"
+                dataKey="cumulative"
+                stroke="hsl(var(--foreground))"
+                strokeWidth={2}
+                dot={{ fill: "hsl(var(--foreground))", r: 3 }}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+
         <div className="mt-4 flex flex-wrap gap-2">
           {statuses.map((status) => {
             const StatusIcon = getStatusIcon(status)
@@ -164,105 +249,11 @@ export function OptimizacionSurtido({
             )
           })}
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[280px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart
-              data={displayData}
-              margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-            >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="#E2E8F0"
-                vertical={false}
-              />
-              <XAxis
-                dataKey="name"
-                tickLine={false}
-                axisLine={{ stroke: "#E2E8F0" }}
-                tick={{ fontSize: 10, fill: "#64748B" }}
-                interval={0}
-                angle={-45}
-                textAnchor="end"
-                height={60}
-              />
-              <YAxis
-                yAxisId="left"
-                tickLine={false}
-                axisLine={{ stroke: "#E2E8F0" }}
-                tick={{ fontSize: 11, fill: "#64748B" }}
-                label={{
-                  value: "Contribución (%)",
-                  angle: -90,
-                  position: "insideLeft",
-                  fontSize: 11,
-                  fill: "#64748B",
-                }}
-              />
-              <YAxis
-                yAxisId="right"
-                orientation="right"
-                tickLine={false}
-                axisLine={{ stroke: "#E2E8F0" }}
-                tick={{ fontSize: 11, fill: "#64748B" }}
-                domain={[0, 100]}
-                label={{
-                  value: "Acumulado (%)",
-                  angle: 90,
-                  position: "insideRight",
-                  fontSize: 11,
-                  fill: "#64748B",
-                }}
-              />
 
-              <ReferenceLine
-                yAxisId="right"
-                y={80}
-                stroke="#F59E0B"
-                strokeDasharray="4 4"
-                label={{
-                  value: "80%",
-                  position: "right",
-                  fontSize: 10,
-                  fill: "#F59E0B",
-                }}
-              />
-
-              <Tooltip content={<CustomTooltip />} />
-
-              <Bar
-                yAxisId="left"
-                dataKey="contribution"
-                radius={[4, 4, 0, 0]}
-                maxBarSize={40}
-              >
-                {displayData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={getStatusColor(entry.status)}
-                    fillOpacity={entry._dimmed ? 0.2 : 0.8}
-                  />
-                ))}
-              </Bar>
-
-              <Line
-                yAxisId="right"
-                type="monotone"
-                dataKey="cumulative"
-                stroke="#1F2937"
-                strokeWidth={2}
-                dot={{ fill: "#1F2937", r: 3 }}
-              />
-            </ComposedChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Summary stats */}
         <div className="mt-4 grid grid-cols-4 gap-3">
-          <div className="p-3 rounded-lg bg-[#22C55E]/5 border border-[#22C55E]/10">
+          <div className="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/10">
             <div className="flex items-center gap-2 mb-1">
-              <CheckCircle className="h-4 w-4 text-[#22C55E]" />
+              <CheckCircle className="h-4 w-4 text-emerald-500" />
               <span className="text-xs text-muted-foreground">SKUs Core</span>
             </div>
             <p className="text-lg font-semibold text-foreground">
@@ -272,9 +263,9 @@ export function OptimizacionSurtido({
               impulsan 75% de ingresos
             </p>
           </div>
-          <div className="p-3 rounded-lg bg-[#3B82F6]/5 border border-[#3B82F6]/10">
+          <div className="p-3 rounded-lg bg-blue-500/5 border border-blue-500/10">
             <div className="flex items-center gap-2 mb-1">
-              <CheckCircle className="h-4 w-4 text-[#3B82F6]" />
+              <CheckCircle className="h-4 w-4 text-blue-500" />
               <span className="text-xs text-muted-foreground">En Crecimiento</span>
             </div>
             <p className="text-lg font-semibold text-foreground">
@@ -284,9 +275,9 @@ export function OptimizacionSurtido({
               potencial de expansión
             </p>
           </div>
-          <div className="p-3 rounded-lg bg-[#F59E0B]/5 border border-[#F59E0B]/10">
+          <div className="p-3 rounded-lg bg-amber-500/5 border border-amber-500/10">
             <div className="flex items-center gap-2 mb-1">
-              <AlertTriangle className="h-4 w-4 text-[#F59E0B]" />
+              <AlertTriangle className="h-4 w-4 text-amber-500" />
               <span className="text-xs text-muted-foreground">En Revisión</span>
             </div>
             <p className="text-lg font-semibold text-foreground">
@@ -296,9 +287,9 @@ export function OptimizacionSurtido({
               bajo rendimiento
             </p>
           </div>
-          <div className="p-3 rounded-lg bg-[#EF4444]/5 border border-[#EF4444]/10">
+          <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/10">
             <div className="flex items-center gap-2 mb-1">
-              <XCircle className="h-4 w-4 text-[#EF4444]" />
+              <XCircle className="h-4 w-4 text-red-500" />
               <span className="text-xs text-muted-foreground">Faltantes</span>
             </div>
             <p className="text-lg font-semibold text-foreground">
@@ -309,7 +300,7 @@ export function OptimizacionSurtido({
             </p>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

@@ -1,25 +1,24 @@
 "use client"
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { LayoutGrid } from "lucide-react"
-import { CardHeaderContent, InsightBanner, Legend } from "../shared/card-header"
+import { ZoneHeaderBar, ZoneInsight, Legend } from "../shared/zone-header"
+import { CHART } from "../shared/di-tokens"
 import { imbalanceMatrix } from "../mock-data/supply"
 
 function getCellColor(value: number) {
-  if (value < 5)  return "bg-[#FEE2E2] text-[#991B1B] border-[#FECACA]"   // crítico stockout
-  if (value < 10) return "bg-[#FEE2E2] text-[#991B1B] border-[#FECACA]"   // stockout rojo
-  if (value < 15) return "bg-[#FED7AA] text-[#92400E] border-[#FDBA74]"   // naranja
-  if (value < 22) return "bg-[#FEF9C3] text-[#713F12] border-[#FDE047]"   // amarillo
-  if (value <= 30) return "bg-[#DCFCE7] text-[#166534] border-[#BBF7D0]"  // óptimo verde
-  if (value <= 40) return "bg-[#DBEAFE] text-[#1E40AF] border-[#BFDBFE]"  // sobrestock leve azul
-  return "bg-[#BFDBFE] text-[#1E3A8A] border-[#93C5FD]"                   // sobrestock alto
+  if (value < 5)  return "bg-red-100 text-red-800 border-red-200"
+  if (value < 10) return "bg-red-100 text-red-800 border-red-200"
+  if (value < 15) return "bg-orange-200 text-orange-800 border-orange-300"
+  if (value < 22) return "bg-yellow-100 text-yellow-800 border-yellow-200"
+  if (value <= 30) return "bg-emerald-100 text-emerald-800 border-emerald-200"
+  if (value <= 40) return "bg-blue-100 text-blue-800 border-blue-200"
+  return "bg-blue-200 text-blue-900 border-blue-300"
 }
 
 function getImbalanceColor(score: number) {
-  if (score >= 70) return "text-[#EF4444]"
-  if (score >= 40) return "text-[#F59E0B]"
-  return "text-[#22C55E]"
+  if (score >= 70) return "text-red-500"
+  if (score >= 40) return "text-amber-500"
+  return "text-emerald-500"
 }
 
 export function MatrizDesbalanceInventario() {
@@ -39,31 +38,24 @@ export function MatrizDesbalanceInventario() {
     .slice(0, 3)
 
   return (
-    <Card className="bg-card border-border shadow-sm">
-      <CardHeader className="pb-4">
-        <CardHeaderContent
-          icon={LayoutGrid}
-          iconColor="#F59E0B"
-          title="Matriz de Desbalance de Inventario"
-          description="Días de inventario restante por tienda y categoría"
-          actions={
-            <Legend
-              items={[
-                { color: "#FEE2E2", label: "Substock" },
-                { color: "#DCFCE7", label: "Óptimo" },
-                { color: "#DBEAFE", label: "Sobrestock" },
-              ]}
-            />
-          }
-        />
-        <div className="mt-4">
-          <InsightBanner
-            message="Sobrestock en 3 tiendas podría cubrir 78% de desabastos"
-            variant="info"
+    <div className="animate-in fade-in duration-500" style={{ animationDelay: "100ms" }}>
+      <ZoneHeaderBar
+        title="DESBALANCE DE INVENTARIO"
+        right={
+          <Legend
+            items={[
+              { color: "bg-red-100", label: "Substock" },
+              { color: "bg-green-100", label: "Óptimo" },
+              { color: "bg-blue-100", label: "Sobrestock" },
+            ]}
           />
-        </div>
-      </CardHeader>
-      <CardContent>
+        }
+      />
+      <ZoneInsight
+        message="Sobrestock en 3 tiendas podría cubrir 78% de desabastos"
+        variant="info"
+      />
+      <div className="px-6 py-5">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
@@ -113,7 +105,6 @@ export function MatrizDesbalanceInventario() {
           </table>
         </div>
 
-        {/* Top Imbalance Zones */}
         <div className="mt-4 p-3 bg-secondary/30 rounded-lg">
           <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
             Zonas de Mayor Desbalance
@@ -125,8 +116,8 @@ export function MatrizDesbalanceInventario() {
                 variant="secondary"
                 className={
                   zone.isLow
-                    ? "bg-[#FEE2E2] text-[#991B1B] border-[#EF4444]/30"
-                    : "bg-[#DBEAFE] text-[#1E40AF] border-[#3B82F6]/30"
+                    ? "bg-red-100 text-red-800 border-red-500/30"
+                    : "bg-blue-100 text-blue-800 border-blue-500/30"
                 }
               >
                 {zone.store} - {zone.sku}: {zone.value}d{" "}
@@ -135,7 +126,7 @@ export function MatrizDesbalanceInventario() {
             ))}
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

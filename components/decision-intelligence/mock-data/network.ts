@@ -116,7 +116,7 @@ export const productLifecycleData: ProductLifecycle[] = [
 // ─── Waterfall Chart ──────────────────────────────────────────────────────────
 
 export const waterfallRawData: WaterfallItem[] = [
-  { name: "Ingreso Base",       value: 1200 },
+  { name: "Ingreso Base",       value: 1200, isTotal: true },
   { name: "Impacto Volumen",    value: 280 },
   { name: "Precio/Mezcla",      value: 95 },
   { name: "Expansión",          value: 340 },

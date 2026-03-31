@@ -1,6 +1,5 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Info } from "lucide-react"
 import {
@@ -21,16 +20,18 @@ import {
   ReferenceLine,
   ReferenceArea,
 } from "recharts"
+import { ZoneHeaderBar, ZoneInsight } from "../shared/zone-header"
+import { CHART, DI_COLORS } from "../shared/di-tokens"
 import { replenishmentData, type ReplenishmentPoint } from "../mock-data/supply"
 
 function getStatusColor(status: ReplenishmentPoint["status"]) {
   switch (status) {
     case "óptimo":
-      return "#22C55E"
+      return CHART.growth
     case "sobre-pedido":
-      return "#3B82F6"
+      return CHART.total
     case "sub-pedido":
-      return "#EF4444"
+      return CHART.decline
   }
 }
 
@@ -64,10 +65,10 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
               variant="secondary"
               className={`text-[10px] px-1.5 py-0 ${
                 data.status === "óptimo"
-                  ? "bg-[#DCFCE7] text-[#166534]"
+                  ? "bg-emerald-100 text-emerald-800"
                   : data.status === "sobre-pedido"
-                  ? "bg-[#DBEAFE] text-[#1E40AF]"
-                  : "bg-[#FEE2E2] text-[#991B1B]"
+                  ? "bg-blue-100 text-blue-800"
+                  : "bg-red-100 text-red-800"
               }`}
             >
               {data.status === "óptimo"
@@ -90,63 +91,56 @@ export function InteligenciaReposicion() {
   const underCount = replenishmentData.filter((d) => d.status === "sub-pedido").length
 
   return (
-    <Card className="bg-card border-border shadow-sm h-full">
-      <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <CardTitle className="text-lg font-semibold text-foreground">
-              Eficiencia de Reposición
-            </CardTitle>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Info className="h-4 w-4 text-muted-foreground" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="text-xs">Patrones de pedido por sucursal y hub</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {/* Legend */}
+    <div className="animate-in fade-in duration-500 h-full" style={{ animationDelay: "300ms" }}>
+      <ZoneHeaderBar
+        title="EFICIENCIA DE REPOSICIÓN"
+        right={
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Info className="h-4 w-4 text-muted-foreground" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="text-xs">Patrones de pedido por sucursal y hub</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        }
+      />
+      <div className="px-6 py-5">
         <div className="flex flex-wrap items-center gap-4 mb-4">
           <div className="flex items-center gap-2">
-            <span className="h-3 w-3 rounded-full bg-[#22C55E]" />
+            <span className="h-3 w-3 rounded-full bg-emerald-500" />
             <span className="text-xs text-muted-foreground">Óptimo ({optimalCount})</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="h-3 w-3 rounded-full bg-[#3B82F6]" />
+            <span className="h-3 w-3 rounded-full bg-blue-500" />
             <span className="text-xs text-muted-foreground">Sobre-pedido ({overCount})</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="h-3 w-3 rounded-full bg-[#EF4444]" />
+            <span className="h-3 w-3 rounded-full bg-red-500" />
             <span className="text-xs text-muted-foreground">Sub-pedido ({underCount})</span>
           </div>
         </div>
 
-        {/* Chart */}
         <div className="h-[220px]">
           <ResponsiveContainer width="100%" height="100%">
             <ScatterChart margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
 
-              {/* Zone areas */}
               <ReferenceArea
                 x1={0} x2={50} y1={70} y2={100}
-                fill="#3B82F6" fillOpacity={0.05}
+                fill={CHART.total} fillOpacity={0.05}
                 stroke="none"
               />
               <ReferenceArea
                 x1={50} x2={100} y1={0} y2={50}
-                fill="#EF4444" fillOpacity={0.05}
+                fill={CHART.decline} fillOpacity={0.05}
                 stroke="none"
               />
               <ReferenceArea
                 x1={20} x2={60} y1={50} y2={80}
-                fill="#22C55E" fillOpacity={0.05}
+                fill={CHART.growth} fillOpacity={0.05}
                 stroke="none"
               />
 
@@ -154,38 +148,37 @@ export function InteligenciaReposicion() {
                 type="number"
                 dataKey="demandVariability"
                 domain={[0, 100]}
-                tick={{ fontSize: 10, fill: "#64748B" }}
-                axisLine={{ stroke: "#E2E8F0" }}
+                tick={{ fontSize: 10, fill: DI_COLORS.slate }}
+                axisLine={{ stroke: "hsl(var(--border))" }}
                 tickLine={false}
                 label={{
                   value: "Variabilidad de Demanda",
                   position: "bottom",
                   offset: -5,
-                  style: { fontSize: 11, fill: "#64748B" },
+                  style: { fontSize: 11, fill: DI_COLORS.slate },
                 }}
               />
               <YAxis
                 type="number"
                 dataKey="replenishmentFrequency"
                 domain={[0, 100]}
-                tick={{ fontSize: 10, fill: "#64748B" }}
-                axisLine={{ stroke: "#E2E8F0" }}
+                tick={{ fontSize: 10, fill: DI_COLORS.slate }}
+                axisLine={{ stroke: "hsl(var(--border))" }}
                 tickLine={false}
                 label={{
                   value: "Frecuencia de Reposición",
                   angle: -90,
                   position: "insideLeft",
                   offset: 10,
-                  style: { fontSize: 11, fill: "#64748B" },
+                  style: { fontSize: 11, fill: DI_COLORS.slate },
                 }}
               />
               <ZAxis type="number" dataKey="volume" range={[80, 400]} />
               <RechartsTooltip content={<CustomTooltip />} />
 
-              {/* Reference line */}
               <ReferenceLine
                 segment={[{ x: 0, y: 50 }, { x: 100, y: 50 }]}
-                stroke="#94A3B8"
+                stroke="hsl(var(--muted-foreground))"
                 strokeDasharray="4 4"
                 strokeWidth={1}
               />
@@ -202,19 +195,18 @@ export function InteligenciaReposicion() {
           </ResponsiveContainer>
         </div>
 
-        {/* Zone labels */}
         <div className="flex justify-between mt-2 px-4">
-          <div className="text-[10px] text-[#3B82F6] font-medium">
+          <div className="text-[10px] text-blue-500 font-medium">
             Zona sobre-pedido
           </div>
-          <div className="text-[10px] text-[#22C55E] font-medium">
+          <div className="text-[10px] text-emerald-500 font-medium">
             Zona óptima
           </div>
-          <div className="text-[10px] text-[#EF4444] font-medium">
+          <div className="text-[10px] text-red-500 font-medium">
             Zona sub-pedido
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

@@ -1,16 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Grid3X3, ArrowUpRight, ArrowDownRight } from "lucide-react"
+import { ArrowUpRight, ArrowDownRight } from "lucide-react"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { CardHeaderContent, Legend } from "../shared/card-header"
+import { ZoneHeaderBar, Legend } from "../shared/zone-header"
+import { DI_COLORS, CHART } from "../shared/di-tokens"
 import {
   clusterData,
   clusterCategories,
@@ -19,10 +19,10 @@ import {
 
 const getCellColor = (penetration: number, benchmark: number) => {
   const diff = penetration - benchmark
-  if (diff >= 10)  return "bg-[#22C55E]/20 text-[#22C55E]"
-  if (diff >= 0)   return "bg-[#22C55E]/10 text-[#22C55E]/80"
-  if (diff >= -10) return "bg-[#F59E0B]/10 text-[#F59E0B]"
-  return "bg-[#EF4444]/15 text-[#EF4444]"
+  if (diff >= 10)  return "bg-emerald-500/20 text-emerald-500"
+  if (diff >= 0)   return "bg-emerald-500/10 text-emerald-500/80"
+  if (diff >= -10) return "bg-amber-500/10 text-amber-500"
+  return "bg-red-500/15 text-red-500"
 }
 
 const getOpportunityScore = (cluster: string) => {
@@ -58,24 +58,19 @@ export function MatrizOportunidad({
   } | null>(null)
 
   return (
-    <Card className="bg-card border-border shadow-sm">
-      <CardHeader className="pb-4">
-        <CardHeaderContent
-          icon={Grid3X3}
-          iconColor="#3B82F6"
-          title="Matriz de Oportunidad por Categoría"
-          description="Penetración vs benchmark por cluster"
-          actions={
-            <Legend
-              items={[
-                { color: "#22C55E", label: "Sobre benchmark" },
-                { color: "#EF4444", label: "Oportunidad" },
-              ]}
-            />
-          }
-        />
-      </CardHeader>
-      <CardContent>
+    <div className="animate-in fade-in duration-500" style={{ animationDelay: '100ms' }}>
+      <ZoneHeaderBar
+        title="MATRIZ DE OPORTUNIDAD"
+        right={
+          <Legend
+            items={[
+              { color: CHART.growth, label: "Sobre benchmark" },
+              { color: CHART.decline, label: "Oportunidad" },
+            ]}
+          />
+        }
+      />
+      <div className="px-6 py-5">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -97,7 +92,7 @@ export function MatrizOportunidad({
                       {getCategoryOpportunity(cat) > 0 && (
                         <Badge
                           variant="outline"
-                          className="text-[9px] px-1 py-0 bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20"
+                          className="text-[9px] px-1 py-0 bg-amber-500/10 text-amber-500 border-amber-500/20"
                         >
                           +{getCategoryOpportunity(cat)}%
                         </Badge>
@@ -143,10 +138,10 @@ export function MatrizOportunidad({
                                 </span>
                                 <div className="absolute top-1 right-1">
                                   {cell.trend === "up" && (
-                                    <ArrowUpRight className="h-3 w-3 text-[#22C55E]" />
+                                    <ArrowUpRight className="h-3 w-3 text-emerald-500" />
                                   )}
                                   {cell.trend === "down" && (
-                                    <ArrowDownRight className="h-3 w-3 text-[#EF4444]" />
+                                    <ArrowDownRight className="h-3 w-3 text-red-500" />
                                   )}
                                   {cell.trend === "stable" && (
                                     <span className="text-[10px] text-muted-foreground leading-none">
@@ -185,8 +180,8 @@ export function MatrizOportunidad({
                                     <span
                                       className={`font-medium ${
                                         cell.penetration >= cell.benchmark
-                                          ? "text-[#22C55E]"
-                                          : "text-[#EF4444]"
+                                          ? "text-emerald-500"
+                                          : "text-red-500"
                                       }`}
                                     >
                                       {cell.penetration >= cell.benchmark
@@ -207,7 +202,7 @@ export function MatrizOportunidad({
                     <div
                       className={`inline-flex items-center justify-center h-8 w-12 rounded-lg text-sm font-semibold ${
                         getOpportunityScore(cluster) > 10
-                          ? "bg-[#F59E0B]/15 text-[#F59E0B]"
+                          ? "bg-amber-500/15 text-amber-500"
                           : "bg-secondary/50 text-muted-foreground"
                       }`}
                     >
@@ -219,7 +214,7 @@ export function MatrizOportunidad({
             </tbody>
           </table>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

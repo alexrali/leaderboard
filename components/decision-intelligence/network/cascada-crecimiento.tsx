@@ -12,7 +12,8 @@ import {
   ReferenceLine,
   LabelList,
 } from "recharts"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { ZoneHeaderBar, ZoneInsight, Legend } from "../shared/zone-header"
+import { CHART, DI_COLORS } from "../shared/di-tokens"
 import { waterfallRawData } from "../mock-data/network"
 import type { WaterfallItem } from "../mock-data/network"
 
@@ -25,7 +26,6 @@ interface WaterfallBar {
   fill: string
 }
 
-// Calcular posiciones del gráfico cascada
 const buildWaterfallData = (raw: WaterfallItem[]): WaterfallBar[] => {
   const result: WaterfallBar[] = []
   let runningTotal = 0
@@ -38,7 +38,7 @@ const buildWaterfallData = (raw: WaterfallItem[]): WaterfallBar[] => {
         displayValue: item.value,
         isTotal: true,
         start: 0,
-        fill: "#3B82F6",
+        fill: CHART.total,
       })
       if (index === 0) {
         runningTotal = item.value
@@ -50,7 +50,7 @@ const buildWaterfallData = (raw: WaterfallItem[]): WaterfallBar[] => {
         value: Math.abs(item.value),
         displayValue: item.value,
         start,
-        fill: item.value >= 0 ? "#22C55E" : "#EF4444",
+        fill: item.value >= 0 ? CHART.growth : CHART.decline,
       })
       runningTotal += item.value
     }
@@ -73,9 +73,8 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
       <div className="bg-card border border-border rounded-xl p-3 shadow-lg">
         <p className="font-semibold text-foreground mb-1">{data.name}</p>
         <p
-          className={`text-lg font-bold ${
-            data.displayValue >= 0 ? "text-[#22C55E]" : "text-[#EF4444]"
-          }`}
+          className="text-lg font-bold"
+          style={{ color: data.displayValue >= 0 ? CHART.growth : CHART.decline }}
         >
           {data.displayValue >= 0 ? "+" : ""}${data.displayValue}K
         </p>
@@ -85,7 +84,6 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   return null
 }
 
-// Métricas de resumen calculadas desde los datos raw
 const baseValue   = waterfallRawData[0].value
 const positiveSum = waterfallRawData.filter((d) => !d.isTotal && d.value > 0).reduce((a, b) => a + b.value, 0)
 const negativeSum = waterfallRawData.filter((d) => !d.isTotal && d.value < 0).reduce((a, b) => a + b.value, 0)
@@ -93,34 +91,20 @@ const netResult   = waterfallRawData.find((d) => d.isTotal && d !== waterfallRaw
 
 export function CascadaCrecimiento() {
   return (
-    <Card className="bg-card border-border shadow-sm">
-      <CardHeader className="pb-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <CardTitle className="text-base font-semibold text-foreground">
-              Descomposición de Crecimiento vs Objetivo
-            </CardTitle>
-            <CardDescription className="text-sm text-muted-foreground mt-1">
-              Análisis de impulsores y detractores de ingreso
-            </CardDescription>
-          </div>
-          <div className="flex items-center gap-4 text-xs shrink-0">
-            <div className="flex items-center gap-1.5">
-              <div className="h-2.5 w-2.5 rounded bg-[#22C55E]" />
-              <span className="text-muted-foreground">Impulsor Positivo</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="h-2.5 w-2.5 rounded bg-[#EF4444]" />
-              <span className="text-muted-foreground">Impulsor Negativo</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="h-2.5 w-2.5 rounded bg-[#3B82F6]" />
-              <span className="text-muted-foreground">Total</span>
-            </div>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
+    <div className="animate-in fade-in duration-500" style={{ animationDelay: "300ms" }}>
+      <ZoneHeaderBar
+        title="DESCOMPOSICION DE CRECIMIENTO"
+        right={
+          <Legend
+            items={[
+              { color: CHART.growth, label: "Impulsor Positivo" },
+              { color: CHART.decline, label: "Impulsor Negativo" },
+              { color: CHART.total, label: "Total" },
+            ]}
+          />
+        }
+      />
+      <div className="px-6 py-5">
         <div className="h-[280px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
@@ -129,31 +113,29 @@ export function CascadaCrecimiento() {
             >
               <CartesianGrid
                 strokeDasharray="3 3"
-                stroke="#E2E8F0"
+                stroke="hsl(var(--border))"
                 opacity={0.5}
                 vertical={false}
               />
               <XAxis
                 dataKey="name"
                 tickLine={false}
-                axisLine={{ stroke: "#CBD5E1" }}
-                tick={{ fill: "#64748B", fontSize: 10 }}
+                axisLine={{ stroke: "hsl(var(--border))" }}
+                tick={{ fill: DI_COLORS.slate, fontSize: 10 }}
                 interval={0}
               />
               <YAxis
                 tickLine={false}
-                axisLine={{ stroke: "#CBD5E1" }}
-                tick={{ fill: "#64748B", fontSize: 11 }}
+                axisLine={{ stroke: "hsl(var(--border))" }}
+                tick={{ fill: DI_COLORS.slate, fontSize: 11 }}
                 tickFormatter={(v) => `$${v}K`}
                 domain={[0, 2000]}
               />
               <Tooltip content={<CustomTooltip />} />
-              <ReferenceLine y={0} stroke="#CBD5E1" />
+              <ReferenceLine y={0} stroke="hsl(var(--border))" />
 
-              {/* Barra invisible para efecto flotante */}
               <Bar dataKey="start" stackId="stack" fill="transparent" />
 
-              {/* Barra visible */}
               <Bar dataKey="value" stackId="stack" radius={[4, 4, 0, 0]}>
                 {waterfallData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.fill} />
@@ -162,26 +144,25 @@ export function CascadaCrecimiento() {
                   dataKey="displayValue"
                   position="top"
                   formatter={(v: number) => `${v >= 0 ? "+" : ""}$${v}K`}
-                  style={{ fill: "#1F2937", fontSize: 10, fontWeight: 600 }}
+                  style={{ fill: "hsl(var(--foreground))", fontSize: 10, fontWeight: 600 }}
                 />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Métricas clave */}
         <div className="grid grid-cols-4 gap-4 mt-4">
           <div className="text-center p-3 bg-secondary/30 rounded-lg">
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Base</p>
             <p className="text-lg font-bold text-foreground">${baseValue}K</p>
           </div>
-          <div className="text-center p-3 bg-[#22C55E]/10 rounded-lg">
+          <div className="text-center p-3 bg-green-500/10 rounded-lg">
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Crecimiento</p>
-            <p className="text-lg font-bold text-[#22C55E]">+${positiveSum}K</p>
+            <p className="text-lg font-bold" style={{ color: CHART.growth }}>+${positiveSum}K</p>
           </div>
-          <div className="text-center p-3 bg-[#EF4444]/10 rounded-lg">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Pérdidas</p>
-            <p className="text-lg font-bold text-[#EF4444]">${negativeSum}K</p>
+          <div className="text-center p-3 bg-red-500/10 rounded-lg">
+            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Perdidas</p>
+            <p className="text-lg font-bold" style={{ color: CHART.decline }}>${negativeSum}K</p>
           </div>
           <div className="text-center p-3 bg-primary/5 rounded-lg border border-border">
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Resultado Neto</p>
@@ -189,13 +170,11 @@ export function CascadaCrecimiento() {
           </div>
         </div>
 
-        {/* Banner de insight */}
-        <div className="mt-4 px-4 py-3 bg-[#F0FDF4] border border-[#22C55E]/20 rounded-lg">
-          <span className="text-sm font-medium text-[#166534]">
-            Crecimiento impulsado 70% por expansión, pero márgenes en decline (–1.2 pts)
-          </span>
-        </div>
-      </CardContent>
-    </Card>
+        <ZoneInsight
+          message="Crecimiento impulsado 70% por expansion, pero margenes en decline (-1.2 pts)"
+          variant="success"
+        />
+      </div>
+    </div>
   )
 }

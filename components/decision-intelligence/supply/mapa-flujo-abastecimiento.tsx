@@ -1,19 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { GitBranch } from "lucide-react"
-import { CardHeaderContent, InsightBanner, Legend } from "../shared/card-header"
+import { ZoneHeaderBar, ZoneInsight, Legend } from "../shared/zone-header"
+import { CHART } from "../shared/di-tokens"
 import { flowNodes, flowEdges, type FlowNode, type FlowEdge } from "../mock-data/supply"
 
 function getNodeColor(status: FlowNode["status"]) {
   switch (status) {
     case "óptimo":
-      return { fill: "#22C55E", stroke: "#16A34A" }
+      return { fill: CHART.growth, stroke: CHART.growth }
     case "riesgo-desabasto":
-      return { fill: "#F59E0B", stroke: "#D97706" }
+      return { fill: CHART.opportunity, stroke: CHART.opportunity }
     case "sobrestock":
-      return { fill: "#3B82F6", stroke: "#2563EB" }
+      return { fill: CHART.total, stroke: CHART.total }
   }
 }
 
@@ -47,40 +46,33 @@ export function MapaFlujoAbastecimiento() {
   const activeNode = hoveredNode ? nodeMap.get(hoveredNode) : null
 
   return (
-    <Card className="bg-card border-border shadow-sm">
-      <CardHeader className="pb-4">
-        <CardHeaderContent
-          icon={GitBranch}
-          iconColor="#3B82F6"
-          title="Flujo de Abastecimiento y Salud de Inventario"
-          description="Tamaño del nodo = nivel de inventario, color = estado de stock"
-          actions={
-            <Legend
-              items={[
-                { color: "#22C55E", label: "Óptimo" },
-                { color: "#F59E0B", label: "Riesgo de Desabasto" },
-                { color: "#3B82F6", label: "Sobrestock" },
-              ]}
-            />
-          }
-        />
-        <div className="mt-4">
-          <InsightBanner
-            message="5 tiendas representan 63% del riesgo de desabasto"
-            variant="warning"
+    <div className="animate-in fade-in duration-500" style={{ animationDelay: "0ms" }}>
+      <ZoneHeaderBar
+        title="FLUJO DE ABASTECIMIENTO"
+        right={
+          <Legend
+            items={[
+              { color: CHART.growth, label: "Óptimo" },
+              { color: CHART.opportunity, label: "Riesgo de Desabasto" },
+              { color: CHART.total, label: "Sobrestock" },
+            ]}
           />
-        </div>
-      </CardHeader>
-      <CardContent>
+        }
+      />
+      <ZoneInsight
+        message="5 tiendas representan 63% del riesgo de desabasto"
+        variant="warning"
+      />
+      <div className="px-6 py-5">
         <div className="relative">
           <svg
             viewBox="0 0 100 100"
             className="w-full h-[360px]"
-            style={{ background: "linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%)" }}
+            style={{ background: "linear-gradient(180deg, hsl(var(--muted) / 0.3) 0%, hsl(var(--muted) / 0.5) 100%)" }}
           >
             <defs>
               <pattern id="supply-grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#E2E8F0" strokeWidth="0.2" />
+                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="hsl(var(--border))" strokeWidth="0.2" />
               </pattern>
               <filter id="supply-glow" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
@@ -92,7 +84,6 @@ export function MapaFlujoAbastecimiento() {
             </defs>
             <rect width="100%" height="100%" fill="url(#supply-grid)" />
 
-            {/* Edges */}
             {flowEdges.map((edge, i) => {
               const highlighted = isEdgeHighlighted(edge)
               const path = getEdgePath(edge)
@@ -101,13 +92,13 @@ export function MapaFlujoAbastecimiento() {
                   <path
                     d={path}
                     fill="none"
-                    stroke={highlighted ? "#3B82F6" : "#CBD5E1"}
+                    stroke={highlighted ? CHART.total : "hsl(var(--border))"}
                     strokeWidth={highlighted ? 0.8 : 0.4 + (edge.flowVolume / 3000)}
                     strokeOpacity={highlighted ? 0.9 : 0.5}
                     strokeLinecap="round"
                     className="transition-all duration-300"
                   />
-                  <circle r="1" fill={highlighted ? "#3B82F6" : "#94A3B8"} opacity="0.8">
+                  <circle r="1" fill={highlighted ? CHART.total : "hsl(var(--muted-foreground))"} opacity="0.8">
                     <animateMotion
                       dur={`${2.5 - edge.flowVolume / 2400}s`}
                       repeatCount="indefinite"
@@ -118,7 +109,6 @@ export function MapaFlujoAbastecimiento() {
               )
             })}
 
-            {/* Nodes */}
             {flowNodes.map((node) => {
               const colors = getNodeColor(node.status)
               const r = getNodeRadius(node.inventoryLevel, node.type)
@@ -186,7 +176,6 @@ export function MapaFlujoAbastecimiento() {
             })}
           </svg>
 
-          {/* Hover tooltip */}
           {activeNode && (
             <div
               className="absolute bg-card border border-border rounded-xl shadow-lg p-3 z-20 pointer-events-none"
@@ -206,7 +195,7 @@ export function MapaFlujoAbastecimiento() {
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

@@ -1,9 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { TrendingUp } from "lucide-react"
 import {
   ScatterChart,
   Scatter,
@@ -17,23 +15,24 @@ import {
   ReferenceArea,
   ZAxis,
 } from "recharts"
-import { CardHeaderContent, InsightBanner, Legend } from "../shared/card-header"
+import { ZoneHeaderBar, ZoneInsight, Legend } from "../shared/zone-header"
+import { DI_COLORS, CHART } from "../shared/di-tokens"
 import { categoryLandscapeData, type CategoryLandscape } from "../mock-data/category"
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Aceites: "#F59E0B",
-  Limpieza: "#3B82F6",
-  "C. Personal": "#EC4899",
-  Alimentos: "#22C55E",
-  Bebidas: "#8B5CF6",
+  Aceites: DI_COLORS.warning,
+  Limpieza: DI_COLORS.neutral,
+  "C. Personal": DI_COLORS.pink,
+  Alimentos: DI_COLORS.positive,
+  Bebidas: DI_COLORS.purple,
 }
 
 const getGrowthColor = (growth: string) => {
   switch (growth) {
-    case "alto":    return "#22C55E"
-    case "estable": return "#3B82F6"
-    case "decline": return "#EF4444"
-    default:        return "#64748B"
+    case "alto":    return CHART.growth
+    case "estable": return CHART.total
+    case "decline": return CHART.decline
+    default:        return DI_COLORS.slate
   }
 }
 
@@ -115,33 +114,25 @@ export function PaisajeCrecimiento({
   }
 
   return (
-    <Card className="bg-card border-border shadow-sm">
-      <CardHeader className="pb-4">
-        <CardHeaderContent
-          icon={TrendingUp}
-          iconColor="#22C55E"
-          title="Paisaje de Crecimiento por Categoría"
-          description="Penetración de mercado vs contribución de ingresos"
-          actions={
-            <Legend
-              items={[
-                { color: "#22C55E", label: "Alto Crecimiento" },
-                { color: "#3B82F6", label: "Estable" },
-                { color: "#EF4444", label: "En Decline" },
-              ]}
-            />
-          }
-        />
-        <div className="mt-4">
-          <InsightBanner
-            message="Aceites tiene 28% de espacio de expansión en tiendas Tier-2"
-            variant="success"
+    <div className="animate-in fade-in duration-500" style={{ animationDelay: '0ms' }}>
+      <ZoneHeaderBar
+        title="PAISAJE DE CATEGORÍAS"
+        right={
+          <Legend
+            items={[
+              { color: CHART.growth, label: "Alto Crecimiento" },
+              { color: CHART.total, label: "Estable" },
+              { color: CHART.decline, label: "En Decline" },
+            ]}
           />
-        </div>
-      </CardHeader>
-      <CardContent>
+        }
+      />
+      <ZoneInsight
+        message="Aceites tiene 28% de espacio de expansión en tiendas Tier-2"
+        variant="success"
+      />
+      <div className="px-6 py-5">
         <div className="h-[400px] relative">
-          {/* Quadrant labels */}
           <div className="absolute top-2 left-12 text-[10px] text-muted-foreground/60 font-medium z-10">
             Optimizar Mezcla
           </div>
@@ -157,13 +148,12 @@ export function PaisajeCrecimiento({
 
           <ResponsiveContainer width="100%" height="100%">
             <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border/40" />
 
-              {/* Quadrant backgrounds */}
-              <ReferenceArea x1={0}  x2={50}  y1={50} y2={100} fill="#F59E0B" fillOpacity={0.03} />
-              <ReferenceArea x1={50} x2={100} y1={50} y2={100} fill="#22C55E" fillOpacity={0.03} />
-              <ReferenceArea x1={0}  x2={50}  y1={0}  y2={50}  fill="#64748B" fillOpacity={0.03} />
-              <ReferenceArea x1={50} x2={100} y1={0}  y2={50}  fill="#3B82F6" fillOpacity={0.03} />
+              <ReferenceArea x1={0}  x2={50}  y1={50} y2={100} fill={DI_COLORS.warning} fillOpacity={0.03} />
+              <ReferenceArea x1={50} x2={100} y1={50} y2={100} fill={DI_COLORS.positive} fillOpacity={0.03} />
+              <ReferenceArea x1={0}  x2={50}  y1={0}  y2={50}  fill={DI_COLORS.slate} fillOpacity={0.03} />
+              <ReferenceArea x1={50} x2={100} y1={0}  y2={50}  fill={DI_COLORS.neutral} fillOpacity={0.03} />
 
               <XAxis
                 type="number"
@@ -171,14 +161,14 @@ export function PaisajeCrecimiento({
                 name="Penetración de Mercado"
                 domain={[0, 100]}
                 tickLine={false}
-                axisLine={{ stroke: "#E2E8F0" }}
-                tick={{ fontSize: 11, fill: "#64748B" }}
+                axisLine={{ className: "stroke-border/40" }}
+                tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
                 label={{
                   value: "Penetración de Mercado (%)",
                   position: "bottom",
                   offset: 0,
                   fontSize: 11,
-                  fill: "#64748B",
+                  fill: "hsl(var(--muted-foreground))",
                 }}
               />
               <YAxis
@@ -187,21 +177,21 @@ export function PaisajeCrecimiento({
                 name="Contribución de Ingresos"
                 domain={[0, 100]}
                 tickLine={false}
-                axisLine={{ stroke: "#E2E8F0" }}
-                tick={{ fontSize: 11, fill: "#64748B" }}
+                axisLine={{ className: "stroke-border/40" }}
+                tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
                 label={{
                   value: "Contribución de Ingresos (%)",
                   angle: -90,
                   position: "insideLeft",
                   offset: 10,
                   fontSize: 11,
-                  fill: "#64748B",
+                  fill: "hsl(var(--muted-foreground))",
                 }}
               />
               <ZAxis type="number" dataKey="sales" range={[200, 1200]} />
 
-              <ReferenceLine x={50} stroke="#94A3B8" strokeDasharray="4 4" />
-              <ReferenceLine y={50} stroke="#94A3B8" strokeDasharray="4 4" />
+              <ReferenceLine x={50} className="stroke-muted-foreground/40" strokeDasharray="4 4" />
+              <ReferenceLine y={50} className="stroke-muted-foreground/40" strokeDasharray="4 4" />
 
               <Tooltip content={<CustomTooltip />} />
 
@@ -213,7 +203,7 @@ export function PaisajeCrecimiento({
                     fillOpacity={
                       selectedCategory === null || selectedCategory === entry.name ? 0.8 : 0.3
                     }
-                    stroke={selectedCategory === entry.name ? "#1F2937" : "transparent"}
+                    stroke={selectedCategory === entry.name ? "hsl(var(--foreground))" : "transparent"}
                     strokeWidth={selectedCategory === entry.name ? 2 : 0}
                     onClick={() => handleClick(entry)}
                   />
@@ -223,7 +213,6 @@ export function PaisajeCrecimiento({
           </ResponsiveContainer>
         </div>
 
-        {/* Category filter buttons */}
         <div className="mt-4 flex flex-wrap gap-2">
           {categoryLandscapeData.map((cat) => (
             <button
@@ -239,7 +228,7 @@ export function PaisajeCrecimiento({
             </button>
           ))}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
