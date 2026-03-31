@@ -20,6 +20,7 @@ import {
   BadgeCheck,
   Bell,
   BarChart2,
+  Brain,
 } from "lucide-react"
 import {
   Sidebar,
@@ -417,16 +418,43 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
               </SidebarMenuItem>
             </Collapsible>
 
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                tooltip="Proveedores"
-                isActive={activeSection === "provider-performance"}
-                onClick={() => handleSectionChange("provider-performance")}
-              >
-                <BarChart2 />
-                <span>Proveedores</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            <Collapsible defaultOpen={activeSection === "provider-performance" || activeSection === "decision-intelligence"} className="group/collapsible">
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton tooltip="Proveedores" onClick={() => handleSectionChange()}>
+                    <BarChart2 />
+                    <span>Proveedores</span>
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuAction className="data-[state=open]:rotate-90">
+                    <ChevronRight />
+                    <span className="sr-only">Expandir</span>
+                  </SidebarMenuAction>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={activeSection === "provider-performance"}
+                        onClick={() => handleSectionChange("provider-performance")}
+                      >
+                        <span>Desempeño</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={activeSection === "decision-intelligence"}
+                        onClick={() => handleSectionChange("decision-intelligence")}
+                      >
+                        <Brain className="size-3.5" />
+                        <span>Inteligencia</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </SidebarMenuItem>
+            </Collapsible>
 
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="Sprints" onClick={() => handleSectionChange()}>

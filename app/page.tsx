@@ -29,6 +29,7 @@ import { PortafolioPage } from "@/components/sri/pages/portafolio-page"
 import { MetasPage } from "@/components/sri/pages/metas-page"
 import { AlertasPage } from "@/components/sri/pages/alertas-page"
 import { ProviderPerformancePage } from "@/components/provider-performance/index"
+import { DecisionIntelligencePage } from "@/components/decision-intelligence/index"
 import { useAppStore } from "@/lib/store"
 import { useSettingsSync } from "@/hooks/use-settings-sync"
 import {
@@ -43,7 +44,7 @@ import type { TeamMember } from "@/lib/leaderboard-data"
 
 const VIEW_MODES = ["daily", "weekly"] as const
 
-const EXCLUDED_SECTIONS = ["settings", "account", "notifications", "provider-performance"]
+const EXCLUDED_SECTIONS = ["settings", "account", "notifications", "provider-performance", "decision-intelligence"]
 
 function getISOWeek(date: Date): number {
   const tmp = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
@@ -108,6 +109,7 @@ function PageContent() {
     "sri-metas": "Metas",
     "sri-alertas": "Alertas",
     "provider-performance": "Desempeño de Proveedores",
+    "decision-intelligence": "Inteligencia Decisional",
   }
 
   return (
@@ -250,6 +252,7 @@ function PageContent() {
 
             {activeSection === "settings" && <SettingsPage />}
             {activeSection === "provider-performance" && <ProviderPerformancePage />}
+            {activeSection === "decision-intelligence" && <DecisionIntelligencePage />}
 
             {!EXCLUDED_SECTIONS.includes(activeSection) && (
               <footer className="border-border/20 flex items-center justify-between border-t pb-4 pt-6">
