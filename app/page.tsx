@@ -116,7 +116,7 @@ function PageContent() {
     <SidebarProvider>
       <AppSidebar activeSection={activeSection} onSectionChange={setActiveSection} />
       <SidebarInset className="overflow-hidden">
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+        <header className="flex h-16 shrink-0 items-center gap-2 px-4 shadow-[0_1px_0_0_rgba(0,0,0,0.08)]">
           <SidebarTrigger className="-ml-1" />
           <Separator
             orientation="vertical"
@@ -125,7 +125,7 @@ function PageContent() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage>{sectionLabel[activeSection] ?? activeSection}</BreadcrumbPage>
+                <BreadcrumbPage className="font-medium">{sectionLabel[activeSection] ?? activeSection}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -135,11 +135,11 @@ function PageContent() {
                 {viewMode === "daily" && (
                   <>
                     <span>{displayDate}</span>
-                    <span className="text-border">·</span>
+                    <span className="text-[#ebebeb]">·</span>
                   </>
                 )}
                 <span>Sem {week}{viewMode === "weekly" ? `, ${now.getFullYear()}` : ""}</span>
-                <span className="text-border">·</span>
+                <span className="text-[#ebebeb]">·</span>
                 <span>{members.length} surtidores</span>
                 {isStale && (
                   <span className="bg-warning/15 text-warning-foreground rounded-full px-2 py-0.5 font-medium">
@@ -158,16 +158,16 @@ function PageContent() {
             >
               <Search className="h-3.5 w-3.5" />
               <span className="hidden sm:inline text-xs">Buscar</span>
-              <kbd className="bg-muted border-border hidden items-center gap-1 rounded border px-1.5 font-mono text-[10px] sm:inline-flex">
+              <kbd className="bg-[#fafafa] shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] hidden items-center gap-1 rounded px-1.5 font-mono text-[10px] sm:inline-flex">
                 ⌘K
               </kbd>
             </Button>
-            <div className="border-border/40 bg-muted/40 flex items-center gap-1 rounded-full border p-1">
+            <div className="flex items-center gap-1 rounded-full bg-[#fafafa] p-1 shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]">
               <button
                 onClick={() => setViewMode("daily")}
                 className={`rounded-full px-3 py-0.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none ${
                   viewMode === "daily"
-                    ? "bg-background text-foreground shadow-sm"
+                    ? "bg-[#171717] text-white shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -177,7 +177,7 @@ function PageContent() {
                 onClick={() => setViewMode("weekly")}
                 className={`rounded-full px-3 py-0.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none ${
                   viewMode === "weekly"
-                    ? "bg-background text-foreground shadow-sm"
+                    ? "bg-[#171717] text-white shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -190,7 +190,7 @@ function PageContent() {
         <main id="main-content" className="w-full flex-1 min-h-0 overflow-auto px-4 py-8 md:px-6 lg:px-8 lg:py-10" tabIndex={-1}>
           <div className="flex flex-col gap-10">
             {isError && !EXCLUDED_SECTIONS.includes(activeSection) && (
-              <div className="border-destructive/30 bg-destructive/10 text-destructive rounded-xl border px-5 py-4 text-sm">
+              <div className="rounded-xl shadow-[rgba(239,68,68,0.3)_0px_0px_0px_1px] bg-red-50 text-destructive px-5 py-4 text-sm">
                 No se pudo cargar la información. Verifica la conexión a Supabase.
               </div>
             )}
@@ -255,7 +255,7 @@ function PageContent() {
             {activeSection === "decision-intelligence" && <DecisionIntelligencePage />}
 
             {!EXCLUDED_SECTIONS.includes(activeSection) && (
-              <footer className="border-border/20 flex items-center justify-between border-t pb-4 pt-6">
+              <footer className="flex items-center justify-between pb-4 pt-6 shadow-[0_-1px_0_0_rgba(0,0,0,0.08)]">
                 <span className="text-muted-foreground text-xs">
                   Datos actualizados automáticamente cada 5 minutos
                 </span>

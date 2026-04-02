@@ -133,6 +133,17 @@
   [data-slot="sidebar-separator"] {
     opacity: 0.3;
   }
+
+  [data-slot="sidebar-group-label"] {
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: #666666;
+  }
+
+  [data-slot="sidebar-menu-button"][data-active="true"] {
+    font-weight: 600;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

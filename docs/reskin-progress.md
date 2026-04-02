@@ -25,7 +25,8 @@ Each session should cover **2 phases max** to avoid context overflow and subagen
 |---|---|---|---|
 | **1 (done)** | Phase 1 | 2 files | Foundations — font, tokens, shadows |
 | **2 (done)** | Phase 2 | 15 files | UI primitives — shadow-as-border, no dark:, Vercel palette |
-| **3 (next)** | Phase 3 + 4 | ~13 files | Shell + typography pass |
+| **3 (done)** | Phase 3 | 3 files | Shell — sidebar, header, globals CSS rules |
+| **4 (next)** | Phase 4 | ~10 files | Typography pass |
 | **4** | Phase 5 | ~40 files | Section pages (biggest session) |
 | **5** | Phase 6 + 7 + 8 | ~30 files | Hermes/messaging + auth + validation |
 
@@ -110,23 +111,42 @@ Each session should cover **2 phases max** to avoid context overflow and subagen
 
 ---
 
-## Phase 3 — Shell 🔲 NEXT
+## Phase 3 — Shell ✅ DONE
 
 **Plan ref:** lines 102–121
-**Files to modify (2):** `components/app-sidebar.tsx`, `app/page.tsx`
+**Files modified (3):** `components/app-sidebar.tsx`, `app/page.tsx`, `app/globals.css`
 
-### Key changes
-- `app-sidebar.tsx`: Logo block bg → `#171717`, group labels → 12px/500/uppercase/`#666666`, menu buttons → 14px/500, tree line → already handled by globals.css `--vercel-gray-100`, user card → shadow-ring
-- `app/page.tsx`: Header `border-b` → `shadow-[0_1px_0_0_rgba(0,0,0,0.08)]`, Hoy/Semana toggle → pill nav (64px radius), breadcrumb → 14px/500, metadata → 12px/400/`#666666`
+### What was done
+- [x] 3.1 `app-sidebar.tsx` — Both AvatarFallback instances: `bg-primary/10 text-primary font-bold` → `font-semibold shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]` (shadow-as-border)
+- [x] 3.2 `globals.css` — Added `[data-slot="sidebar-group-label"]`: 12px, uppercase, weight 500, `#666666`
+- [x] 3.3 `globals.css` — Added `[data-slot="sidebar-menu-button"][data-active="true"]`: font-weight 600
+- [x] 3.4 `page.tsx` — Header `border-b` → `shadow-[0_1px_0_0_rgba(0,0,0,0.08)]`
+- [x] 3.5 `page.tsx` — BreadcrumbPage: added `font-medium` (14px/500)
+- [x] 3.6 `page.tsx` — Dot separators: `text-border` → `text-[#ebebeb]`
+- [x] 3.7 `page.tsx` — Search kbd: `bg-muted border-border border` → `bg-[#fafafa] shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]`
+- [x] 3.8 `page.tsx` — Toggle container: `border` → shadow-as-border, `bg-muted/40` → `bg-[#fafafa]`
+- [x] 3.9 `page.tsx` — Toggle active pills: `bg-background text-foreground` → `bg-[#171717] text-white`
+- [x] 3.10 `page.tsx` — Footer: `border-t` → `shadow-[0_-1px_0_0_rgba(0,0,0,0.08)]`
+- [x] 3.11 `page.tsx` — Error banner: `border` → `shadow-[rgba(239,68,68,0.3)_0px_0px_0px_1px] bg-red-50`
 
-### Suggestions for Phase 3
-- **SidebarInset is sacrosanct** — Do NOT touch any `SidebarInset` class, its `rounded-xl`, or its `shadow-sm`. Only modify content inside and around it.
-- **`app-sidebar.tsx`** likely uses shadcn sidebar primitives (`data-slot="sidebar-*"`). Some styling may already be handled by the updated sidebar tokens in globals.css. Check before overwriting.
-- **Toggle buttons** (Hoy/Semana): These may be custom components or use `Tabs`/`ToggleGroup`. Check what `app/page.tsx` actually renders before deciding the approach.
+### Decisions made
+1. **SidebarGroupLabel styled via global CSS** — Uses `[data-slot="sidebar-group-label"]` selector in globals.css rather than modifying app-sidebar.tsx directly, consistent with how other sidebar tokens are handled
+2. **SidebarMenuButton active weight via global CSS** — Same approach, using `[data-slot="sidebar-menu-button"][data-active="true"]` to bump weight to 600 on active items
+3. **Toggle pills use dark active state** — `bg-[#171717] text-white` for the selected pill matches the Vercel design spec for large pill nav
+4. **Error banner keeps reddish tint** — Shadow uses `rgba(239,68,68,0.3)` to maintain destructive visual hierarchy while using shadow-as-border technique
+5. **Logo block unchanged** — Already uses `bg-sidebar-primary` / `text-sidebar-primary-foreground` which resolve to `#171717` / `#ffffff` via Phase 1 tokens
+6. **Sub-menu tree line already handled** — `--vercel-gray-100` (`#ebebeb`) set in Phase 1 globals.css
+
+### Validation
+- `npx next build` — ✅ compiled successfully, 22/22 pages generated
+- Zero `font-bold` in Phase 3 files
+- Zero `dark:` classes in Phase 3 files
+- Zero `border-b` / `border-t` on header/footer (only shadow technique)
+- SidebarInset untouched
 
 ---
 
-## Phase 4 — Typography Pass 🔲
+## Phase 4 — Typography Pass 🔲 NEXT
 
 **Plan ref:** lines 124–150
 **Files (~10):** `leaderboard-header.tsx`, `weekly-overview.tsx`, `general-metrics.tsx`, `day-progress.tsx`, `resources-detail.tsx`, `panel-overview.tsx`, `panel/` components, `section-tabs.tsx`, `worker-detail-sheet.tsx`, `settings-page.tsx`, `spotlight.tsx`

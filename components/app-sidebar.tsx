@@ -502,7 +502,7 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                   <Avatar className="h-8 w-8 rounded-lg" aria-label={`Avatar for ${displayName}`}>
-                    <AvatarFallback className="bg-primary/10 text-primary rounded-lg text-xs font-bold">
+                    <AvatarFallback className="rounded-lg text-xs font-semibold shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]">
                       {displayName.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -522,7 +522,7 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg" aria-label={`Avatar for ${displayName}`}>
-                      <AvatarFallback className="bg-primary/10 text-primary rounded-lg text-xs font-bold">
+                      <AvatarFallback className="rounded-lg text-xs font-semibold shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]">
                         {displayName.slice(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
