@@ -1,5 +1,6 @@
 "use client"
 
+import { ViewTransition } from "react"
 import { useState, useId } from "react"
 import {
   TrendingUp,
@@ -487,8 +488,8 @@ function ClassificationTableSection({
             </thead>
             <tbody>
               {members.map((member, idx) => (
+                <ViewTransition key={member.id} default="none">
                 <tr
-                  key={member.id}
                   className={`border-border/30 hover:bg-muted/20 border-t transition-colors cursor-pointer ${idx % 2 === 0 ? "" : "bg-muted/10"}`}
                   onClick={() => onRowClick(member)}
                   onKeyDown={(e) => {
@@ -553,6 +554,7 @@ function ClassificationTableSection({
                     <TrendIcon trend={member.trend} value={member.trendValue} />
                   </td>
                 </tr>
+                </ViewTransition>
               ))}
             </tbody>
           </table>
@@ -665,7 +667,9 @@ export function WeeklyOverview({ members, weeklySummary, dailyTrend, loading }: 
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               {top3.map((m, i) => (
-                <PodiumCard key={m.id} member={m} index={i} />
+                <ViewTransition key={m.id} default="none">
+                  <PodiumCard member={m} index={i} />
+                </ViewTransition>
               ))}
             </div>
           </div>

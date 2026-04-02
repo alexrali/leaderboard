@@ -1,5 +1,7 @@
 "use client"
 
+import { startTransition } from "react"
+
 import {
   LayoutDashboard,
   Trophy,
@@ -74,11 +76,11 @@ export function AppSidebar({ activeSection = "overview", onSectionChange }: AppS
   }
 
   function handleSectionChange(section?: string) {
-    // Only call onSectionChange if a section is provided
     if (section) {
-      onSectionChange?.(section)
+      startTransition(() => {
+        onSectionChange?.(section)
+      })
     }
-    // Always close mobile sidebar after menu item selection
     if (isMobile) {
       setOpenMobile(false)
     }

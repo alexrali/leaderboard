@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useEffect, useState } from "react"
+import { Suspense, useEffect, useState, startTransition, ViewTransition } from "react"
 import { parseAsStringLiteral, useQueryState } from "nuqs"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
@@ -164,7 +164,7 @@ function PageContent() {
             </Button>
             <div className="flex items-center gap-1 rounded-full bg-[#fafafa] p-1 shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]">
               <button
-                onClick={() => setViewMode("daily")}
+                onClick={() => startTransition(() => setViewMode("daily"))}
                 className={`rounded-full px-3 py-0.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none ${
                   viewMode === "daily"
                     ? "bg-[#171717] text-white shadow-sm"
@@ -174,7 +174,7 @@ function PageContent() {
                 Hoy
               </button>
               <button
-                onClick={() => setViewMode("weekly")}
+                onClick={() => startTransition(() => setViewMode("weekly"))}
                 className={`rounded-full px-3 py-0.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none ${
                   viewMode === "weekly"
                     ? "bg-[#171717] text-white shadow-sm"
@@ -190,21 +190,26 @@ function PageContent() {
         <main id="main-content" className="w-full flex-1 min-h-0 overflow-auto px-4 py-8 md:px-6 lg:px-8 lg:py-10" tabIndex={-1}>
           <div className="flex flex-col gap-10">
             {isError && !EXCLUDED_SECTIONS.includes(activeSection) && (
-              <div className="rounded-xl shadow-[rgba(239,68,68,0.3)_0px_0px_0px_1px] bg-red-50 text-destructive px-5 py-4 text-sm">
-                No se pudo cargar la información. Verifica la conexión a Supabase.
-              </div>
+              <ViewTransition enter="vt-fade-in" exit="vt-fade-out" default="none">
+                <div className="rounded-xl shadow-[rgba(239,68,68,0.3)_0px_0px_0px_1px] bg-red-50 text-destructive px-5 py-4 text-sm">
+                  No se pudo cargar la información. Verifica la conexión a Supabase.
+                </div>
+              </ViewTransition>
             )}
 
             {isLoading && !EXCLUDED_SECTIONS.includes(activeSection) && (
-              <div className="flex items-center justify-center py-20">
-                <div className="flex flex-col items-center gap-3">
-                  <div className="border-primary size-8 animate-spin rounded-full border-2 border-t-transparent" />
-                  <span className="text-muted-foreground text-sm">Cargando datos...</span>
+              <ViewTransition exit="vt-fade-out" default="none">
+                <div className="flex items-center justify-center py-20">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="border-primary size-8 animate-spin rounded-full border-2 border-t-transparent" />
+                    <span className="text-muted-foreground text-sm">Cargando datos...</span>
+                  </div>
                 </div>
-              </div>
+              </ViewTransition>
             )}
 
             {!isLoading && !isError && !EXCLUDED_SECTIONS.includes(activeSection) && (
+              <ViewTransition key={activeSection} enter="vt-fade-in" exit="vt-fade-out" default="none">
               <>
                 {activeSection === "overview" && (
                   <WeeklyOverview
@@ -248,11 +253,24 @@ function PageContent() {
                   </div>
                 )}
               </>
+              </ViewTransition>
             )}
 
-            {activeSection === "settings" && <SettingsPage />}
-            {activeSection === "provider-performance" && <ProviderPerformancePage />}
-            {activeSection === "decision-intelligence" && <DecisionIntelligencePage />}
+            {activeSection === "settings" && (
+              <ViewTransition enter="vt-fade-in" exit="vt-fade-out" default="none">
+                <SettingsPage />
+              </ViewTransition>
+            )}
+            {activeSection === "provider-performance" && (
+              <ViewTransition enter="vt-fade-in" exit="vt-fade-out" default="none">
+                <ProviderPerformancePage />
+              </ViewTransition>
+            )}
+            {activeSection === "decision-intelligence" && (
+              <ViewTransition enter="vt-fade-in" exit="vt-fade-out" default="none">
+                <DecisionIntelligencePage />
+              </ViewTransition>
+            )}
 
             {!EXCLUDED_SECTIONS.includes(activeSection) && (
               <footer className="flex items-center justify-between pb-4 pt-6 shadow-[0_-1px_0_0_rgba(0,0,0,0.08)]">

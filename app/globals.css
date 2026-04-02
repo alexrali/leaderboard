@@ -165,6 +165,45 @@
   }
 }
 
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes vt-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes vt-slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes vt-slide-down {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(12px); }
+}
+
+::view-transition-old(.vt-fade-out) {
+  animation: vt-fade-out 150ms ease-out both;
+}
+::view-transition-new(.vt-fade-in) {
+  animation: vt-fade-in 150ms ease-in both;
+}
+::view-transition-old(.vt-slide-down) {
+  animation: vt-slide-down 200ms ease-out both;
+}
+::view-transition-new(.vt-slide-up) {
+  animation: vt-slide-up 200ms ease-in both;
+}
+::view-transition-old(.vt-slide-down-slow) {
+  animation: vt-slide-down 300ms ease-out both;
+}
+::view-transition-new(.vt-slide-up-slow) {
+  animation: vt-slide-up 300ms ease-in both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -172,5 +211,10 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.01ms !important;
   }
 }

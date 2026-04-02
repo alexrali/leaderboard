@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo, useState, ViewTransition } from "react"
 import { TrendingUp, TrendingDown, Minus, Flame, Award, Zap, Clock, Target } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -254,8 +254,8 @@ function RankingTableSection({
             </TableHeader>
             <TableBody>
               {members.map((member, idx) => (
+                <ViewTransition key={member.id} default="none">
                 <TableRow
-                  key={member.id}
                   className="hover:bg-muted/60 cursor-pointer transition-colors animate-in fade-in slide-in-from-bottom-1 duration-300"
                   style={{ animationDelay: `${idx * 60}ms`, animationFillMode: "both" }}
                   onClick={() => onRowClick(member)}
@@ -346,6 +346,7 @@ function RankingTableSection({
                     <TrendIcon trend={member.trend} value={member.trendValue} />
                   </TableCell>
                 </TableRow>
+                </ViewTransition>
               ))}
             </TableBody>
           </Table>
