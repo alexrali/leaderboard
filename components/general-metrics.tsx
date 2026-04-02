@@ -70,7 +70,7 @@ function RankBadge({ rank, name, index }: { rank: number; name: string; index: n
     <Tooltip>
       <TooltipTrigger asChild>
         <div
-          className={`flex size-8 items-center justify-center rounded-full border text-xs font-bold animate-in fade-in slide-in-from-bottom-2 duration-500 ${
+          className={`flex size-8 items-center justify-center rounded-full border text-xs font-semibold animate-in fade-in slide-in-from-bottom-2 duration-500 ${
             styles[rank] ?? "bg-muted text-muted-foreground border-border"
           }`}
           style={{ animationDelay: `${index * 80}ms`, animationFillMode: "both" }}
@@ -126,7 +126,7 @@ function KpiCard({
       </CardHeader>
       <CardContent className="px-5 pt-1 pb-5">
         <div className="flex items-baseline gap-1.5">
-          <span className="text-foreground text-2xl font-bold tabular-nums">
+          <span className="text-foreground text-2xl font-semibold tabular-nums">
             {formatter(animatedValue)}
           </span>
           {unit && <span className="text-muted-foreground text-sm">{unit}</span>}
@@ -286,7 +286,7 @@ function RankingTableSection({
                     </div>
                   </TableCell>
                   <TableCell className="hidden text-right md:table-cell">
-                    <span className="text-foreground font-mono text-sm font-bold">
+                    <span className="text-foreground font-mono text-sm font-semibold">
                       {member.score.toLocaleString()}
                     </span>
                   </TableCell>

@@ -147,13 +147,13 @@ export function ContributionHeatmap({ data, onDayClick, selectedDate }: Contribu
                           <p className="font-semibold capitalize">{dayNum}</p>
                           <div className="flex items-center gap-3 text-muted-foreground">
                             <span>
-                              <span className="text-foreground font-mono font-bold">
+                              <span className="text-foreground font-mono font-semibold">
                                 {cell.teamUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })}
                               </span>{" "}
                               UE
                             </span>
                             <span>
-                              <span className="text-foreground font-mono font-bold">{cell.activeWorkers}</span>{" "}
+                              <span className="text-foreground font-mono font-semibold">{cell.activeWorkers}</span>{" "}
                               trabajadores
                             </span>
                           </div>

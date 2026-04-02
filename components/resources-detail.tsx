@@ -102,7 +102,7 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
             </CardDescription>
           </CardHeader>
           <CardContent className="px-5 pt-0 pb-5">
-            <CardTitle className="text-3xl font-bold">{overallUsage}%</CardTitle>
+            <CardTitle className="text-3xl font-semibold">{overallUsage}%</CardTitle>
             <Tooltip>
               <TooltipTrigger asChild>
                 <div>
@@ -122,7 +122,7 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
           </CardHeader>
           <CardContent className="px-5 pt-0 pb-5">
             <div className="flex items-baseline gap-2">
-              <CardTitle className="text-success text-3xl font-bold">{onTrack}</CardTitle>
+              <CardTitle className="text-success text-3xl font-semibold">{onTrack}</CardTitle>
               <span className="text-muted-foreground text-sm">resources</span>
             </div>
           </CardContent>
@@ -134,7 +134,7 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
           </CardHeader>
           <CardContent className="px-5 pt-0 pb-5">
             <div className="flex items-baseline gap-2">
-              <CardTitle className="text-warning text-3xl font-bold">{atRisk}</CardTitle>
+              <CardTitle className="text-warning text-3xl font-semibold">{atRisk}</CardTitle>
               <span className="text-muted-foreground text-sm">resources</span>
             </div>
           </CardContent>
@@ -146,7 +146,7 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
           </CardHeader>
           <CardContent className="px-5 pt-0 pb-5">
             <div className="flex items-baseline gap-2">
-              <CardTitle className="text-destructive text-3xl font-bold">{exceeded}</CardTitle>
+              <CardTitle className="text-destructive text-3xl font-semibold">{exceeded}</CardTitle>
               <span className="text-muted-foreground text-sm">resources</span>
             </div>
           </CardContent>
@@ -223,7 +223,7 @@ export function ResourcesDetail({ resources }: ResourcesDetailProps) {
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between">
                         <span className="text-muted-foreground text-xs">Usage</span>
-                        <span className="text-foreground font-mono text-xs font-bold">{pct}%</span>
+                        <span className="text-foreground font-mono text-xs font-semibold">{pct}%</span>
                       </div>
                       <Tooltip>
                         <TooltipTrigger asChild>

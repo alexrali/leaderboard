@@ -46,7 +46,7 @@ export function HeatmapDayDrawer({ date, onClose }: HeatmapDayDrawerProps) {
             </SheetDescription>
           </div>
           <div className="flex items-start justify-between gap-3">
-            <SheetTitle className="text-2xl font-mono font-bold tracking-tight capitalize leading-snug">
+            <SheetTitle className="text-2xl font-mono font-semibold tracking-[-0.04em] capitalize leading-snug">
               {formattedDate}
             </SheetTitle>
             {data && (
@@ -74,7 +74,7 @@ export function HeatmapDayDrawer({ date, onClose }: HeatmapDayDrawerProps) {
                 <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   UE del Equipo
                 </p>
-                <p className="text-4xl font-mono font-bold tracking-tight">
+                <p className="text-4xl font-mono font-semibold tracking-[-0.04em]">
                   {animatedUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })}
                 </p>
                 <p className="text-[10px] text-muted-foreground">unidades estiba</p>
@@ -83,7 +83,7 @@ export function HeatmapDayDrawer({ date, onClose }: HeatmapDayDrawerProps) {
                 <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   Trabajadores Activos
                 </p>
-                <p className="text-4xl font-mono font-bold tracking-tight">
+                <p className="text-4xl font-mono font-semibold tracking-[-0.04em]">
                   {animatedWorkers.toLocaleString()}
                 </p>
                 <p className="text-[10px] text-muted-foreground">en el día</p>
@@ -94,24 +94,24 @@ export function HeatmapDayDrawer({ date, onClose }: HeatmapDayDrawerProps) {
             <div className="grid grid-cols-4 gap-4 p-4 bg-muted/40 rounded-lg">
               <div className="text-center">
                 <FileText className="h-4 w-4 mx-auto text-muted-foreground mb-1.5" />
-                <p className="text-lg font-mono font-bold">{animatedFolios.toLocaleString()}</p>
+                <p className="text-lg font-mono font-semibold">{animatedFolios.toLocaleString()}</p>
                 <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Folios</p>
               </div>
               <div className="text-center">
                 <Package className="h-4 w-4 mx-auto text-muted-foreground mb-1.5" />
-                <p className="text-lg font-mono font-bold">{data.totalSkus.toLocaleString()}</p>
+                <p className="text-lg font-mono font-semibold">{data.totalSkus.toLocaleString()}</p>
                 <p className="text-[9px] text-muted-foreground uppercase tracking-wider">SKUs</p>
               </div>
               <div className="text-center">
                 <Weight className="h-4 w-4 mx-auto text-muted-foreground mb-1.5" />
-                <p className="text-lg font-mono font-bold">
+                <p className="text-lg font-mono font-semibold">
                   {data.totalWeightKg.toLocaleString("es-MX", { maximumFractionDigits: 0 })}
                 </p>
                 <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Peso (kg)</p>
               </div>
               <div className="text-center">
                 <Box className="h-4 w-4 mx-auto text-muted-foreground mb-1.5" />
-                <p className="text-lg font-mono font-bold">
+                <p className="text-lg font-mono font-semibold">
                   {data.totalVolumeM3.toLocaleString("es-MX", { maximumFractionDigits: 1 })}
                 </p>
                 <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Vol. (m3)</p>

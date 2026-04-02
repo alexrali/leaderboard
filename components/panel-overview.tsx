@@ -30,7 +30,7 @@ function HeroSummary({ teamUE, isLoading }: { teamUE?: number; isLoading: boolea
         UE del Equipo Hoy
       </p>
       <div className="flex items-baseline gap-3">
-        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-bold tracking-tighter font-mono leading-none">
+        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-semibold tracking-[-0.04em] font-mono leading-none">
           {animatedUE.toLocaleString("es-MX", { maximumFractionDigits: 1 })}
         </h2>
         <Zap className="size-5 text-yellow-500 hidden sm:block" />

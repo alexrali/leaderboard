@@ -62,17 +62,17 @@ function ChartTooltipContent({
         <p className="text-card-foreground mb-1.5 text-xs font-semibold">{label}</p>
         <p className="text-muted-foreground text-xs">
           Rutas:{" "}
-          <span className="text-card-foreground font-mono font-bold">
+          <span className="text-card-foreground font-mono font-semibold">
             {payload[0].value}
           </span>
         </p>
         <p className="text-muted-foreground text-xs">
           UE:{" "}
-          <span className="text-card-foreground font-mono font-bold">{ue}</span>
+          <span className="text-card-foreground font-mono font-semibold">{ue}</span>
         </p>
         <p className="text-muted-foreground text-xs">
           del día:{" "}
-          <span className="text-card-foreground font-mono font-bold">
+          <span className="text-card-foreground font-mono font-semibold">
             {pct}%
           </span>
         </p>
@@ -258,7 +258,7 @@ export function DayProgressSection({ data }: DayProgressProps) {
               </CardDescription>
             </CardHeader>
             <CardContent className="px-5 pt-0 pb-5">
-              <CardTitle className="text-3xl font-bold tabular-nums">
+              <CardTitle className="text-3xl font-semibold tabular-nums">
                 {animatedTotal.toLocaleString("es-MX")}
               </CardTitle>
               <div className="mt-2 flex items-center gap-1.5">
@@ -275,7 +275,7 @@ export function DayProgressSection({ data }: DayProgressProps) {
               </CardDescription>
             </CardHeader>
             <CardContent className="px-5 pt-0 pb-5">
-              <CardTitle className="text-3xl font-bold tabular-nums">
+              <CardTitle className="text-3xl font-semibold tabular-nums">
                 {animatedUE.toLocaleString("es-MX", { maximumFractionDigits: 0 })}
               </CardTitle>
               <div className="mt-2 flex items-center gap-1.5">
@@ -292,7 +292,7 @@ export function DayProgressSection({ data }: DayProgressProps) {
               </CardDescription>
             </CardHeader>
             <CardContent className="px-5 pt-0 pb-5">
-              <CardTitle className="text-3xl font-bold tabular-nums">
+              <CardTitle className="text-3xl font-semibold tabular-nums">
                 {animatedAvg}
               </CardTitle>
               <div className="mt-2 flex items-center gap-1.5">
@@ -309,7 +309,7 @@ export function DayProgressSection({ data }: DayProgressProps) {
               </CardDescription>
             </CardHeader>
             <CardContent className="px-5 pt-0 pb-5">
-              <CardTitle className="text-3xl font-bold">{peakHour}</CardTitle>
+              <CardTitle className="text-3xl font-semibold">{peakHour}</CardTitle>
               <div className="mt-2">
                 <span className="text-muted-foreground text-xs">Mayor actividad</span>
               </div>
@@ -495,7 +495,7 @@ export function DayProgressSection({ data }: DayProgressProps) {
                                 value={pct}
                                 className="h-2 flex-1 rounded-full"
                               />
-                              <span className="text-foreground font-mono text-xs font-bold">
+                              <span className="text-foreground font-mono text-xs font-semibold">
                                 {block.completed.toLocaleString("es-MX")}
                               </span>
                             </div>
@@ -579,7 +579,7 @@ export function DayProgressSection({ data }: DayProgressProps) {
                           <TableCell className="pl-5 font-mono text-sm font-medium">
                             {row.hour}
                           </TableCell>
-                          <TableCell className="text-right font-mono font-bold">
+                          <TableCell className="text-right font-mono font-semibold">
                             {row.completed.toLocaleString("es-MX")}
                           </TableCell>
                           <TableCell className="pr-5 text-right">
@@ -604,7 +604,7 @@ export function DayProgressSection({ data }: DayProgressProps) {
                           <TableCell className="pl-5 font-mono text-sm font-medium">
                             {row.hour}
                           </TableCell>
-                          <TableCell className="text-right font-mono font-bold">
+                          <TableCell className="text-right font-mono font-semibold">
                             {row.completed.toLocaleString("es-MX")}
                           </TableCell>
                           <TableCell className="pr-5 text-right">

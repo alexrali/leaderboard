@@ -66,7 +66,7 @@ export function TeamPaceChart() {
           <CardTitle className="text-sm font-semibold">Ritmo del Dia — UE Acumulada</CardTitle>
           <span className="text-muted-foreground text-xs">
             Total actual:{" "}
-            <span className="text-foreground font-mono font-bold">
+            <span className="text-foreground font-mono font-semibold">
               {animatedTotal.toLocaleString("es-MX", { maximumFractionDigits: 1 })}
             </span>
           </span>
@@ -104,13 +104,13 @@ export function TeamPaceChart() {
                       <p className="text-card-foreground mb-1.5 text-xs font-semibold">{label}</p>
                       <p className="text-muted-foreground text-xs">
                         Acumulado:{" "}
-                        <span className="text-card-foreground font-mono font-bold">
+                        <span className="text-card-foreground font-mono font-semibold">
                           {Number(cumUE?.value ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 1 })}
                         </span>
                       </p>
                       <p className="text-muted-foreground text-xs">
                         Esta hora:{" "}
-                        <span className="text-card-foreground font-mono font-bold">
+                        <span className="text-card-foreground font-mono font-semibold">
                           +{Number(hourUE?.value ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 1 })}
                         </span>
                       </p>

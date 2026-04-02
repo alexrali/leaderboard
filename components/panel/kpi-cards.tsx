@@ -38,7 +38,7 @@ function InlineStat({
         <p className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-medium leading-none mb-1">
           {label}
         </p>
-        <p className="text-xl font-mono font-bold tracking-tight tabular-nums leading-none">
+        <p className="text-xl font-mono font-semibold tracking-[-0.04em] tabular-nums leading-none">
           {animated.toLocaleString("es-MX", { maximumFractionDigits: 1 })}
           {suffix && <span className="text-base ml-0.5">{suffix}</span>}
         </p>

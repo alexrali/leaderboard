@@ -106,7 +106,7 @@ export function SettingsPage() {
     <div className="flex flex-col gap-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Configuración</h1>
+        <h1 className="text-[32px] font-semibold tracking-[-0.04em]">Configuración</h1>
         <p className="text-muted-foreground mt-1 text-sm">
           Personaliza tu experiencia en el dashboard
         </p>

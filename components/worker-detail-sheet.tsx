@@ -50,7 +50,7 @@ function StatTile({
   return (
     <div className="bg-muted/30 flex flex-col items-center rounded-lg border px-2 py-2.5">
       <Icon className="text-primary mb-1 size-3.5" />
-      <span className="text-foreground text-xs font-bold tabular-nums">
+      <span className="text-foreground text-xs font-semibold tabular-nums">
         {animatedValue.toLocaleString("es-MX", { maximumFractionDigits: decimals })}
       </span>
       <span className="text-muted-foreground text-[10px]">{label}</span>

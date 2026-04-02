@@ -143,7 +143,7 @@ function KpiCard({
       </CardHeader>
       <CardContent className="px-5 pt-1 pb-5">
         <div className="flex items-baseline gap-1.5">
-          <span className="text-foreground text-2xl font-bold">{formatter(animatedValue)}</span>
+          <span className="text-foreground text-2xl font-semibold">{formatter(animatedValue)}</span>
           {unit && <span className="text-muted-foreground text-sm">{unit}</span>}
         </div>
         {current !== undefined && previous !== undefined && (
@@ -193,11 +193,11 @@ function PodiumCard({ member, index }: { member: TeamMember; index: number }) {
       <CardContent className="flex flex-col items-center gap-3 px-5 py-5">
         <div className="relative">
           <Avatar className="border-muted size-14 border-2" aria-label={`Avatar for ${member.name}`}>
-            <AvatarFallback className="bg-secondary text-secondary-foreground text-sm font-bold">
+            <AvatarFallback className="bg-secondary text-secondary-foreground text-sm font-semibold">
               {member.avatar}
             </AvatarFallback>
           </Avatar>
-          <span className="absolute -right-1 -bottom-1 flex size-5 items-center justify-center rounded-full bg-amber-400 text-[10px] font-bold text-amber-900">
+          <span className="absolute -right-1 -bottom-1 flex size-5 items-center justify-center rounded-full bg-amber-400 text-[10px] font-semibold text-amber-900">
             {style.label}
           </span>
         </div>
@@ -209,23 +209,23 @@ function PodiumCard({ member, index }: { member: TeamMember; index: number }) {
         <div className="grid w-full grid-cols-2 gap-2 text-center">
           <div>
             <p className="text-muted-foreground text-xs">UE</p>
-            <p className="text-foreground font-mono text-sm font-bold">
+            <p className="text-foreground font-mono text-sm font-semibold">
               {member.score.toLocaleString("es-MX", { maximumFractionDigits: 0 })}
             </p>
           </div>
           <div>
             <p className="text-muted-foreground text-xs">Efic.</p>
-            <p className="text-foreground font-mono text-sm font-bold">{member.efficiency}%</p>
+            <p className="text-foreground font-mono text-sm font-semibold">{member.efficiency}%</p>
           </div>
           <div>
             <p className="text-muted-foreground text-xs">Folios</p>
-            <p className="text-foreground font-mono text-sm font-bold">
+            <p className="text-foreground font-mono text-sm font-semibold">
               {(member.foliosCompleted ?? 0).toLocaleString()}
             </p>
           </div>
           <div>
             <p className="text-muted-foreground text-xs">SKUs</p>
-            <p className="text-foreground font-mono text-sm font-bold">
+            <p className="text-foreground font-mono text-sm font-semibold">
               {(member.distinctSkus ?? 0).toLocaleString()}
             </p>
           </div>
@@ -252,14 +252,14 @@ function ChartTooltip({ active, payload, label }: TooltipProps<string, string>) 
       <div className="flex flex-col gap-1">
         <p className="text-muted-foreground">
           UE:{" "}
-          <span className="text-foreground font-mono font-bold">
+          <span className="text-foreground font-mono font-semibold">
             {Number(payload[0]?.value ?? 0).toLocaleString("es-MX", { maximumFractionDigits: 0 })}
           </span>
         </p>
         {entry?.activeWorkers != null && (
           <p className="text-muted-foreground">
             Surtidores:{" "}
-            <span className="text-foreground font-mono font-bold">{entry.activeWorkers}</span>
+            <span className="text-foreground font-mono font-semibold">{entry.activeWorkers}</span>
           </p>
         )}
       </div>
@@ -502,7 +502,7 @@ function ClassificationTableSection({
                   aria-label={`Ver detalle de ${member.name}`}
                 >
                   <td className="py-3 pl-5">
-                    <span className="bg-muted text-muted-foreground flex size-7 items-center justify-center rounded-full text-xs font-bold">
+                    <span className="bg-muted text-muted-foreground flex size-7 items-center justify-center rounded-full text-xs font-semibold">
                       {member.rank}
                     </span>
                   </td>
@@ -527,7 +527,7 @@ function ClassificationTableSection({
                     </div>
                   </td>
                   <td className="hidden py-3 pr-4 text-right md:table-cell">
-                    <span className="text-foreground font-mono text-xs font-bold">
+                    <span className="text-foreground font-mono text-xs font-semibold">
                       {member.score.toLocaleString("es-MX", { maximumFractionDigits: 0 })}
                     </span>
                   </td>

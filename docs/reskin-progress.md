@@ -26,8 +26,8 @@ Each session should cover **2 phases max** to avoid context overflow and subagen
 | **1 (done)** | Phase 1 | 2 files | Foundations — font, tokens, shadows |
 | **2 (done)** | Phase 2 | 15 files | UI primitives — shadow-as-border, no dark:, Vercel palette |
 | **3 (done)** | Phase 3 | 3 files | Shell — sidebar, header, globals CSS rules |
-| **4 (next)** | Phase 4 | ~10 files | Typography pass |
-| **4** | Phase 5 | ~40 files | Section pages (biggest session) |
+| **4 (done)** | Phase 4 | 14 files | Typography pass — font-bold→semibold, tracking, page titles |
+| **5 (next)** | Phase 5 | ~40 files | Section pages (biggest session) |
 | **5** | Phase 6 + 7 + 8 | ~30 files | Hermes/messaging + auth + validation |
 
 ---
@@ -146,33 +146,44 @@ Each session should cover **2 phases max** to avoid context overflow and subagen
 
 ---
 
-## Phase 4 — Typography Pass 🔲 NEXT
+## Phase 4 — Typography Pass ✅ DONE
 
 **Plan ref:** lines 124–150
-**Files (~10):** `leaderboard-header.tsx`, `weekly-overview.tsx`, `general-metrics.tsx`, `day-progress.tsx`, `resources-detail.tsx`, `panel-overview.tsx`, `panel/` components, `section-tabs.tsx`, `worker-detail-sheet.tsx`, `settings-page.tsx`, `spotlight.tsx`
+**Files modified (11):** `weekly-overview.tsx`, `general-metrics.tsx`, `day-progress.tsx`, `resources-detail.tsx`, `panel-overview.tsx`, `panel/kpi-cards.tsx`, `panel/contribution-heatmap.tsx`, `panel/team-pace-chart.tsx`, `panel/heatmap-day-drawer.tsx`, `worker-detail-sheet.tsx`, `settings-page.tsx`
 
-### Type hierarchy (from DESIGN.md)
+### What was done
+- [x] 4.1 `weekly-overview.tsx` — 11 `font-bold` → `font-semibold` (KPI card values, PodiumCard values/rank/mono, tooltip values, table values)
+- [x] 4.2 `general-metrics.tsx` — 3 `font-bold` → `font-semibold` (RankBadge, KPI card value, table UE value)
+- [x] 4.3 `day-progress.tsx` — 10 `font-bold` → `font-semibold` (tooltip values, day summary CardTitle values, time block values, breakdown table values)
+- [x] 4.4 `resources-detail.tsx` — 5 `font-bold` → `font-semibold` (summary card values, resource card usage %)
+- [x] 4.5 `panel-overview.tsx` — `font-bold` → `font-semibold`, `tracking-tighter` → `tracking-[-0.04em]` (hero number)
+- [x] 4.6 `panel/kpi-cards.tsx` — `font-bold` → `font-semibold`, `tracking-tight` → `tracking-[-0.04em]` (KPI value)
+- [x] 4.7 `panel/contribution-heatmap.tsx` — 2 `font-bold` → `font-semibold` (tooltip data values)
+- [x] 4.8 `panel/team-pace-chart.tsx` — 4 `font-bold` → `font-semibold` (header total, tooltip values)
+- [x] 4.9 `panel/heatmap-day-drawer.tsx` — 7 `font-bold` → `font-semibold`, `tracking-tight` → `tracking-[-0.04em]` (sheet title, hero stats, secondary stats)
+- [x] 4.10 `worker-detail-sheet.tsx` — 1 `font-bold` → `font-semibold` (StatTile value counter)
+- [x] 4.11 `settings-page.tsx` — Page `<h1>` upgraded: `text-2xl font-semibold tracking-tight` → `text-[32px] font-semibold tracking-[-0.04em]`
+- [x] 4.12 `leaderboard-header.tsx` — No changes needed (already correct)
+- [x] 4.13 `section-tabs.tsx` — No changes needed (already uses `text-sm font-medium`)
+- [x] 4.14 `spotlight.tsx` — No changes needed (no `font-bold`, all typography already conforms)
 
-| Context | Tailwind classes |
-|---|---|
-| Page/section titles (32px/600/-1.28px) | `text-[32px] font-semibold tracking-[-0.04em]` |
-| Card titles (24px/600/-0.96px) | `text-2xl font-semibold tracking-[-0.04em]` |
-| Body large (20px/400) | `text-xl font-normal` |
-| Body (16px/400) | `text-base font-normal` |
-| Body medium (16px/500) | `text-base font-medium` |
-| Buttons/links (14px/500) | `text-sm font-medium` |
-| Metadata (12px/400-500) | `text-xs font-normal` or `text-xs font-medium` |
-| Technical labels (12px mono/500/uppercase) | `text-xs font-medium uppercase font-mono tracking-wide` |
+### Decisions made
+1. **Inline section labels kept at `text-base`** — Labels like "Resumen Semanal" with 16px icons beside them are compact inline headers, not page-level titles. Upgrading to 32px would break layout.
+2. **`tracking-[-0.04em]` applied to hero/metric numbers** — Panel overview hero, KPI values, drawer titles/stats all received the Vercel negative tracking.
+3. **Pre-existing `dark:` classes in `day-progress.tsx` left untouched** — Two `dark:` classes in VelocityGrid component remain as-is.
+4. **`settings-page.tsx` only had title typography changed** — Pre-existing tsc errors not touched, per plan constraint.
+5. **Table column headers at `text-[10px]` in worker-detail-sheet left as-is** — Dense table headers where 10px is intentional for fit.
 
-### Suggestions for Phase 4
-- **Use `tracking-[-0.04em]`** instead of pixel values for negative letter-spacing — Tailwind's em-based tracking scales with font size automatically.
-- **`settings-page.tsx` has pre-existing tsc errors** — Don't try to fix them. Only apply typography changes.
-- **Search for `font-bold`** across all Phase 4 files — Vercel system caps at weight 600. Replace `font-bold` (700) with `font-semibold` (600).
-- **Search for `text-lg`/`text-xl`/`text-2xl`** on section titles — These likely need to become `text-[32px]` with negative tracking.
+### Validation
+- `npx next build` — ✅ compiled successfully, 22/22 pages generated
+- Zero `font-bold` in all 14 Phase 4 files (11 changed + 3 unchanged)
+- Zero non-typography changes (no colors, shadows, spacing, borders modified)
+- Spec compliance review: ✅ passed
+- Code quality review: ✅ approved (typography changes clean; unrelated pre-existing dirty files noted, not committed)
 
 ---
 
-## Phase 5 — Section Pages 🔲
+## Phase 5 — Section Pages 🔲 NEXT
 
 **Plan ref:** lines 153–178
 **Files (~40):**
