@@ -29,7 +29,8 @@ Each session should cover **2 phases max** to avoid context overflow and subagen
 | **4 (done)** | Phase 4 | 14 files | Typography pass — font-bold→semibold, tracking, page titles |
 | **5 (done)** | Phase 5 | 46 files | Section pages (biggest session) |
 | **6 (done)** | Phase 6 | 13 files | Hermes/messaging — shadow-as-border, pill badges, type hierarchy |
-| **7 (next)** | Phase 7 + 8 | ~5 files | Auth + validation |
+| **7 (done)** | Phase 7 | 3 files | Auth — login/signup pages |
+| **8 (next)** | Phase 8 | ~5 files | Validation & cleanup |
 
 ---
 
@@ -330,13 +331,30 @@ Phase 5 complete. Session table update:
 
 ---
 
-## Phase 7 — Login / Auth 🔲
+## Phase 7 — Login / Auth ✅ DONE
 
 **Plan ref:** lines 201–212
-**Files (3):** `app/login/page.tsx`, `components/login-form.tsx`, `components/signup-form.tsx`
+**Files modified (3):** `app/login/page.tsx`, `components/login-form.tsx`, `components/signup-form.tsx`
 
-### Suggestions for Phase 7
-- Simplest phase — only 3 files with straightforward token/class swaps.
+### What was done
+- [x] 7.1 `app/login/page.tsx` — Background `bg-muted` → `bg-white`; error banner `border border-destructive/30 bg-destructive/10` → `shadow-[rgba(239,68,68,0.3)_0px_0px_0px_1px] bg-red-50`
+- [x] 7.2 `components/login-form.tsx` — Both `<h1>` tags: `text-2xl font-bold` → `text-2xl font-semibold tracking-[-0.04em]` (2 instances)
+- [x] 7.3 `components/signup-form.tsx` — `<h1>`: `text-2xl font-bold` → `text-2xl font-semibold tracking-[-0.04em]`; side image div `bg-muted` → `bg-[#fafafa]`; removed `dark:brightness-[0.2] dark:grayscale` from img
+
+### Decisions made
+1. **Input/Button components not modified** — Already updated in Phase 2 to use shadow-as-border and primary dark styling
+2. **Error banner uses destructive shadow variant** — Same pattern as Phase 3 error banner: `rgba(239,68,68,0.3)` maintains destructive visual hierarchy with shadow-as-border technique
+3. **`text-muted-foreground` preserved** — Resolves to `#666666` (Gray 500), correct per Vercel palette
+4. **`text-sm text-balance` body text preserved** — 14px/400 matches spec for body text
+
+### Validation
+- `npx next build` — ✅ compiled successfully, 22/22 pages generated
+- Zero `font-bold` in all 3 Phase 7 files
+- Zero `dark:` classes in all 3 Phase 7 files
+- Zero `bg-muted` in all 3 Phase 7 files (except `text-muted-foreground` which is correct)
+- Zero `border` on error banner (replaced by shadow)
+- Spec compliance review: ✅ passed
+- Code quality review: ✅ approved
 
 ---
 

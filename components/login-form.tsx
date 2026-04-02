@@ -81,7 +81,7 @@ export function LoginForm({
             <form onSubmit={emailForm.handleSubmit(onEmailSubmit)}>
               <FieldGroup>
                 <div className="flex flex-col items-center gap-2 text-center">
-                  <h1 className="text-2xl font-bold">Bienvenido</h1>
+                  <h1 className="text-2xl font-semibold tracking-[-0.04em]">Bienvenido</h1>
                   <p className="text-muted-foreground text-sm text-balance">
                     Ingresa tu correo para recibir un código de acceso
                   </p>
@@ -116,7 +116,7 @@ export function LoginForm({
             <form onSubmit={codeForm.handleSubmit(onCodeSubmit)}>
               <FieldGroup>
                 <div className="flex flex-col items-center gap-2 text-center">
-                  <h1 className="text-2xl font-bold">Revisa tu correo</h1>
+                  <h1 className="text-2xl font-semibold tracking-[-0.04em]">Revisa tu correo</h1>
                   <p className="text-muted-foreground text-sm text-balance">
                     Enviamos un código de acceso a{" "}
                     <span className="font-medium text-foreground">
