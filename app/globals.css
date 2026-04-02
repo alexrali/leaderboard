@@ -144,6 +144,11 @@
   [data-slot="sidebar-menu-button"][data-active="true"] {
     font-weight: 600;
   }
+
+  [data-slot="sidebar-menu-button"]:not([data-active="true"]):hover,
+  [data-slot="sidebar-menu-sub-button"]:not([data-active="true"]):hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
