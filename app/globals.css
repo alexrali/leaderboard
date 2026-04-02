@@ -141,13 +141,27 @@
     color: #666666;
   }
 
-  [data-slot="sidebar-menu-button"][data-active="true"] {
+  /* Active state: left accent bar + bold, no background fill */
+  [data-slot="sidebar-menu-button"][data-active="true"],
+  [data-slot="sidebar-menu-sub-button"][data-active="true"] {
     font-weight: 600;
+    color: #171717;
+    border-left: 2px solid #171717;
+    padding-left: calc(0.5rem - 2px);
   }
 
+  /* Resting non-active: muted text */
+  [data-slot="sidebar-menu-button"]:not([data-active="true"]),
+  [data-slot="sidebar-menu-sub-button"]:not([data-active="true"]) {
+    color: #666666;
+    border-left: 2px solid transparent;
+  }
+
+  /* Hover non-active: text darkens, no background */
   [data-slot="sidebar-menu-button"]:not([data-active="true"]):hover,
   [data-slot="sidebar-menu-sub-button"]:not([data-active="true"]):hover {
-    background-color: rgba(0, 0, 0, 0.03);
+    color: #171717;
+    background-color: transparent;
   }
 }
 
