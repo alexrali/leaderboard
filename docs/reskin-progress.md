@@ -24,9 +24,10 @@ Each session should cover **2 phases max** to avoid context overflow and subagen
 | Session | Phases | Files | Notes |
 |---|---|---|---|
 | **1 (done)** | Phase 1 | 2 files | Foundations — font, tokens, shadows |
-| **2 (next)** | Phase 2 + 3 | ~15 files | UI primitives + shell |
-| **3** | Phase 4 + 5 | ~30 files | Typography + section pages (biggest session) |
-| **4** | Phase 6 + 7 + 8 | ~30 files | Hermes/messaging + auth + validation |
+| **2 (done)** | Phase 2 | 15 files | UI primitives — shadow-as-border, no dark:, Vercel palette |
+| **3 (next)** | Phase 3 + 4 | ~13 files | Shell + typography pass |
+| **4** | Phase 5 | ~40 files | Section pages (biggest session) |
+| **5** | Phase 6 + 7 + 8 | ~30 files | Hermes/messaging + auth + validation |
 
 ---
 
@@ -70,41 +71,46 @@ Each session should cover **2 phases max** to avoid context overflow and subagen
 
 ---
 
-## Phase 2 — UI Primitives 🔲 NEXT
+## Phase 2 — UI Primitives ✅ DONE
 
 **Plan ref:** `docs/plans/2026-04-02-vercel-design-system-reskin-a0a962.md` lines 63–98
 **Working dir:** `leaderboard/`
-**Files to modify (12):**
+**Files modified (15):**
 
-| File | What to change | Priority |
-|---|---|---|
-| `components/ui/card.tsx` | `rounded-xl` → `rounded-lg`, remove `border` and `shadow-sm` classes | High |
-| `components/ui/button.tsx` | Primary: `bg-[#171717]`, outline/ghost: shadow-ring instead of border, base `text-sm font-medium` already good | High |
-| `components/ui/badge.tsx` | Default → `rounded-full bg-[#ebf5ff] text-[#0068d6]`, secondary → `rounded-full` | High |
-| `components/ui/tabs.tsx` | `TabsList`: `bg-transparent` + shadow-ring, `TabsTrigger`: active font-semibold | High |
-| `components/ui/table.tsx` | `TableHead`: add `text-xs uppercase tracking-wide`, rows: hover `bg-[#fafafa]`, separator `border-[#ebebeb]` | High |
-| `components/ui/input.tsx` | Replace `border` with shadow-as-border, focus `box-shadow: 0 0 0 2px hsla(212,100%,48%,1)` | High |
-| `components/ui/separator.tsx` | Change `bg-border` → `bg-[#ebebeb]` | Low |
-| `components/ui/progress.tsx` | Track → `#ebebeb`, fill → `#171717` | Low |
-| `components/ui/dialog.tsx` | Backdrop → `hsla(0,0%,98%,1)`, remove `ring-foreground/10` | Medium |
-| `components/ui/sheet.tsx` | Backdrop → `hsla(0,0%,98%,1)`, border sides → shadow technique | Medium |
-| `components/ui/drawer.tsx` | Backdrop → `hsla(0,0%,98%,1)`, borders → shadow technique | Medium |
-| `components/ui/select.tsx` | Popover: shadow-as-border, `rounded-lg` | Medium |
-| `components/ui/dropdown-menu.tsx` | Popover: shadow-as-border, `rounded-lg` | Medium |
-| `components/ui/popover.tsx` | Popover: shadow-as-border, `rounded-lg` | Medium |
-| `components/ui/command.tsx` | Inherit from dialog/select changes | Low |
+### What was done
+- [x] 2.1 `card.tsx` — Removed `border` and `shadow-sm`, changed `rounded-xl` → `rounded-lg`
+- [x] 2.2 `button.tsx` — Removed `border border-transparent` from base, removed all `dark:` classes, outline uses shadow-ring, cleaned orphaned `focus-visible:border-ring`
+- [x] 2.3 `badge.tsx` — Removed `border` from base, `rounded-md` → `rounded-full`, default variant → blue pill (`#ebf5ff`/`#0068d6`), removed `dark:` classes, cleaned orphaned border refs
+- [x] 2.4 `tabs.tsx` — TabsList: `bg-transparent` + inset shadow-ring, TabsTrigger: removed `dark:`, removed `border border-transparent`, added `data-[state=active]:font-semibold`
+- [x] 2.5 `table.tsx` — TableHead: added `text-xs uppercase tracking-wide`, TableRow: `hover:bg-[#fafafa]`, `border-b border-[#ebebeb]`
+- [x] 2.6 `input.tsx` — `border` → inset shadow-as-border, focus shadow ring, `transition-colors` → `transition-shadow`, removed all `dark:` classes, cleaned orphaned border refs
+- [x] 2.7 `separator.tsx` — `bg-border` → `bg-[#ebebeb]`
+- [x] 2.8 `progress.tsx` — Track `bg-primary/20` → `bg-[#ebebeb]`, fill kept as `bg-primary` (#171717)
+- [x] 2.9 `dialog.tsx` — Overlay `bg-black/10` → `bg-white/80`, content ring → shadow-as-border stack, `rounded-xl` → `rounded-lg`, footer removed `border-t`
+- [x] 2.10 `sheet.tsx` — Overlay `bg-white/80`, removed `bg-clip-padding` and all side border classes, added shadow-as-border stack, added directional rounded corners
+- [x] 2.11 `drawer.tsx` — Overlay `bg-black/50` → `bg-white/80`, removed all direction border classes, added full shadow-as-border stack
+- [x] 2.12 `select.tsx` — Trigger: shadow-as-border + focus shadow, removed `dark:` + orphaned `border-input`, content: shadow-as-border + `rounded-lg`
+- [x] 2.13 `dropdown-menu.tsx` — Content + SubContent: `ring-foreground/10 ring-1` → shadow-as-border stack, removed `dark:` from items
+- [x] 2.14 `popover.tsx` — `border shadow-md` → shadow-as-border stack, `rounded-md` → `rounded-lg`
+- [x] 2.15 `command.tsx` — `rounded-xl!` → `rounded-lg!`, input wrapper → `bg-[#fafafa]`, separator → `bg-[#ebebeb]`
 
-### Suggestions for Phase 2
-- **Start with `card.tsx`** — it's the most-used primitive. After removing `border` and `shadow-sm` from the className, the global `[data-slot="card"]` CSS rule (already in globals.css) handles everything.
-- **`button.tsx` base classes**: Remove `border border-transparent` from the base cva string. For outline variant, replace `border-border` with a shadow-ring style. For ghost, no border needed at all.
-- **`badge.tsx`**: Remove the `border` from the base cva string entirely. Default variant becomes a blue pill with no border. This aligns with DESIGN.md's pill badge spec.
-- **`tabs.tsx`**: The `dark:` prefixed classes can be removed since we deleted dark mode. Simplify by stripping all `dark:` conditionals.
-- **Backdrops**: `dialog.tsx`, `sheet.tsx`, and `drawer.tsx` all use `bg-black/10` or `bg-black/50` for overlay. Change to a near-transparent white: `hsla(0,0%,98%,0.8)` to match DESIGN.md's overlay backdrop spec.
-- **After Phase 2, run `npx next build`** to verify no Tailwind class issues.
+### Decisions made
+1. **Shadow-as-border stack for all panels** — Dialog, sheet, drawer, select content, dropdown, popover all use the same 3-layer shadow: `rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 2px, rgba(0,0,0,0.04) 0px 8px 8px -8px`
+2. **Inset shadow for input fields** — Input, select trigger, and tabs list use `inset` variant to create recessed fields vs. outset shadow on panels
+3. **Card has no local shadow/border** — The global `[data-slot="card"]` CSS rule in globals.css handles all card styling; card.tsx just needs `border` and `shadow-sm` removed
+4. **Sheet gets directional rounding** — Added `data-[side=bottom]:rounded-t-lg`, `data-[side=left]:rounded-r-lg`, etc. for rounded corners on exposed edges
+5. **Table rows use actual CSS borders** — `border-b border-[#ebebeb]` for horizontal dividers is appropriate for table context (shadow-as-border is for card/panel boundaries)
+6. **Orphaned border references cleaned** — Removed no-op `focus-visible:border-ring`, `aria-invalid:border-destructive`, `border-input` from button, badge, tabs, input, and select (these set border-color without border-width)
+
+### Validation
+- `npx next build` — ✅ passes
+- Zero `dark:` classes remain in all 15 Phase 2 files
+- Zero `ring-foreground/10` references remain
+- Zero orphaned border-color references without border-width
 
 ---
 
-## Phase 3 — Shell 🔲
+## Phase 3 — Shell 🔲 NEXT
 
 **Plan ref:** lines 102–121
 **Files to modify (2):** `components/app-sidebar.tsx`, `app/page.tsx`
