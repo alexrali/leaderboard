@@ -22,11 +22,11 @@ export function DashboardHeader({ summary }: DashboardHeaderProps) {
     : '—'
 
   return (
-    <header className="border-b border-border/40 px-6 lg:px-8 py-3 bg-background sticky top-0 z-50">
+    <header className="shadow-[0_1px_0_0_rgba(0,0,0,0.08)] px-6 lg:px-8 py-3 bg-background sticky top-0 z-50">
       <div className="flex items-center justify-between">
         {/* Left: Brand + Context */}
         <div className="flex items-center gap-6">
-          <h1 className="text-sm font-mono font-bold tracking-tight">
+          <h1 className="text-sm font-mono font-semibold tracking-tight">
             SALES<span className="text-muted-foreground">.track</span>
           </h1>
           <div className="hidden md:flex items-center gap-1.5 text-[11px] text-muted-foreground font-mono">

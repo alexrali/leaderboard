@@ -81,8 +81,8 @@ interface MetricCardProps {
 
 function MetricCard({ label, value, trend, unit }: MetricCardProps) {
   return (
-    <div className="bg-neutral-50 rounded-lg p-3">
-      <p className="text-xs text-neutral-600 mb-1">{label}</p>
+    <div className="bg-[#fafafa] rounded-lg p-3">
+      <p className="text-xs text-[#4d4d4d] mb-1">{label}</p>
       <div className="flex items-baseline justify-between">
         <p className="text-lg font-semibold tabular-nums">{value}</p>
         {trend && (
@@ -92,7 +92,7 @@ function MetricCard({ label, value, trend, unit }: MetricCardProps) {
                 ? "text-status-success"
                 : trend.direction === "down"
                   ? "text-status-critical"
-                  : "text-neutral-500"
+                  : "text-[#666666]"
             }`}
           >
             {trend.direction === "up" && <TrendingUp className="w-3 h-3" />}
@@ -106,7 +106,7 @@ function MetricCard({ label, value, trend, unit }: MetricCardProps) {
           </div>
         )}
       </div>
-      {unit && <p className="text-xs text-neutral-500 mt-0.5">{unit}</p>}
+      {unit && <p className="text-xs text-[#666666] mt-0.5">{unit}</p>}
     </div>
   )
 }
@@ -126,12 +126,12 @@ function GoalBar({ label, current, target, format }: GoalBarProps) {
   return (
     <div className="space-y-1">
       <div className="flex justify-between text-xs">
-        <span className="text-neutral-600">{label}</span>
-        <span className="text-neutral-900 font-medium tabular-nums">
+        <span className="text-[#4d4d4d]">{label}</span>
+        <span className="text-[#171717] font-medium tabular-nums">
           {format(current)} / {format(target)}
         </span>
       </div>
-      <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
+      <div className="h-2 bg-[#ebebeb] rounded-full overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
@@ -145,7 +145,7 @@ function GoalBar({ label, current, target, format }: GoalBarProps) {
           }`}
         />
       </div>
-      <p className="text-xs text-neutral-500 text-right tabular-nums">
+      <p className="text-xs text-[#666666] text-right tabular-nums">
         {formatPercent(percentage / 100, 0)} de meta
       </p>
     </div>
@@ -185,8 +185,8 @@ function AlertCard({
       iconColor: "text-status-warning",
     },
     info: {
-      bg: "bg-neutral-100",
-      border: "border-neutral-200",
+      bg: "bg-[#ebebeb]",
+      border: "border-[#ebebeb]",
       icon: CheckCircle2,
       iconColor: "text-status-success",
     },
@@ -197,15 +197,15 @@ function AlertCard({
 
   return (
     <div
-      className={`border rounded-lg p-3 ${style.bg} ${style.border} transition-smooth hover:shadow-md`}
+      className={`shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] rounded-lg p-3 ${style.bg} ${style.border} transition-smooth hover:shadow-md`}
     >
       <div className="flex items-start gap-3">
         <Icon className={`w-5 h-5 mt-0.5 ${style.iconColor} flex-shrink-0`} />
         <div className="flex-1 min-w-0">
-          <h4 className="text-sm font-semibold text-neutral-900 mb-1">
+          <h4 className="text-sm font-semibold text-[#171717] mb-1">
             {title}
           </h4>
-          <p className="text-xs text-neutral-600 mb-2">{description}</p>
+          <p className="text-xs text-[#4d4d4d] mb-2">{description}</p>
           <Button
             variant="outline"
             size="sm"
@@ -263,7 +263,7 @@ function ActionModal({ open, onOpenChange, type, agentName }: ActionModalProps) 
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <div className="py-4">
-          <p className="text-sm text-neutral-600">
+          <p className="text-sm text-[#4d4d4d]">
             Esta acción se aplicará a <strong>{agentName}</strong> y generará
             las recomendaciones correspondientes basadas en los datos actuales.
           </p>
@@ -415,8 +415,8 @@ export function AgentDetailSheet({
               {/* Resumen Tab */}
               <TabsContent value="resumen" className="space-y-4 mt-4">
                 <ScaleIn>
-                  <div className="bg-neutral-50 rounded-lg p-4">
-                    <h3 className="text-sm font-semibold text-neutral-900 mb-3">
+                  <div className="bg-[#fafafa] rounded-lg p-4">
+                    <h3 className="text-sm font-semibold text-[#171717] mb-3">
                       Índice de Performance
                     </h3>
                     <ApiScoreStacked
@@ -468,7 +468,7 @@ export function AgentDetailSheet({
                 </div>
 
                 <div className="space-y-3">
-                  <h3 className="text-sm font-semibold text-neutral-900">
+                  <h3 className="text-sm font-semibold text-[#171717]">
                     Metas del Mes
                   </h3>
                   <GoalBar
@@ -501,8 +501,8 @@ export function AgentDetailSheet({
               {/* Tendencias Tab */}
               <TabsContent value="tendencias" className="space-y-4 mt-4">
                 <ScaleIn>
-                  <div className="bg-neutral-50 rounded-lg p-4">
-                    <h3 className="text-sm font-semibold text-neutral-900 mb-3">
+                  <div className="bg-[#fafafa] rounded-lg p-4">
+                    <h3 className="text-sm font-semibold text-[#171717] mb-3">
                       Evolución del API
                     </h3>
                     <TrendLineChart
@@ -516,8 +516,8 @@ export function AgentDetailSheet({
                   </div>
                 </ScaleIn>
 
-                <div className="bg-neutral-50 rounded-lg p-4">
-                  <h3 className="text-sm font-semibold text-neutral-900 mb-3">
+                <div className="bg-[#fafafa] rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-[#171717] mb-3">
                     Trayectoria de Ingresos
                   </h3>
                   <TrendLineChart
@@ -552,21 +552,21 @@ export function AgentDetailSheet({
 
               {/* Categorías Tab */}
               <TabsContent value="categorias" className="space-y-4 mt-4">
-                <div className="bg-neutral-50 rounded-lg p-4">
-                  <h3 className="text-sm font-semibold text-neutral-900 mb-3">
+                <div className="bg-[#fafafa] rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-[#171717] mb-3">
                     Top 5 Categorías
                   </h3>
                   <div className="space-y-2">
                     {mockTopCategories.map((cat, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-between py-2 border-b border-neutral-200 last:border-0"
+                        className="flex items-center justify-between py-2 border-b border-[#ebebeb] last:border-0"
                       >
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-neutral-900">
+                          <p className="text-sm font-medium text-[#171717]">
                             {cat.name}
                           </p>
-                          <p className="text-xs text-neutral-600">
+                          <p className="text-xs text-[#4d4d4d]">
                             {formatNumber(cat.units)} unidades
                           </p>
                         </div>
@@ -597,8 +597,8 @@ export function AgentDetailSheet({
                   </div>
                 </div>
 
-                <div className="bg-neutral-50 rounded-lg p-4">
-                  <h3 className="text-sm font-semibold text-neutral-900 mb-3">
+                <div className="bg-[#fafafa] rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-[#171717] mb-3">
                     Comparación con Grupo
                   </h3>
                   <HorizontalBarChart
@@ -633,7 +633,7 @@ export function AgentDetailSheet({
                 {alerts.length === 0 ? (
                   <div className="text-center py-8">
                     <CheckCircle2 className="w-12 h-12 text-status-success mx-auto mb-3" />
-                    <p className="text-sm text-neutral-600">
+                    <p className="text-sm text-[#4d4d4d]">
                       No hay alertas activas. Buen trabajo.
                     </p>
                   </div>
@@ -660,8 +660,8 @@ export function AgentDetailSheet({
                   ))
                 )}
 
-                <div className="pt-4 border-t border-neutral-200">
-                  <h3 className="text-sm font-semibold text-neutral-900 mb-3">
+                <div className="pt-4 border-t border-[#ebebeb]">
+                  <h3 className="text-sm font-semibold text-[#171717] mb-3">
                     Acciones Rápidas
                   </h3>
                   <div className="grid grid-cols-3 gap-2">

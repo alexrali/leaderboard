@@ -27,8 +27,8 @@ Each session should cover **2 phases max** to avoid context overflow and subagen
 | **2 (done)** | Phase 2 | 15 files | UI primitives — shadow-as-border, no dark:, Vercel palette |
 | **3 (done)** | Phase 3 | 3 files | Shell — sidebar, header, globals CSS rules |
 | **4 (done)** | Phase 4 | 14 files | Typography pass — font-bold→semibold, tracking, page titles |
-| **5 (next)** | Phase 5 | ~40 files | Section pages (biggest session) |
-| **5** | Phase 6 + 7 + 8 | ~30 files | Hermes/messaging + auth + validation |
+| **5 (done)** | Phase 5 | 46 files | Section pages (biggest session) |
+| **6 (next)** | Phase 6 + 7 + 8 | ~30 files | Hermes/messaging + auth + validation |
 
 ---
 
@@ -183,22 +183,102 @@ Each session should cover **2 phases max** to avoid context overflow and subagen
 
 ---
 
-## Phase 5 — Section Pages 🔲 NEXT
+## Phase 5 — Section Pages ✅ DONE
 
 **Plan ref:** lines 153–178
-**Files (~40):**
+**Files modified (46):**
 
-| Section | Directory | Files |
-|---|---|---|
-| SRI | `components/sri/` | ~10 files (5 pages + detail sheet + score bar + badge + states + charts) |
-| Provider Performance | `components/provider-performance/` | 10 files |
-| Decision Intelligence | `components/decision-intelligence/` | ~20 files (3 sub-dirs with ~6 files each + views + shared) |
+### What was done
 
-### Suggestions for Phase 5
-- **This is the largest phase** — Consider splitting across two sub-sessions if the subagent struggles.
-- **Recharts charts**: Only change axis/grid text to 12px Geist. Do NOT change chart data colors — they're functional accents.
-- **`status-badge.tsx`** should use the same pill style from Phase 2's `badge.tsx` changes. Check if it imports `Badge` or rolls its own.
-- **Decision Intelligence has 18+ files in sub-dirs** — The subagent should process `category/`, `network/`, `supply/` sequentially, not all at once.
+**5.1 SRI (`components/sri/` — 15 files):**
+- [x] `status-badge.tsx` — Removed `border` from base and all style objects; `bg-neutral-100` → `bg-[#fafafa]`; `text-neutral-600` → `text-[#4d4d4d]`
+- [x] `api-score-bar.tsx` — Track `bg-neutral-100` → `bg-[#ebebeb]`; all `text-neutral-600` → `text-[#4d4d4d]`
+- [x] `agent-detail-sheet.tsx` — `bg-neutral-50` → `bg-[#fafafa]` (6); `text-neutral-900` → `text-[#171717]` (11); `text-neutral-600` → `text-[#4d4d4d]` (6); AlertCard `border` → shadow-as-border
+- [x] `empty-state.tsx` — `bg-neutral-100` → `bg-[#ebebeb]`; `text-neutral-*` → Vercel palette
+- [x] `loading-state.tsx` — `border-neutral-200` → `border-[#ebebeb]`; `border-t-neutral-900` → `border-t-[#171717]`
+- [x] `signal-action-modal.tsx` — `text-neutral-*` → Vercel palette; `hover:bg-neutral-50` → `hover:bg-[#fafafa]`
+- [x] `pages/agentes-page.tsx` — SummaryCard + table wrapper `border` → shadow-as-border; all `text-neutral-*` → Vercel palette; thead `bg-neutral-50` → `bg-[#fafafa]`; spinner → `border-[#171717]`
+- [x] `pages/clientes-page.tsx` — Card `border border-border/40` → shadow-as-border; progress track `bg-muted` → `bg-[#ebebeb]`; `rounded-xl` → `rounded-lg`
+- [x] `pages/portafolio-page.tsx` — `font-bold` → `font-semibold` (3); MetricCard + table wrappers → shadow-as-border; all `text-neutral-*` → Vercel palette
+- [x] `pages/metas-page.tsx` — `font-bold` → `font-semibold` (2); StatusSummaryCard + AgentGoalRow `border` → shadow-as-border; track `bg-neutral-100` → `bg-[#ebebeb]`
+- [x] `pages/alertas-page.tsx` — `font-bold` → `font-semibold` (2); all `text-neutral-*` → Vercel palette; table borders → `border-[#ebebeb]`
+- [x] `charts/line-chart.tsx` — Tick `fontSize: 11` → `12`; added `fontFamily: "var(--font-sans)"`
+- [x] `charts/horizontal-bar-chart.tsx` — Added `fontFamily: "var(--font-sans)"` to YAxis tick
+- [x] `charts/pie-chart.tsx` — No changes needed
+- [x] `charts/sparkline.tsx` — No changes needed
+
+**5.2 Provider Performance (`components/provider-performance/` — 10 files):**
+- [x] `header.tsx` — `border-b border-border/40` → shadow-as-border; `font-bold` → `font-semibold`
+- [x] `hero-section.tsx` — Tab bar `border border-border` → shadow-as-border + `divide-[#ebebeb]`
+- [x] `metric-cards.tsx` — 2× `font-bold` → `font-semibold`; `bg-border/30` → `bg-[#ebebeb]/30`; `bg-muted` → `bg-[#fafafa]`
+- [x] `total-revenue.tsx` — `font-bold` → `font-semibold`; `text-border/60` → `text-[#ebebeb]`; `bg-muted` → `bg-[#fafafa]`
+- [x] `sales-chart.tsx` — 4× tick `fontSize: 9` → `12` + `fontFamily: "var(--font-sans)"`; 2× tab bar → shadow + `divide-[#ebebeb]`; 2× tooltip → shadow; `bg-muted` → `bg-[#fafafa]`
+- [x] `provider-sidebar.tsx` — 3× `font-bold` → `font-semibold`; 3× `border-t border-border` → `border-[#ebebeb]`; velocity grid → shadow + `divide-[#ebebeb]`; `hover:bg-muted/50` → `hover:bg-[#fafafa]`
+- [x] `channel-grid.tsx` — `font-bold` → `font-semibold`; `border-border/60` → `border-[#ebebeb]/60`; `bg-muted/*` → `bg-[#fafafa]`
+- [x] `sales-log.tsx` — `border-b border-border` → `border-[#ebebeb]`; `bg-muted/40` → `bg-[#fafafa]`; `bg-muted/30` → `bg-[#fafafa]/30`
+- [x] `category-detail-panel.tsx` — 6× `font-bold` → `font-semibold`; tick `fontSize: 9` → `12`; tooltip + table wrapper → shadow; `bg-muted` progress → `bg-[#ebebeb]`
+- [x] `index.tsx` — `bg-muted/50` → `bg-[#fafafa]`; error banner → shadow technique; all `border-border` → `border-[#ebebeb]`
+
+**5.3 Decision Intelligence (`components/decision-intelligence/` — 21 files):**
+- [x] `di-header.tsx` — `border-b border-border/40` → shadow-as-border; `font-bold` → `font-semibold`; `bg-muted/40` → `bg-[#fafafa]`; tab bar → shadow + `divide-[#ebebeb]`
+- [x] `index.tsx` — `bg-muted/50` → `bg-[#fafafa]/50`
+- [x] `shared/zone-header.tsx` — `bg-muted/40` → `bg-[#fafafa]`; `border-border/60` → `border-[#ebebeb]/60`
+- [x] `shared/card-header.tsx` — No changes needed
+- [x] `shared/di-tokens.ts` — Skipped (functional chart accent colors)
+- [x] `views/abastecimiento-view.tsx` — `border-border` → `border-[#ebebeb]`; `bg-muted/70` → `bg-[#fafafa]/70`
+- [x] `views/crecimiento-categorias-view.tsx` — Same 3 changes as abastecimiento
+- [x] `views/red-tiendas-view.tsx` — Same 3 changes as abastecimiento
+- [x] `category/acciones-crecimiento.tsx` — `border-border` → `border-[#ebebeb]`; `font-bold` → `font-semibold`
+- [x] `category/momentum-categoria.tsx` — `border-border` → `border-[#ebebeb]`; `bg-muted` → `bg-[#fafafa]`
+- [x] `category/optimizacion-surtido.tsx` — `border-border` → `border-[#ebebeb]`; `bg-muted` → `bg-[#fafafa]`; `font-bold` → `font-semibold`
+- [x] `category/paisaje-crecimiento.tsx` — `border-border` → `border-[#ebebeb]`; `bg-muted` → `bg-[#fafafa]`
+- [x] `category/matriz-oportunidad.tsx` — `font-bold` → `font-semibold`
+- [x] `category/micro-insights-categorias.tsx` — No changes needed (already clean)
+- [x] `network/cascada-crecimiento.tsx` — `font-bold` → `font-semibold`; `border-border` → `border-[#ebebeb]`; `bg-muted` → `bg-[#fafafa]`
+- [x] `network/matriz-ciclo-producto.tsx` — `font-bold` → `font-semibold`
+- [x] `network/mapa-rendimiento-red.tsx` — `font-bold` → `font-semibold`; `border-border` → `border-[#ebebeb]`
+- [x] `network/motor-oportunidades.tsx` — 4× `font-bold` → `font-semibold`; `border-border` → `border-[#ebebeb]`
+- [x] `network/acciones-prioritarias.tsx` — `font-bold` → `font-semibold`; `border-border` → `border-[#ebebeb]`; `divide-border/60` → `divide-[#ebebeb]/60`
+- [x] `network/micro-insights-red.tsx` — No changes needed (already clean)
+- [x] `supply/inteligencia-reposicion.tsx` — Tooltip `border` → shadow; tick `fontSize: 10` → `12` + `fontFamily`
+- [x] `supply/envejecimiento-inventario.tsx` — 4× `font-bold` → `font-semibold`; tick `fontSize: 10` → `12`; `border-border` → `border-[#ebebeb]`
+- [x] `supply/matriz-desbalance-inventario.tsx` — `font-bold` → `font-semibold`; `border-border/50` → `border-[#ebebeb]/50`
+- [x] `supply/mapa-flujo-abastecimiento.tsx` — Tooltip card `border` → shadow
+- [x] `supply/acciones-abastecimiento.tsx` — `font-bold` → `font-semibold`; `border-border` → `border-[#ebebeb]`; `divide-border/60` → `divide-[#ebebeb]/60`
+- [x] `supply/micro-insights-abastecimiento.tsx` — No changes needed (already clean)
+
+### Decisions made
+1. **`bg-neutral-200` left in SignalBadge fallback** — Not in the replacement list; maps to a different gray than `#ebebeb`
+2. **`bg-neutral-400` left in GoalBar levelColors** — Functional color for bar fill (neutral level), not a theme surface
+3. **`border-neutral-300` left on form inputs/buttons** — Not in replacement list; these are form field borders that resolve distinctly from `#ebebeb`
+4. **`font-mono` preserved in Provider Performance** — Section intentionally uses monospace for data density
+5. **`bg-foreground text-background` on active tabs preserved** — Intentional inverted state for toggle buttons
+6. **`bg-muted-foreground/40` in sales-chart legend preserved** — Foreground token used for legend line, not background
+7. **DI micro-insights files untouched** — Already clean with no `font-bold`, `border-border`, or `bg-muted` patterns
+8. **`di-tokens.ts` skipped** — Defines functional chart accent colors (DI_COLORS), not theme colors
+
+### Validation
+- `npx next build` — ✅ compiled successfully, 22/22 pages generated
+- Zero `font-bold` in all 46 Phase 5 files
+- Zero `border-border` / `divide-border` in all Phase 5 files (except DI mock-data/ which was not modified)
+- Zero `bg-muted` in all Phase 5 files
+- Recharts axis ticks all use `fontSize: 12` with `fontFamily: "var(--font-sans)"`
+- Chart data colors untouched across all sections
+
+---
+
+## Phase 5→6 Session Note
+
+Phase 5 complete. Session table update:
+
+| Session | Phases | Files | Notes |
+|---|---|---|---|
+| **1 (done)** | Phase 1 | 2 files | Foundations |
+| **2 (done)** | Phase 2 | 15 files | UI primitives |
+| **3 (done)** | Phase 3 | 3 files | Shell |
+| **4 (done)** | Phase 4 | 14 files | Typography pass |
+| **5 (done)** | Phase 5 | 46 files | Section pages (biggest session) |
+| **6 (next)** | Phase 6 + 7 + 8 | ~30 files | Hermes/messaging + auth + validation |
 
 ---
 

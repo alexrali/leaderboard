@@ -54,10 +54,10 @@ interface SummaryCardProps {
 
 function SummaryCard({ label, value, trend }: SummaryCardProps) {
   return (
-    <div className="border border-neutral-200 rounded-lg p-4 bg-white">
-      <p className="text-xs text-neutral-600 mb-1">{label}</p>
+    <div className="shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] rounded-lg p-4 bg-white">
+      <p className="text-xs text-[#4d4d4d] mb-1">{label}</p>
       <div className="flex items-baseline justify-between">
-        <p className="text-2xl font-semibold text-neutral-900 tabular-nums">
+        <p className="text-2xl font-semibold text-[#171717] tabular-nums">
           {value}
         </p>
         {trend && (
@@ -67,7 +67,7 @@ function SummaryCard({ label, value, trend }: SummaryCardProps) {
                 ? "text-status-success"
                 : trend.direction === "down"
                   ? "text-status-critical"
-                  : "text-neutral-500"
+                  : "text-[#666666]"
             }`}
           >
             {trend.direction === "up" && <ChevronUp className="w-3.5 h-3.5" />}
@@ -215,10 +215,10 @@ export function AgentesPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-neutral-900">
+            <h1 className="text-2xl font-semibold text-[#171717]">
               Ranking de Agentes
             </h1>
-            <p className="text-sm text-neutral-600 mt-1">
+            <p className="text-sm text-[#4d4d4d] mt-1">
               Desempeño y métricas clave por agente
             </p>
           </div>
@@ -227,7 +227,7 @@ export function AgentesPage() {
           <div className="flex items-center gap-3">
             <label
               htmlFor="month-select"
-              className="text-sm text-neutral-600 whitespace-nowrap"
+              className="text-sm text-[#4d4d4d] whitespace-nowrap"
             >
               Mes:
             </label>
@@ -256,8 +256,8 @@ export function AgentesPage() {
         {agentsLoading && (
           <div className="flex items-center justify-center py-20">
             <div className="flex flex-col items-center gap-3">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-900 border-t-transparent" />
-              <span className="text-sm text-neutral-600">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#171717] border-t-transparent" />
+              <span className="text-sm text-[#4d4d4d]">
                 Cargando datos...
               </span>
             </div>
@@ -310,7 +310,7 @@ export function AgentesPage() {
 
             {/* Peer Group Filter */}
             <div className="flex items-center gap-2">
-              <span className="text-sm text-neutral-600">Filtrar por grupo:</span>
+              <span className="text-sm text-[#4d4d4d]">Filtrar por grupo:</span>
               <div className="flex gap-2">
                 {(["all", 0, 1, 2, 3] as const).map((group) => (
                   <Button
@@ -330,44 +330,44 @@ export function AgentesPage() {
               variants={staggerContainer}
               initial="hidden"
               animate="show"
-              className="border border-neutral-200 rounded-lg overflow-hidden"
+              className="shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] rounded-lg overflow-hidden"
             >
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-neutral-50 border-b border-neutral-200">
+                  <thead className="bg-[#fafafa] border-b border-[#ebebeb]">
                     <tr>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-[#171717] uppercase">
                         Rank
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-[#171717] uppercase">
                         Agente
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-[#171717] uppercase">
                         API Score
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-[#171717] uppercase">
                         Revenue
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-[#171717] uppercase">
                         Crecimiento
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-[#171717] uppercase">
                         Clientes
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-[#171717] uppercase">
                         Retención
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-[#171717] uppercase">
                         Peer Group
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-neutral-100">
+                  <tbody className="divide-y divide-[#ebebeb]">
                     {filteredAgents.length === 0 ? (
                       <tr>
                         <td
                           colSpan={8}
-                          className="px-4 py-12 text-center text-sm text-neutral-500"
+                          className="px-4 py-12 text-center text-sm text-[#666666]"
                         >
                           No hay agentes para mostrar con los filtros actuales.
                         </td>
@@ -378,17 +378,17 @@ export function AgentesPage() {
                           key={agent.agent_id}
                           variants={staggerItem}
                           onClick={() => handleRowClick(agent)}
-                          className="hover:bg-neutral-50 cursor-pointer transition-colors"
+                          className="hover:bg-[#fafafa] cursor-pointer transition-colors"
                         >
-                          <td className="px-4 py-3 text-sm font-medium text-neutral-900">
+                          <td className="px-4 py-3 text-sm font-medium text-[#171717]">
                             {index + 1}
                           </td>
                           <td className="px-4 py-3">
                             <div>
-                              <p className="text-sm font-medium text-neutral-900">
+                              <p className="text-sm font-medium text-[#171717]">
                                 {agent.agent_name}
                               </p>
-                              <p className="text-xs text-neutral-500">
+                              <p className="text-xs text-[#666666]">
                                 {agent.agent_id}
                               </p>
                             </div>
@@ -396,7 +396,7 @@ export function AgentesPage() {
                           <td className="px-4 py-3">
                             <ApiScoreBar score={agent.api_score} />
                           </td>
-                          <td className="px-4 py-3 text-sm text-neutral-900 tabular-nums">
+                          <td className="px-4 py-3 text-sm text-[#171717] tabular-nums">
                             {formatCurrency(agent.total_revenue)}
                           </td>
                           <td className="px-4 py-3">
@@ -413,7 +413,7 @@ export function AgentesPage() {
                                   )}
                                   {getTrendIcon(agent.revenue_growth_mom * 100) ===
                                     "stable" && (
-                                    <Minus className="w-4 h-4 text-neutral-500" />
+                                    <Minus className="w-4 h-4 text-[#666666]" />
                                   )}
                                   <span
                                     className={`text-sm font-medium tabular-nums ${
@@ -424,7 +424,7 @@ export function AgentesPage() {
                                               agent.revenue_growth_mom * 100
                                             ) === "down"
                                           ? "text-status-critical"
-                                          : "text-neutral-500"
+                  : "text-[#666666]"
                                     }`}
                                   >
                                     {formatPercent(agent.revenue_growth_mom)}
@@ -432,20 +432,20 @@ export function AgentesPage() {
                                 </>
                               )}
                               {(agent.revenue_growth_mom === null || agent.revenue_growth_mom === undefined) && (
-                                <span className="text-sm text-neutral-400 tabular-nums">
+                                <span className="text-sm text-[#666666] tabular-nums">
                                   N/A
                                 </span>
                               )}
                             </div>
                           </td>
-                          <td className="px-4 py-3 text-sm text-neutral-900 tabular-nums">
+                          <td className="px-4 py-3 text-sm text-[#171717] tabular-nums">
                             {agent.active_client_count}
                           </td>
-                          <td className="px-4 py-3 text-sm text-neutral-900 tabular-nums">
+                          <td className="px-4 py-3 text-sm text-[#171717] tabular-nums">
                             {formatPercent(agent.client_retention_rate / 100, 0)}
                           </td>
                           <td className="px-4 py-3">
-                            <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-neutral-100 text-neutral-700">
+                            <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-[#ebebeb] text-[#171717]">
                               {agent.peer_group_label}
                             </span>
                           </td>

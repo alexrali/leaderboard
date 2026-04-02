@@ -25,9 +25,9 @@ export function ApiScoreBar({
   return (
     <div className={cn("flex items-center gap-3", className)}>
       {label && (
-        <span className="text-sm text-neutral-600 min-w-fit">{label}</span>
-      )}
-      <div className="flex-1 h-2 bg-neutral-100 rounded-full overflow-hidden">
+        <span className="text-sm text-[#4d4d4d] min-w-fit">{label}</span>
+       )}
+       <div className="flex-1 h-2 bg-[#ebebeb] rounded-full overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-500 ease-out"
           style={{
@@ -72,19 +72,19 @@ export function ApiScoreStacked({ scores, weights }: ApiScoreStackedProps) {
     <div className="space-y-2">
       <ApiScoreBar score={total} showValue={false} />
       <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
-        <div className="flex justify-between text-neutral-600">
+        <div className="flex justify-between text-[#4d4d4d]">
           <span>Revenue ({Math.round(weights.revenue * 100)}%)</span>
           <span className="font-medium tabular-nums">{scores.revenue.toFixed(0)}</span>
         </div>
-        <div className="flex justify-between text-neutral-600">
+        <div className="flex justify-between text-[#4d4d4d]">
           <span>Portfolio ({Math.round(weights.portfolio * 100)}%)</span>
           <span className="font-medium tabular-nums">{scores.portfolio.toFixed(0)}</span>
         </div>
-        <div className="flex justify-between text-neutral-600">
+        <div className="flex justify-between text-[#4d4d4d]">
           <span>CPI ({Math.round(weights.cpi * 100)}%)</span>
           <span className="font-medium tabular-nums">{scores.cpi.toFixed(0)}</span>
         </div>
-        <div className="flex justify-between text-neutral-600">
+        <div className="flex justify-between text-[#4d4d4d]">
           <span>Quality ({Math.round(weights.quality * 100)}%)</span>
           <span className="font-medium tabular-nums">{scores.quality.toFixed(0)}</span>
         </div>

@@ -70,10 +70,10 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload
     return (
-      <div className="bg-card border border-border rounded-xl p-3 shadow-lg">
+      <div className="bg-card rounded-xl p-3 shadow-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]">
         <p className="font-semibold text-foreground mb-1">{data.name}</p>
         <p
-          className="text-lg font-bold"
+          className="text-lg font-semibold"
           style={{ color: data.displayValue >= 0 ? CHART.growth : CHART.decline }}
         >
           {data.displayValue >= 0 ? "+" : ""}${data.displayValue}K
@@ -121,7 +121,7 @@ export function CascadaCrecimiento() {
                 dataKey="name"
                 tickLine={false}
                 axisLine={{ stroke: "hsl(var(--border))" }}
-                tick={{ fill: DI_COLORS.slate, fontSize: 10 }}
+                tick={{ fill: DI_COLORS.slate, fontSize: 12, fontFamily: "var(--font-sans)" }}
                 interval={0}
               />
               <YAxis
@@ -154,19 +154,19 @@ export function CascadaCrecimiento() {
         <div className="grid grid-cols-4 gap-4 mt-4">
           <div className="text-center p-3 bg-secondary/30 rounded-lg">
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Base</p>
-            <p className="text-lg font-bold text-foreground">${baseValue}K</p>
+            <p className="text-lg font-semibold text-foreground">${baseValue}K</p>
           </div>
           <div className="text-center p-3 bg-green-500/10 rounded-lg">
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Crecimiento</p>
-            <p className="text-lg font-bold" style={{ color: CHART.growth }}>+${positiveSum}K</p>
+            <p className="text-lg font-semibold" style={{ color: CHART.growth }}>+${positiveSum}K</p>
           </div>
           <div className="text-center p-3 bg-red-500/10 rounded-lg">
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Perdidas</p>
-            <p className="text-lg font-bold" style={{ color: CHART.decline }}>${negativeSum}K</p>
+            <p className="text-lg font-semibold" style={{ color: CHART.decline }}>${negativeSum}K</p>
           </div>
-          <div className="text-center p-3 bg-primary/5 rounded-lg border border-border">
+          <div className="text-center p-3 bg-primary/5 rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]">
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Resultado Neto</p>
-            <p className="text-lg font-bold text-foreground">${netResult}K</p>
+            <p className="text-lg font-semibold text-foreground">${netResult}K</p>
           </div>
         </div>
 

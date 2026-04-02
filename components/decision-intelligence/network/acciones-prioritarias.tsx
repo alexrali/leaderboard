@@ -73,10 +73,10 @@ export function AccionesPrioritarias() {
           {priorityActions.length} acciones · clasificadas por impacto
         </p>
       </div>
-      <div className="border-t border-border" />
+      <div className="border-t border-[#ebebeb]" />
 
       <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
-        <div className="divide-y divide-border/60">
+        <div className="divide-y divide-[#ebebeb]/60">
           {priorityActions.map((action) => {
             const Icon = getTypeIcon(action.type)
             const styles = getPriorityStyles(action.priority)
@@ -85,7 +85,7 @@ export function AccionesPrioritarias() {
               <div
                 key={action.rank}
                 className={cn(
-                  "px-5 py-4 hover:bg-muted/50 transition-colors group relative",
+                  "px-5 py-4 hover:bg-[#fafafa]/50 transition-colors group relative",
                   action.rank === 1 && "bg-red-50/30"
                 )}
               >
@@ -123,7 +123,7 @@ export function AccionesPrioritarias() {
                         <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5">
                           {action.impact}
                         </p>
-                        <p className="text-sm font-bold" style={{ color: CHART.growth }}>{action.impactValue}</p>
+                        <p className="text-sm font-semibold" style={{ color: CHART.growth }}>{action.impactValue}</p>
                       </div>
 
                       <div className="text-right">
@@ -145,7 +145,7 @@ export function AccionesPrioritarias() {
                               }}
                             />
                           </div>
-                          <span className="text-sm font-bold text-foreground">{action.gapScore}</span>
+                          <span className="text-sm font-semibold text-foreground">{action.gapScore}</span>
                         </div>
                       </div>
                     </div>

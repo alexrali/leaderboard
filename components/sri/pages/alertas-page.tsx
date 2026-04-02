@@ -29,9 +29,9 @@ function SignalCountCard({ level, count, description }: SignalCountCardProps) {
     <div className={`rounded-lg bg-${color}-10 p-4`}>
       <div className="mb-2 flex items-center justify-between">
         <span className={`text-sm font-medium text-${color}`}>{level}</span>
-        <span className={`text-2xl font-bold text-${color}`}>{count}</span>
+        <span className={`text-2xl font-semibold text-${color}`}>{count}</span>
       </div>
-      <p className="text-xs text-neutral-600">{description}</p>
+      <p className="text-xs text-[#4d4d4d]">{description}</p>
     </div>
   )
 }
@@ -94,36 +94,36 @@ function SignalTable({ signals, signalLevel, actionType, onAction }: SignalTable
 
   return (
     <div className="mb-8">
-      <h3 className="mb-4 text-lg font-semibold text-neutral-900">
+      <h3 className="mb-4 text-lg font-semibold text-[#171717]">
         {signalLevel} — {sectionTitles[signalLevel]}
       </h3>
       <div className="overflow-x-auto">
         <table className="w-full text-sm" aria-label={`Señales de nivel ${signalLevel}`}>
           <thead>
-            <tr className="border-b border-neutral-200 text-left">
-              <th scope="col" className="pb-2 font-medium text-neutral-700">Agente</th>
-              <th scope="col" className="pb-2 font-medium text-neutral-700">Peer Group</th>
-              <th scope="col" className="pb-2 font-medium text-neutral-700">Tipo</th>
-              <th scope="col" className="pb-2 font-medium text-neutral-700">Detalle</th>
-              <th scope="col" className="pb-2 font-medium text-neutral-700">Revenue</th>
-              <th scope="col" className="pb-2 font-medium text-neutral-700">Acción</th>
+            <tr className="border-b border-[#ebebeb] text-left">
+              <th scope="col" className="pb-2 font-medium text-[#171717]">Agente</th>
+              <th scope="col" className="pb-2 font-medium text-[#171717]">Peer Group</th>
+              <th scope="col" className="pb-2 font-medium text-[#171717]">Tipo</th>
+              <th scope="col" className="pb-2 font-medium text-[#171717]">Detalle</th>
+              <th scope="col" className="pb-2 font-medium text-[#171717]">Revenue</th>
+              <th scope="col" className="pb-2 font-medium text-[#171717]">Acción</th>
             </tr>
           </thead>
           <tbody>
             {signals.map((signal, idx) => (
-              <tr key={`${signal.agentId}-${signal.type}-${idx}`} className="border-b border-neutral-100">
-                <td className="py-3 text-neutral-900">{signal.agentName}</td>
-                <td className="py-3 text-neutral-600">{signal.peerGroup}</td>
+              <tr key={`${signal.agentId}-${signal.type}-${idx}`} className="border-b border-[#ebebeb]">
+                <td className="py-3 text-[#171717]">{signal.agentName}</td>
+                <td className="py-3 text-[#4d4d4d]">{signal.peerGroup}</td>
                 <td className="py-3">
                   <StatusBadge level={statusLevel}>{signal.type}</StatusBadge>
                 </td>
-                <td className="py-3 text-neutral-600">{signal.message}</td>
-                <td className="py-3 text-neutral-600">{formatCurrency(signal.revenue)}</td>
+                <td className="py-3 text-[#4d4d4d]">{signal.message}</td>
+                <td className="py-3 text-[#4d4d4d]">{formatCurrency(signal.revenue)}</td>
                 <td className="py-3">
                   <button
                     type="button"
                     onClick={() => handleActionClick(signal)}
-                    className="rounded-md border border-neutral-300 px-3 py-1 text-xs font-medium text-neutral-700 hover:bg-neutral-50"
+                    className="rounded-md border border-neutral-300 px-3 py-1 text-xs font-medium text-[#171717] hover:bg-[#fafafa]"
                   >
                     {actionLabels[actionType]}
                   </button>
@@ -181,7 +181,7 @@ export function AlertasPage() {
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-900 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#171717] border-t-transparent" />
       </div>
     )
   }
@@ -190,8 +190,8 @@ export function AlertasPage() {
     <PageFadeIn>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Señales de Atención</h1>
-          <p className="mt-1 text-sm text-neutral-600">
+          <h1 className="text-2xl font-semibold text-[#171717]">Señales de Atención</h1>
+          <p className="mt-1 text-sm text-[#4d4d4d]">
             Detecta oportunidades y riesgos basados en métricas clave
           </p>
         </div>
@@ -254,16 +254,16 @@ export function AlertasPage() {
         {/* Summary by Agent */}
         {groupedByAgent.size > 0 && (
           <div>
-            <h3 className="mb-4 text-lg font-semibold text-neutral-900">Resumen por Agente</h3>
+            <h3 className="mb-4 text-lg font-semibold text-[#171717]">Resumen por Agente</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-sm" aria-label="Resumen de señales por agente">
                 <thead>
-                  <tr className="border-b border-neutral-200 text-left">
-                    <th scope="col" className="pb-2 font-medium text-neutral-700">Agente</th>
-                    <th scope="col" className="pb-2 font-medium text-neutral-700">Peer Group</th>
-                    <th scope="col" className="pb-2 font-medium text-neutral-700">ALTO</th>
-                    <th scope="col" className="pb-2 font-medium text-neutral-700">MEDIO</th>
-                    <th scope="col" className="pb-2 font-medium text-neutral-700">POSITIVO</th>
+                  <tr className="border-b border-[#ebebeb] text-left">
+                    <th scope="col" className="pb-2 font-medium text-[#171717]">Agente</th>
+                    <th scope="col" className="pb-2 font-medium text-[#171717]">Peer Group</th>
+                    <th scope="col" className="pb-2 font-medium text-[#171717]">ALTO</th>
+                    <th scope="col" className="pb-2 font-medium text-[#171717]">MEDIO</th>
+                    <th scope="col" className="pb-2 font-medium text-[#171717]">POSITIVO</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -271,9 +271,9 @@ export function AlertasPage() {
                     const agent = agents?.find((a) => a.agent_id === agentId)
                     if (!agent) return null
                     return (
-                      <tr key={agentId} className="border-b border-neutral-100">
-                        <td className="py-3 text-neutral-900">{agent.agent_name}</td>
-                        <td className="py-3 text-neutral-600">{agent.peer_group}</td>
+                      <tr key={agentId} className="border-b border-[#ebebeb]">
+                        <td className="py-3 text-[#171717]">{agent.agent_name}</td>
+                        <td className="py-3 text-[#4d4d4d]">{agent.peer_group}</td>
                         <td className="py-3">
                           <SignalBadge count={counts.alto} level="ALTO" />
                         </td>
@@ -294,8 +294,8 @@ export function AlertasPage() {
 
         {/* No signals message */}
         {signals.length === 0 && (
-          <div className="rounded-lg bg-neutral-50 p-8 text-center">
-            <p className="text-neutral-600">No se detectaron señales de atención</p>
+          <div className="rounded-lg bg-[#fafafa] p-8 text-center">
+            <p className="text-[#4d4d4d]">No se detectaron señales de atención</p>
           </div>
         )}
       </div>

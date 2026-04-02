@@ -39,7 +39,7 @@ function CategorySlide({
     >
       <div>
         <div className="flex items-center gap-2">
-          <h3 className="text-2xl font-mono font-bold">{category.name}</h3>
+          <h3 className="text-2xl font-mono font-semibold">{category.name}</h3>
           <ExternalLink className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
         <p className="text-sm text-muted-foreground mt-1">{category.revenue} ingresos</p>
@@ -47,7 +47,7 @@ function CategorySlide({
       <div className="flex items-end justify-between">
         <div>
           <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground mb-1">Participación</p>
-          <p className="text-3xl font-mono font-bold">{(category.share * 100).toFixed(0)}%</p>
+          <p className="text-3xl font-mono font-semibold">{(category.share * 100).toFixed(0)}%</p>
         </div>
       </div>
 
@@ -111,15 +111,15 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
         {/* ANNUAL TARGET Section */}
         {!summary ? (
           <div className="px-5 pt-5 pb-4">
-            <div className="h-3 w-24 bg-muted animate-pulse rounded mb-3" />
-            <div className="h-10 w-32 bg-muted animate-pulse rounded" />
+            <div className="h-3 w-24 bg-[#fafafa] animate-pulse rounded mb-3" />
+            <div className="h-10 w-32 bg-[#fafafa] animate-pulse rounded" />
           </div>
         ) : (
           <div className="px-5 pt-5 pb-4">
             <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-3">
               Objetivo Anual
             </p>
-            <p className="text-[42px] font-mono font-bold tracking-tighter leading-none">
+            <p className="text-[42px] font-mono font-semibold tracking-tighter leading-none">
               ${(targetValue / 1000000).toFixed(1)}M
             </p>
             <p className="text-[11px] text-muted-foreground mt-2 leading-relaxed">
@@ -128,7 +128,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
           </div>
         )}
 
-        <div className="border-t border-border" />
+        <div className="border-t border-[#ebebeb]" />
 
         {/* Category Slideshow Section */}
         <div className="px-5 py-4">
@@ -169,7 +169,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
           </div>
         </div>
 
-        <div className="border-t border-border" />
+        <div className="border-t border-[#ebebeb]" />
 
         {/* SESSION MILESTONES Section */}
         <div className="px-5 py-4">
@@ -196,7 +196,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
           </div>
         </div>
 
-        <div className="border-t border-border" />
+        <div className="border-t border-[#ebebeb]" />
 
         {/* Category Velocity Grid */}
         <div className="px-5 py-4">
@@ -206,7 +206,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
             </p>
             <p className="text-[8px] text-muted-foreground font-mono">mes actual vs anterior</p>
           </div>
-          <div className="divide-y divide-border border border-border/60" role="listbox" aria-label="Categorías por velocidad">
+          <div className="divide-y divide-[#ebebeb] shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]" role="listbox" aria-label="Categorías por velocidad">
             {categorySlides.map((cat, index) => {
               const vel = velocity.find(v => v.category_code === cat.category_code)
               const pct = vel?.velocity_pct ?? null
@@ -220,7 +220,7 @@ export function ProviderSidebar({ categories = [], summary, velocity = [] }: Pro
                   onClick={() => handleSelectFromPicker(index)}
                   className={cn(
                     "w-full flex items-center justify-between px-3 py-2 transition-colors duration-150",
-                    isActive ? "bg-foreground text-background" : "bg-background hover:bg-muted/50"
+                    isActive ? "bg-foreground text-background" : "bg-background hover:bg-[#fafafa]"
                   )}
                 >
                   <div className="flex items-center gap-2 min-w-0">

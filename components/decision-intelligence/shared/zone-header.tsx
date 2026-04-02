@@ -12,7 +12,7 @@ interface ZoneHeaderBarProps {
 
 export function ZoneHeaderBar({ title, right, className }: ZoneHeaderBarProps) {
   return (
-    <div className={cn("bg-muted/40 border-b border-border/60 px-6 py-3 flex items-center justify-between", className)}>
+    <div className={cn("bg-[#fafafa] border-b border-[#ebebeb]/60 px-6 py-3 flex items-center justify-between", className)}>
       <h3 className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
         {title}
       </h3>
@@ -43,7 +43,7 @@ export function ZoneInsight({ message, variant = "info", className }: ZoneInsigh
 }
 
 export function ZoneDivider() {
-  return <div className="border-t border-border/60" />
+    return <div className="border-t border-[#ebebeb]/60" />
 }
 
 export { Legend, LegendItem }

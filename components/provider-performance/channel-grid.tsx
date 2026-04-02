@@ -27,7 +27,7 @@ function ChannelColumn({
     <div
       className={cn(
         "flex-1 py-5 px-6",
-        !isLast && "border-b sm:border-b-0 sm:border-r border-border/60"
+        !isLast && "border-b sm:border-b-0 sm:border-r border-[#ebebeb]/60"
       )}
     >
       {/* Icon and Label */}
@@ -43,7 +43,7 @@ function ChannelColumn({
 
       {/* Amount */}
       <p className={cn(
-        "text-[32px] font-mono font-bold tracking-tight tabular-nums leading-none",
+        "text-[32px] font-mono font-semibold tracking-tight tabular-nums leading-none",
         channel.color || "text-foreground"
       )}>
         ${channel.amount.toLocaleString()}
@@ -59,15 +59,15 @@ export function ChannelGrid({ channels: channelData }: ChannelGridProps) {
   if (!channelData || channelData.length === 0) {
     return (
       <div className="space-y-3">
-        <div className="flex items-center justify-between px-6 py-3 bg-muted/30">
-          <div className="h-3 w-40 bg-muted animate-pulse rounded" />
-          <div className="h-3 w-32 bg-muted animate-pulse rounded" />
+        <div className="flex items-center justify-between px-6 py-3 bg-[#fafafa]/30">
+          <div className="h-3 w-40 bg-[#fafafa] animate-pulse rounded" />
+          <div className="h-3 w-32 bg-[#fafafa] animate-pulse rounded" />
         </div>
-        <div className="flex flex-col sm:flex-row bg-muted/20 p-6 gap-6">
+        <div className="flex flex-col sm:flex-row bg-[#fafafa]/20 p-6 gap-6">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="flex-1 space-y-2">
-              <div className="h-3 w-20 bg-muted animate-pulse rounded" />
-              <div className="h-8 w-24 bg-muted animate-pulse rounded" />
+              <div className="h-3 w-20 bg-[#fafafa] animate-pulse rounded" />
+              <div className="h-8 w-24 bg-[#fafafa] animate-pulse rounded" />
             </div>
           ))}
         </div>
@@ -92,7 +92,7 @@ export function ChannelGrid({ channels: channelData }: ChannelGridProps) {
   return (
     <div className="animate-in fade-in duration-700 delay-500">
       {/* Zone Header Bar - INSIDE the zone */}
-      <div className="flex items-center justify-between px-6 py-3 bg-muted/40 border-b border-border/60">
+      <div className="flex items-center justify-between px-6 py-3 bg-[#fafafa] border-b border-[#ebebeb]/60">
         <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
           Rendimiento por Canal de Venta
         </p>

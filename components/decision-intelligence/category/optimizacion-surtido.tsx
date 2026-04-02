@@ -58,7 +58,7 @@ const CustomTooltip = ({
     const StatusIcon = getStatusIcon(data.status)
     const statusColor = getStatusColor(data.status)
     return (
-      <div className="bg-card border border-border rounded-xl p-4 shadow-lg">
+      <div className="bg-card rounded-xl p-4 shadow-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]">
         <div className="flex items-center gap-2 mb-2">
           <StatusIcon className="h-4 w-4" style={{ color: statusColor }} />
           <p className="font-semibold text-foreground">{data.name}</p>
@@ -80,7 +80,7 @@ const CustomTooltip = ({
             <span className="text-muted-foreground">Acumulado (%)</span>
             <span className="font-medium">{data.cumulative}%</span>
           </div>
-          <div className="flex justify-between gap-6 pt-2 border-t border-border">
+          <div className="flex justify-between gap-6 pt-2 border-t border-[#ebebeb]">
             <span className="text-muted-foreground">Estado</span>
             <Badge
               variant="outline"
@@ -143,7 +143,7 @@ export function OptimizacionSurtido({
                 dataKey="name"
                 tickLine={false}
                 axisLine={{ className: "stroke-border/40" }}
-                tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
+                tick={{ fontSize: 12, fontFamily: "var(--font-sans)", fill: "hsl(var(--muted-foreground))" }}
                 interval={0}
                 angle={-45}
                 textAnchor="end"

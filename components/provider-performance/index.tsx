@@ -28,9 +28,9 @@ export function ProviderPerformancePage() {
   const { data: velocity } = useProviderCategoryVelocity()
 
   return (
-    <div className="bg-muted/50 overflow-hidden -mx-4 -my-8 md:-mx-6 lg:-mx-8 lg:-my-10">
+    <div className="bg-[#fafafa] overflow-hidden -mx-4 -my-8 md:-mx-6 lg:-mx-8 lg:-my-10">
       {e1 && (
-        <div className="px-6 py-3 border-b border-destructive/30 bg-destructive/5">
+        <div className="px-6 py-3 shadow-[rgba(239,68,68,0.3)_0px_0px_0px_1px] bg-red-50">
           <p className="text-xs text-destructive font-mono">Error cargando datos del proveedor. Intenta de nuevo.</p>
         </div>
       )}
@@ -39,7 +39,7 @@ export function ProviderPerformancePage() {
       {/* Main Dashboard Body */}
       <div>
         {/* Top Section: Main Zone + Sidebar */}
-        <div className="flex flex-col lg:flex-row border-y border-border">
+        <div className="flex flex-col lg:flex-row border-y border-[#ebebeb]">
 
           {/* LEFT: Main Content Zone */}
           <div className="flex-1 bg-background min-w-0">
@@ -47,16 +47,16 @@ export function ProviderPerformancePage() {
             <div className="px-6 pb-5">
               <MetricCards summary={summary} />
             </div>
-            <div className="border-t border-border/60 mx-6" />
+            <div className="border-t border-[#ebebeb]/60 mx-6" />
             <div className="px-6 py-5">
               <SalesChart data={dailySeries} yoyData={yoySeries} />
             </div>
-            <div className="border-t border-border/60" />
+            <div className="border-t border-[#ebebeb]/60" />
             <ChannelGrid channels={channels} />
           </div>
 
           {/* RIGHT: Sidebar Zone */}
-          <div className="w-full lg:w-72 xl:w-80 lg:shrink-0 border-t lg:border-t-0 lg:border-l border-border bg-muted/70">
+          <div className="w-full lg:w-72 xl:w-80 lg:shrink-0 border-t lg:border-t-0 lg:border-l border-[#ebebeb] bg-[#fafafa]">
             <ProviderSidebar categories={categories} summary={summary} velocity={velocity} />
           </div>
         </div>
@@ -65,7 +65,7 @@ export function ProviderPerformancePage() {
         <SalesLog initialTransactions={transactions} />
 
         {/* Footer Stats Line */}
-        <div className="flex items-center justify-end px-6 py-4 border-t border-border/60">
+        <div className="flex items-center justify-end px-6 py-4 border-t border-[#ebebeb]/60">
           <p className="text-xs text-muted-foreground font-mono tabular-nums">
             {summary
               ? `— ${summary.total_orders.toLocaleString()} órdenes · $0 → $${Math.round(summary.total_revenue).toLocaleString()} · MTD`

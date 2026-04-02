@@ -16,10 +16,10 @@ interface MetricCardProps {
 
 function MetricCard({ title, value, description }: MetricCardProps) {
   return (
-    <div className="border border-neutral-200 rounded-lg p-6 bg-white">
-      <h3 className="text-sm font-medium text-neutral-600 mb-1">{title}</h3>
-      <p className="text-3xl font-bold text-neutral-900 mb-1">{value}</p>
-      <p className="text-sm text-neutral-500">{description}</p>
+    <div className="shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] rounded-lg p-6 bg-white">
+      <h3 className="text-sm font-medium text-[#4d4d4d] mb-1">{title}</h3>
+      <p className="text-3xl font-semibold text-[#171717] mb-1">{value}</p>
+      <p className="text-sm text-[#666666]">{description}</p>
     </div>
   )
 }
@@ -70,7 +70,7 @@ export function PortafolioPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-900 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#171717] border-t-transparent" />
       </div>
     )
   }
@@ -78,7 +78,7 @@ export function PortafolioPage() {
   if (!rankingData || rankingData.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-neutral-500">No hay datos disponibles para el análisis de portafolio.</p>
+        <p className="text-[#666666]">No hay datos disponibles para el análisis de portafolio.</p>
       </div>
     )
   }
@@ -115,8 +115,8 @@ export function PortafolioPage() {
       <div className="space-y-8">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-neutral-900 mb-2">Análisis de Portafolio</h1>
-          <p className="text-neutral-600">
+          <h1 className="text-3xl font-semibold text-[#171717] mb-2">Análisis de Portafolio</h1>
+          <p className="text-[#4d4d4d]">
             Análisis detallado del rendimiento de portafolio por agente, incluyendo CPI, cross-sell y concentración de productos.
           </p>
         </div>
@@ -154,19 +154,19 @@ export function PortafolioPage() {
         <div className="grid grid-cols-1 gap-8">
           {/* CPI Table */}
           <motion.div variants={containerVariants} initial="hidden" animate="show">
-            <motion.h2 className="text-xl font-semibold text-neutral-900 mb-4" variants={itemVariants}>
+            <motion.h2 className="text-xl font-semibold text-[#171717] mb-4" variants={itemVariants}>
               Top 10 - CPI Score
             </motion.h2>
-            <motion.div className="border border-neutral-200 rounded-lg overflow-hidden" variants={itemVariants}>
+            <motion.div className="shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] rounded-lg overflow-hidden" variants={itemVariants}>
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-neutral-50 border-b border-neutral-200">
+                  <thead className="bg-[#fafafa] border-b border-[#ebebeb]">
                     <tr>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">Rank</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">Agente</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">CPI Score</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">vs Peer</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">Categorías</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#171717]">Rank</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#171717]">Agente</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#171717]">CPI Score</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#171717]">vs Peer</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#171717]">Categorías</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -177,13 +177,13 @@ export function PortafolioPage() {
                       const statusColor = statusLevel === "success" ? "bg-emerald-500" : statusLevel === "warning" ? "bg-amber-500" : "bg-red-500"
 
                       return (
-                        <tr key={agent.agent_id} className="border-b border-neutral-100 last:border-b-0">
-                          <td className="py-3 px-4 text-sm font-medium text-neutral-900">#{index + 1}</td>
-                          <td className="py-3 px-4 text-sm text-neutral-700">{agent.agent_name}</td>
+                        <tr key={agent.agent_id} className="border-b border-[#ebebeb] last:border-b-0">
+                          <td className="py-3 px-4 text-sm font-medium text-[#171717]">#{index + 1}</td>
+                          <td className="py-3 px-4 text-sm text-[#171717]">{agent.agent_name}</td>
                           <td className="py-3 px-4">
                             <div className="flex items-center gap-3">
-                              <span className="text-sm font-medium text-neutral-900 w-12">{formatPercent(cpi / 100)}</span>
-                              <div className="flex-1 h-2 bg-neutral-100 rounded-full overflow-hidden">
+                              <span className="text-sm font-medium text-[#171717] w-12">{formatPercent(cpi / 100)}</span>
+                              <div className="flex-1 h-2 bg-[#ebebeb] rounded-full overflow-hidden">
                                 <div
                                   className={`h-full ${statusColor} rounded-full transition-all duration-300`}
                                   style={{ width: `${Math.min(cpi, 100)}%` }}
@@ -201,7 +201,7 @@ export function PortafolioPage() {
                               {formatPercent(peerDiff / 100)}
                             </span>
                           </td>
-                          <td className="py-3 px-4 text-sm text-neutral-500">{agent.category_breadth ?? 0}</td>
+                          <td className="py-3 px-4 text-sm text-[#666666]">{agent.category_breadth ?? 0}</td>
                         </tr>
                       )
                     })}
@@ -213,10 +213,10 @@ export function PortafolioPage() {
 
           {/* Concentration Comparison Chart */}
           <motion.div variants={containerVariants} initial="hidden" animate="show">
-            <motion.h2 className="text-xl font-semibold text-neutral-900 mb-4" variants={itemVariants}>
+            <motion.h2 className="text-xl font-semibold text-[#171717] mb-4" variants={itemVariants}>
               Concentración de Portafolio - Top 8
             </motion.h2>
-            <motion.div className="border border-neutral-200 rounded-lg p-6 bg-white" variants={itemVariants}>
+            <motion.div className="shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] rounded-lg p-6 bg-white" variants={itemVariants}>
               <HorizontalBarChart
                 data={top8ByConcentration.map((agent) => ({
                   name: agent.agent_name,
@@ -233,18 +233,18 @@ export function PortafolioPage() {
 
           {/* Cross-Sell Leaderboard */}
           <motion.div variants={containerVariants} initial="hidden" animate="show">
-            <motion.h2 className="text-xl font-semibold text-neutral-900 mb-4" variants={itemVariants}>
+            <motion.h2 className="text-xl font-semibold text-[#171717] mb-4" variants={itemVariants}>
               Top 10 - Cross-Sell
             </motion.h2>
-            <motion.div className="border border-neutral-200 rounded-lg overflow-hidden" variants={itemVariants}>
+            <motion.div className="shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] rounded-lg overflow-hidden" variants={itemVariants}>
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-neutral-50 border-b border-neutral-200">
+                  <thead className="bg-[#fafafa] border-b border-[#ebebeb]">
                     <tr>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">Agente</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">Cross-Sell</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">Categorías</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">Riesgo</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#171717]">Agente</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#171717]">Cross-Sell</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#171717]">Categorías</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#171717]">Riesgo</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -254,12 +254,12 @@ export function PortafolioPage() {
                       const statusColor = statusLevel === "success" ? "bg-emerald-500" : statusLevel === "warning" ? "bg-amber-500" : "bg-red-500"
 
                       return (
-                        <tr key={agent.agent_id} className="border-b border-neutral-100 last:border-b-0">
-                          <td className="py-3 px-4 text-sm text-neutral-700">{agent.agent_name}</td>
+                        <tr key={agent.agent_id} className="border-b border-[#ebebeb] last:border-b-0">
+                          <td className="py-3 px-4 text-sm text-[#171717]">{agent.agent_name}</td>
                           <td className="py-3 px-4">
                             <div className="flex items-center gap-3">
-                              <span className="text-sm font-medium text-neutral-900 w-12">{formatPercent(crossSell / 100)}</span>
-                              <div className="flex-1 h-2 bg-neutral-100 rounded-full overflow-hidden">
+                              <span className="text-sm font-medium text-[#171717] w-12">{formatPercent(crossSell / 100)}</span>
+                              <div className="flex-1 h-2 bg-[#ebebeb] rounded-full overflow-hidden">
                                 <div
                                   className={`h-full ${statusColor} rounded-full transition-all duration-300`}
                                   style={{ width: `${Math.min(crossSell, 100)}%` }}
@@ -267,7 +267,7 @@ export function PortafolioPage() {
                               </div>
                             </div>
                           </td>
-                          <td className="py-3 px-4 text-sm text-neutral-500">
+                          <td className="py-3 px-4 text-sm text-[#666666]">
                             {agent.category_breadth ?? 0}
                           </td>
                           <td className="py-3 px-4">

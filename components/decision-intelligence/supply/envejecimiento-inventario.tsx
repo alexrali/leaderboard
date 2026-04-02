@@ -98,7 +98,7 @@ export function EnvejecimientoInventario() {
               <XAxis
                 type="number"
                 domain={[0, 100]}
-                tick={{ fontSize: 10, fill: DI_COLORS.slate }}
+                tick={{ fontSize: 12, fontFamily: "var(--font-sans)", fill: DI_COLORS.slate }}
                 axisLine={{ stroke: "hsl(var(--border))" }}
                 tickLine={false}
                 tickFormatter={(v) => `${v}%`}
@@ -137,27 +137,27 @@ export function EnvejecimientoInventario() {
           </ResponsiveContainer>
         </div>
 
-        <div className="grid grid-cols-4 gap-3 mt-4 pt-4 border-t border-border">
+        <div className="grid grid-cols-4 gap-3 mt-4 pt-4 border-t border-[#ebebeb]">
           <div className="text-center">
-            <p className="text-lg font-bold text-emerald-500">
+            <p className="text-lg font-semibold text-emerald-500">
               {Math.round(totals.fresh / n)}%
             </p>
             <p className="text-xs text-muted-foreground">Prom Fresco</p>
           </div>
           <div className="text-center">
-            <p className="text-lg font-bold text-blue-500">
+            <p className="text-lg font-semibold text-blue-500">
               {Math.round(totals.active / n)}%
             </p>
             <p className="text-xs text-muted-foreground">Prom Activo</p>
           </div>
           <div className="text-center">
-            <p className="text-lg font-bold text-amber-500">
+            <p className="text-lg font-semibold text-amber-500">
               {Math.round(totals.slowMoving / n)}%
             </p>
             <p className="text-xs text-muted-foreground">Prom Lento</p>
           </div>
           <div className="text-center">
-            <p className="text-lg font-bold text-red-500">
+            <p className="text-lg font-semibold text-red-500">
               {Math.round(totals.deadStock / n)}%
             </p>
             <p className="text-xs text-muted-foreground">Prom Muerto</p>

@@ -43,7 +43,7 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload
     return (
-      <div className="bg-card border border-border rounded-xl p-4 shadow-lg">
+      <div className="bg-card rounded-xl p-4 shadow-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]">
         <p className="font-semibold text-foreground text-sm mb-2">{data.name}</p>
         <div className="space-y-1.5 text-sm">
           <div className="flex justify-between gap-4">
@@ -60,7 +60,7 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
           </div>
           {data.growth !== undefined && (
             <div
-              className="pt-1 border-t border-border text-sm font-medium"
+              className="pt-1 border-t border-[#ebebeb] text-sm font-medium"
               style={{ color: data.growth > 0 ? CHART.growth : CHART.decline }}
             >
               {data.growth > 0 ? "+" : ""}
@@ -181,7 +181,7 @@ export function MapaRendimientoRed() {
           {highlightedStores.map((store) => (
             <div
               key={store.id}
-              className="flex items-center gap-2 px-3 py-2 bg-secondary/50 rounded-lg border border-border"
+              className="flex items-center gap-2 px-3 py-2 bg-secondary/50 rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]"
             >
               <div
                 className="h-2.5 w-2.5 rounded-full"

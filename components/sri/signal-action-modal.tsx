@@ -140,13 +140,13 @@ export function SignalActionModal({
         >
           <h2
             id="modal-title"
-            className="mb-1 text-xl font-semibold text-neutral-900"
+            className="mb-1 text-xl font-semibold text-[#171717]"
           >
             {actionTypeLabels[type]}
           </h2>
           <p
             id="modal-description"
-            className="mb-4 text-sm text-neutral-600"
+            className="mb-4 text-sm text-[#4d4d4d]"
           >
             {agentName} · ID: {agentId} · {signalLevel}
           </p>
@@ -158,7 +158,7 @@ export function SignalActionModal({
           )}
 
           <div className="mb-4">
-            <label htmlFor="title" className="mb-1 block text-sm font-medium text-neutral-700">
+            <label htmlFor="title" className="mb-1 block text-sm font-medium text-[#171717]">
               Título
             </label>
             <input
@@ -173,7 +173,7 @@ export function SignalActionModal({
           </div>
 
           <div className="mb-6">
-            <label htmlFor="description" className="mb-1 block text-sm font-medium text-neutral-700">
+            <label htmlFor="description" className="mb-1 block text-sm font-medium text-[#171717]">
               Descripción
             </label>
             <textarea
@@ -190,7 +190,7 @@ export function SignalActionModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-md border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+              className="rounded-md border border-neutral-300 px-4 py-2 text-sm font-medium text-[#171717] hover:bg-[#fafafa]"
             >
               Cancelar
             </button>

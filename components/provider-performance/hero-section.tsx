@@ -22,7 +22,7 @@ function PeriodToggle({
   ]
   return (
     <div
-      className="flex border border-border divide-x divide-border"
+      className="flex shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] divide-x divide-[#ebebeb]"
       role="tablist"
       aria-label="Período"
     >

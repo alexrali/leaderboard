@@ -18,9 +18,9 @@ const tabs = [
 
 export function DIHeader({ activeTab, onTabChange, providerCode, onProviderChange }: DIHeaderProps) {
   return (
-    <div className="sticky top-0 z-50 bg-background border-b border-border/40">
+    <div className="sticky top-0 z-50 bg-background shadow-[0_1px_0_0_rgba(0,0,0,0.08)]">
       <div className="flex items-center justify-between px-6 py-3">
-        <h1 className="text-sm font-mono font-bold tracking-tight">
+        <h1 className="text-sm font-mono font-semibold tracking-tight">
           DI<span className="text-muted-foreground">.intel</span>
         </h1>
 
@@ -32,10 +32,10 @@ export function DIHeader({ activeTab, onTabChange, providerCode, onProviderChang
         </div>
       </div>
 
-      <div className="bg-muted/40 border-t border-border/60 px-6 py-2">
+      <div className="bg-[#fafafa] border-t border-[#ebebeb]/60 px-6 py-2">
         <div
           role="tablist"
-          className="flex border border-border divide-x divide-border"
+          className="flex shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] divide-x divide-[#ebebeb]"
         >
           {tabs.map((tab) => (
             <button

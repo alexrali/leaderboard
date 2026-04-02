@@ -11,9 +11,9 @@ export function TotalRevenue({ summary }: TotalRevenueProps) {
   if (!summary) {
     return (
       <div className="space-y-3">
-        <div className="h-3 w-32 bg-muted animate-pulse rounded" />
-        <div className="h-14 w-56 bg-muted animate-pulse rounded" />
-        <div className="h-4 w-48 bg-muted animate-pulse rounded" />
+        <div className="h-3 w-32 bg-[#fafafa] animate-pulse rounded" />
+        <div className="h-14 w-56 bg-[#fafafa] animate-pulse rounded" />
+        <div className="h-4 w-48 bg-[#fafafa] animate-pulse rounded" />
       </div>
     )
   }
@@ -27,7 +27,7 @@ export function TotalRevenue({ summary }: TotalRevenueProps) {
         Ingresos Totales
       </p>
       <div className="flex items-baseline gap-4">
-        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold tracking-tighter font-mono leading-none">
+        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-semibold tracking-tighter font-mono leading-none">
           ${revenue.toLocaleString()}
         </h2>
       </div>
@@ -38,9 +38,9 @@ export function TotalRevenue({ summary }: TotalRevenueProps) {
             : '—'}
         </span>
         <span className="tabular-nums">{orders.toLocaleString()} órdenes</span>
-        <span className="text-border/60">·</span>
+        <span className="text-[#ebebeb]">·</span>
         <span>seguimiento 24/7</span>
-        <span className="text-border/60">·</span>
+        <span className="text-[#ebebeb]">·</span>
         <span>sin captura manual desde ene</span>
       </div>
     </div>

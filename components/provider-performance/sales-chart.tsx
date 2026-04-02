@@ -16,8 +16,8 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
   if (!data || data.length === 0) {
     return (
       <div className="space-y-4">
-        <div className="h-3 w-40 bg-muted animate-pulse rounded" />
-        <div className="h-[280px] bg-muted/30 animate-pulse rounded" />
+        <div className="h-3 w-40 bg-[#fafafa] animate-pulse rounded" />
+        <div className="h-[280px] bg-[#fafafa]/30 animate-pulse rounded" />
       </div>
     )
   }
@@ -80,7 +80,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
           {mode === 'cumulative' ? 'Curva de Ingresos — Acumulada' : 'Revenue — Año vs Año'}
         </p>
         {hasYoY && (
-          <div className="flex border border-border divide-x divide-border" role="tablist" aria-label="Modo de gráfico">
+          <div className="flex shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] divide-x divide-[#ebebeb]" role="tablist" aria-label="Modo de gráfico">
             <button
               role="tab"
               aria-selected={mode === 'cumulative'}
@@ -126,7 +126,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
                 dataKey="weekLabel"
                 tickLine={false}
                 axisLine={false}
-                tick={{ fontSize: 9, fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fontSize: 12, fontFamily: "var(--font-sans)", fill: 'hsl(var(--muted-foreground))' }}
                 tickMargin={12}
                 interval="preserveStartEnd"
               />
@@ -134,7 +134,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
                 orientation="right"
                 tickLine={false}
                 axisLine={false}
-                tick={{ fontSize: 9, fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fontSize: 12, fontFamily: "var(--font-sans)", fill: 'hsl(var(--muted-foreground))' }}
                 tickMargin={8}
                 tickFormatter={(value) => `$${(value / 1000).toFixed(0)}K`}
                 domain={yDomain}
@@ -155,7 +155,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="bg-background/95 backdrop-blur-sm border border-border/50 px-3 py-2 shadow-lg">
+                      <div className="bg-background/95 backdrop-blur-sm shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] px-3 py-2 shadow-lg">
                         <p className="text-[10px] text-muted-foreground mb-1">{payload[0].payload.weekLabel}</p>
                         <p className="font-mono text-sm font-semibold">
                           ${Number(payload[0].value).toLocaleString()}
@@ -204,7 +204,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
                 dataKey="weekLabel"
                 tickLine={false}
                 axisLine={false}
-                tick={{ fontSize: 9, fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fontSize: 12, fontFamily: "var(--font-sans)", fill: 'hsl(var(--muted-foreground))' }}
                 tickMargin={12}
                 interval="preserveStartEnd"
               />
@@ -212,7 +212,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
                 orientation="right"
                 tickLine={false}
                 axisLine={false}
-                tick={{ fontSize: 9, fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fontSize: 12, fontFamily: "var(--font-sans)", fill: 'hsl(var(--muted-foreground))' }}
                 tickMargin={8}
                 tickFormatter={(v) => `$${(v / 1000000).toFixed(1)}M`}
                 domain={yoyDomain}
@@ -226,7 +226,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
                     const delta = row.current - row.prior
                     const pct = row.prior > 0 ? ((delta / row.prior) * 100).toFixed(1) : '—'
                     return (
-                      <div className="bg-background/95 backdrop-blur-sm border border-border/50 px-3 py-2 shadow-lg min-w-[140px]">
+                      <div className="bg-background/95 backdrop-blur-sm shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] px-3 py-2 shadow-lg min-w-[140px]">
                         <p className="text-[10px] text-muted-foreground mb-1.5">{row.weekLabel}</p>
                         <div className="flex justify-between gap-4 text-[10px] font-mono">
                           <span className="text-foreground font-semibold">{currentYear}</span>
@@ -237,7 +237,7 @@ export function SalesChart({ data, yoyData }: SalesChartProps) {
                           <span>${(row.prior / 1000000).toFixed(2)}M</span>
                         </div>
                         <div className={cn(
-                          "flex justify-between gap-4 text-[10px] font-mono mt-1 pt-1 border-t border-border/30",
+                          "flex justify-between gap-4 text-[10px] font-mono mt-1 pt-1 border-t border-[#ebebeb]/30",
                           delta >= 0 ? "text-emerald-600" : "text-red-500"
                         )}>
                           <span>Δ</span>

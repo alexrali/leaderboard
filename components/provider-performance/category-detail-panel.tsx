@@ -43,14 +43,14 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
               Detalle de Categoría
             </SheetDescription>
           </div>
-          <SheetTitle className="text-3xl font-mono font-bold tracking-tight">
+          <SheetTitle className="text-3xl font-mono font-semibold tracking-tight">
             {detail?.category_name ?? categoryCode ?? ''}
           </SheetTitle>
         </SheetHeader>
 
         {isLoading && (
           <div className="flex items-center justify-center py-20">
-            <div className="size-6 animate-spin rounded-full border-2 border-border border-t-transparent" />
+            <div className="size-6 animate-spin rounded-full border-2 border-[#ebebeb] border-t-transparent" />
           </div>
         )}
 
@@ -62,7 +62,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
                 <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   Ingresos Totales
                 </p>
-                <p className="text-4xl font-mono font-bold tracking-tight">
+                <p className="text-4xl font-mono font-semibold tracking-tight">
                   ${revenueCounter.toLocaleString()}
                 </p>
                 <p className="text-[10px] text-muted-foreground">últimos 6 meses</p>
@@ -71,7 +71,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
                 <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   Piezas Vendidas
                 </p>
-                <p className="text-4xl font-mono font-bold tracking-tight">
+                <p className="text-4xl font-mono font-semibold tracking-tight">
                   {unitsCounter.toLocaleString()}
                 </p>
                 <p className="text-[10px] text-muted-foreground">unidades normalizadas</p>
@@ -79,20 +79,20 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
             </div>
 
             {/* Secondary Stats */}
-            <div className="grid grid-cols-3 gap-4 p-4 bg-muted/40 rounded-lg">
+            <div className="grid grid-cols-3 gap-4 p-4 bg-[#fafafa] rounded-lg">
               <div className="text-center">
                 <ShoppingCart className="h-4 w-4 mx-auto text-muted-foreground mb-1.5" />
-                <p className="text-lg font-mono font-bold">{ordersCounter.toLocaleString()}</p>
+                <p className="text-lg font-mono font-semibold">{ordersCounter.toLocaleString()}</p>
                 <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Órdenes</p>
               </div>
               <div className="text-center">
                 <Package className="h-4 w-4 mx-auto text-muted-foreground mb-1.5" />
-                <p className="text-lg font-mono font-bold">{avgTicket}</p>
+                <p className="text-lg font-mono font-semibold">{avgTicket}</p>
                 <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Ticket Prom.</p>
               </div>
               <div className="text-center">
                 <Users className="h-4 w-4 mx-auto text-muted-foreground mb-1.5" />
-                <p className="text-lg font-mono font-bold">{detail.topReps.length}</p>
+                <p className="text-lg font-mono font-semibold">{detail.topReps.length}</p>
                 <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Top Reps</p>
               </div>
             </div>
@@ -102,7 +102,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
               <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                 Tendencia de Ingresos — 6 Meses
               </p>
-              <div className="h-36 w-full bg-muted/20 rounded-lg p-2">
+              <div className="h-36 w-full bg-[#fafafa]/20 rounded-lg p-2">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={detail.monthlyData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
                     <defs>
@@ -115,13 +115,13 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
                       dataKey="month"
                       tickLine={false}
                       axisLine={false}
-                      tick={{ fontSize: 9, fill: 'hsl(var(--muted-foreground))' }}
+                      tick={{ fontSize: 12, fontFamily: "var(--font-sans)", fill: 'hsl(var(--muted-foreground))' }}
                     />
                     <Tooltip
                       content={({ active, payload }) => {
                         if (active && payload && payload.length) {
                           return (
-                            <div className="bg-background/95 backdrop-blur-sm border border-border/50 rounded-md px-3 py-2 shadow-lg">
+                            <div className="bg-background/95 backdrop-blur-sm shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] rounded-md px-3 py-2 shadow-lg">
                               <p className="text-[10px] text-muted-foreground">{payload[0].payload.month}</p>
                               <p className="font-mono text-sm font-semibold">
                                 ${Number(payload[0].value).toLocaleString()}
@@ -156,7 +156,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
                       <span className="text-muted-foreground">{ch.channel}</span>
                       <span className="font-mono font-semibold">${ch.revenue.toLocaleString()}</span>
                     </div>
-                    <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-[#ebebeb] rounded-full overflow-hidden">
                       <div
                         className={cn(
                           "h-full rounded-full transition-all duration-1000",
@@ -176,10 +176,10 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
                 <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   Productos Destacados
                 </p>
-                <div className="border border-border/50 rounded-lg overflow-hidden">
+                <div className="shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] rounded-lg overflow-hidden">
                   <Table>
                     <TableHeader>
-                      <TableRow className="hover:bg-transparent border-b border-border/30">
+                      <TableRow className="hover:bg-transparent border-b border-[#ebebeb]/30">
                         <TableHead className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-medium h-8">Producto</TableHead>
                         <TableHead className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-medium h-8 text-right">Pzas</TableHead>
                         <TableHead className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground font-medium h-8 text-right">Ingreso</TableHead>
@@ -187,7 +187,7 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
                     </TableHeader>
                     <TableBody>
                       {detail.topProducts.map((product) => (
-                        <TableRow key={product.clave} className="border-b border-border/20">
+                        <TableRow key={product.clave} className="border-b border-[#ebebeb]/20">
                           <TableCell className="text-[11px] py-2">{product.name}</TableCell>
                           <TableCell className="text-[11px] font-mono text-muted-foreground py-2 text-right tabular-nums">{product.units.toLocaleString()}</TableCell>
                           <TableCell className="text-[11px] font-mono font-semibold py-2 text-right tabular-nums">${product.revenue.toLocaleString()}</TableCell>
@@ -209,10 +209,10 @@ export function CategoryDetailPanel({ categoryCode, open, onOpenChange }: Catego
                   {detail.topReps.map((rep, idx) => (
                     <div
                       key={rep.name}
-                      className="flex items-center justify-between p-3 bg-muted/30 rounded-lg"
+                      className="flex items-center justify-between p-3 bg-[#fafafa]/30 rounded-lg"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-full bg-foreground/10 flex items-center justify-center text-[10px] font-mono font-bold">
+                        <div className="w-6 h-6 rounded-full bg-foreground/10 flex items-center justify-center text-[10px] font-mono font-semibold">
                           {idx + 1}
                         </div>
                         <div>

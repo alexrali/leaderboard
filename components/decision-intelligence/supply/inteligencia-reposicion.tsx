@@ -44,7 +44,7 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
   if (active && payload && payload.length) {
     const data = payload[0].payload
     return (
-      <div className="bg-card border border-border rounded-lg shadow-lg p-3">
+      <div className="bg-card rounded-lg shadow-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] p-3">
         <p className="text-sm font-semibold text-foreground mb-2">{data.name}</p>
         <div className="space-y-1 text-xs">
           <div className="flex justify-between gap-4">
@@ -148,7 +148,7 @@ export function InteligenciaReposicion() {
                 type="number"
                 dataKey="demandVariability"
                 domain={[0, 100]}
-                tick={{ fontSize: 10, fill: DI_COLORS.slate }}
+                tick={{ fontSize: 12, fontFamily: "var(--font-sans)", fill: DI_COLORS.slate }}
                 axisLine={{ stroke: "hsl(var(--border))" }}
                 tickLine={false}
                 label={{
@@ -162,7 +162,7 @@ export function InteligenciaReposicion() {
                 type="number"
                 dataKey="replenishmentFrequency"
                 domain={[0, 100]}
-                tick={{ fontSize: 10, fill: DI_COLORS.slate }}
+                tick={{ fontSize: 12, fontFamily: "var(--font-sans)", fill: DI_COLORS.slate }}
                 axisLine={{ stroke: "hsl(var(--border))" }}
                 tickLine={false}
                 label={{

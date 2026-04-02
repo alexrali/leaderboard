@@ -64,7 +64,7 @@ const CustomTooltip = ({
     const quadrant = getQuadrant(data.penetration, data.revenue)
     const growthColor = getGrowthColor(data.growth)
     return (
-      <div className="bg-card border border-border rounded-xl p-4 shadow-lg">
+      <div className="bg-card rounded-xl p-4 shadow-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]">
         <p className="font-semibold text-foreground text-sm">{data.name}</p>
         <div className="mt-2 space-y-1.5 text-sm">
           <div className="flex justify-between gap-4">
@@ -89,7 +89,7 @@ const CustomTooltip = ({
               {getGrowthLabel(data.growth)}
             </Badge>
           </div>
-          <div className="pt-2 border-t border-border mt-2">
+          <div className="pt-2 border-t border-[#ebebeb] mt-2">
             <span className="text-muted-foreground text-xs">Cuadrante: </span>
             <span className="text-xs font-medium">{quadrant}</span>
           </div>

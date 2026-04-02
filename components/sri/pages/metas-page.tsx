@@ -90,25 +90,25 @@ interface StatusSummaryCardProps {
 
 function StatusSummaryCard({ label, value, percentage, variant }: StatusSummaryCardProps) {
   const variantStyles = {
-    success: "border-status-success/30 bg-status-success/5",
-    warning: "border-status-warning/30 bg-status-warning/5",
-    critical: "border-status-critical/30 bg-status-critical/5",
-    neutral: "border-neutral-200 bg-neutral-50",
+    success: "bg-status-success/5",
+    warning: "bg-status-warning/5",
+    critical: "bg-status-critical/5",
+    neutral: "bg-[#fafafa]",
   }
 
   const textStyles = {
     success: "text-status-success",
     warning: "text-status-warning",
     critical: "text-status-critical",
-    neutral: "text-neutral-600",
+    neutral: "text-[#4d4d4d]",
   }
 
   return (
     <div
-      className={`rounded-lg border p-4 transition-all hover:shadow-sm ${variantStyles[variant]}`}
+      className={`shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] rounded-lg p-4 transition-all hover:shadow-sm ${variantStyles[variant]}`}
     >
       <p className="text-muted-foreground text-sm font-medium">{label}</p>
-      <p className={`text-2xl font-bold ${textStyles[variant]}`}>{value}</p>
+      <p className={`text-2xl font-semibold ${textStyles[variant]}`}>{value}</p>
       {percentage !== undefined && (
         <p className={`text-xs font-medium ${textStyles[variant]}`}>
           {formatPercent(percentage / 100)}
@@ -156,7 +156,7 @@ function GoalBar({ label, achievement, showValue = true }: GoalBarProps) {
           </span>
         )}
       </div>
-      <div className="bg-neutral-100 h-1.5 w-full rounded-full overflow-hidden">
+      <div className="bg-[#ebebeb] h-1.5 w-full rounded-full overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
@@ -189,7 +189,7 @@ function AgentGoalRow({ goals }: AgentGoalRowProps) {
   return (
     <motion.div
       variants={staggerItem}
-      className="border-border/40 hover:border-border/60 rounded-lg border bg-white/50 p-4 transition-colors"
+      className="shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] rounded-lg bg-white/50 p-4 transition-colors"
     >
       <div className="mb-3 flex items-center justify-between">
         <div>
@@ -285,7 +285,7 @@ export function MetasPage() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-900 border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#171717] border-t-transparent" />
           <span className="text-muted-foreground text-sm">Cargando metas...</span>
         </div>
       </div>
@@ -307,7 +307,7 @@ export function MetasPage() {
       <div className="space-y-8">
         {/* Header */}
         <div>
-          <h1 className="text-foreground text-2xl font-bold">Progreso vs Metas</h1>
+          <h1 className="text-foreground text-2xl font-semibold">Progreso vs Metas</h1>
           <p className="text-muted-foreground text-sm">
             Seguimiento del cumplimiento de objetivos por agente y métrica
           </p>

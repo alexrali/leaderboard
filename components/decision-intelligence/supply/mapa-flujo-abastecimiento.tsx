@@ -178,7 +178,7 @@ export function MapaFlujoAbastecimiento() {
 
           {activeNode && (
             <div
-              className="absolute bg-card border border-border rounded-xl shadow-lg p-3 z-20 pointer-events-none"
+              className="absolute bg-card rounded-xl shadow-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] p-3 z-20 pointer-events-none"
               style={{
                 left: `${activeNode.x}%`,
                 top: `${activeNode.y + 10}%`,

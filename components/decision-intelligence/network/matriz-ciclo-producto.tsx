@@ -37,7 +37,7 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload
     return (
-      <div className="bg-card border border-border rounded-xl p-4 shadow-lg">
+      <div className="bg-card rounded-xl p-4 shadow-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]">
         <p className="font-semibold text-foreground mb-1">{data.name}</p>
         <p className="text-xs text-muted-foreground mb-2">SKU: {data.sku}</p>
         <div className="space-y-1 text-sm">

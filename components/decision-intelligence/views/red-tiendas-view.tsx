@@ -10,7 +10,7 @@ import { ZoneDivider } from "../shared/zone-header"
 
 export function RedTiendasView() {
   return (
-    <div role="tabpanel" aria-label="Red de Tiendas" className="flex flex-col lg:flex-row border-y border-border animate-in fade-in duration-700">
+    <div role="tabpanel" aria-label="Red de Tiendas" className="flex flex-col lg:flex-row border-y border-[#ebebeb] animate-in fade-in duration-700">
       <div className="flex-1 bg-background min-w-0">
         <MicroInsightsRed />
         <ZoneDivider />
@@ -22,12 +22,12 @@ export function RedTiendasView() {
           <div className="flex-1 min-w-0">
             <MatrizCicloProducto />
           </div>
-          <div className="flex-1 min-w-0 border-t sm:border-t-0 sm:border-l border-border/60">
+          <div className="flex-1 min-w-0 border-t sm:border-t-0 sm:border-l border-[#ebebeb]/60">
             <CascadaCrecimiento />
           </div>
         </div>
       </div>
-      <div className="w-full lg:w-80 xl:w-[360px] lg:shrink-0 border-t lg:border-t-0 lg:border-l border-border bg-muted/70">
+      <div className="w-full lg:w-80 xl:w-[360px] lg:shrink-0 border-t lg:border-t-0 lg:border-l border-[#ebebeb] bg-[#fafafa]/70">
         <AccionesPrioritarias />
       </div>
     </div>

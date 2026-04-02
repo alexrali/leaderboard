@@ -81,7 +81,7 @@ export function MatrizDesbalanceInventario() {
             </thead>
             <tbody>
               {imbalanceMatrix.stores.map((store, rowIndex) => (
-                <tr key={store} className="border-t border-border/50">
+                <tr key={store} className="border-t border-[#ebebeb]/50">
                   <td className="p-2 text-xs font-medium text-foreground bg-secondary/30 whitespace-nowrap">
                     {store}
                   </td>
@@ -95,7 +95,7 @@ export function MatrizDesbalanceInventario() {
                     </td>
                   ))}
                   <td className="p-2 text-center">
-                    <span className={`text-sm font-bold ${getImbalanceColor(imbalanceMatrix.scores[rowIndex])}`}>
+                    <span className={`text-sm font-semibold ${getImbalanceColor(imbalanceMatrix.scores[rowIndex])}`}>
                       {imbalanceMatrix.scores[rowIndex]}
                     </span>
                   </td>

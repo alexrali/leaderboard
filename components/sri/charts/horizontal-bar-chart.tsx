@@ -37,7 +37,7 @@ export function HorizontalBarChart({
           type="category"
           dataKey="name"
           width={55}
-          tick={{ fontSize: 12, fill: "var(--neutral-600)" }}
+          tick={{ fontSize: 12, fill: "var(--neutral-600)", fontFamily: "var(--font-sans)" }}
           axisLine={false}
           tickLine={false}
         />

@@ -11,9 +11,9 @@ export function SriEmptyState({
 }: SriEmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
-      <div className="w-16 h-16 rounded-full bg-neutral-100 flex items-center justify-center mb-4">
+      <div className="w-16 h-16 rounded-full bg-[#ebebeb] flex items-center justify-center mb-4">
         <svg
-          className="w-8 h-8 text-neutral-400"
+          className="w-8 h-8 text-[#666666]"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -26,8 +26,8 @@ export function SriEmptyState({
           />
         </svg>
       </div>
-      <p className="text-base font-medium text-neutral-700">{message}</p>
-      <p className="text-sm text-neutral-500 mt-1 max-w-md">{hint}</p>
+      <p className="text-base font-medium text-[#171717]">{message}</p>
+      <p className="text-sm text-[#666666] mt-1 max-w-md">{hint}</p>
     </div>
   )
 }

@@ -54,7 +54,7 @@ export function SalesLog({ initialTransactions = [] }: SalesLogProps) {
   return (
     <div className="animate-in fade-in duration-700 delay-700">
       {/* Header with title */}
-      <div className="px-6 py-3 border-b border-border bg-muted/40">
+      <div className="px-6 py-3 border-b border-[#ebebeb] bg-[#fafafa]">
         <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
           Registro de Ejecución
         </p>
@@ -63,7 +63,7 @@ export function SalesLog({ initialTransactions = [] }: SalesLogProps) {
       {/* Table Structure */}
       <div className="bg-background">
         {/* Header Row */}
-        <div className="grid grid-cols-[60px_1fr_50px_80px] sm:grid-cols-[70px_80px_80px_1fr_50px_50px_100px_80px] gap-3 px-4 py-2.5 bg-muted/40 border-b border-border text-[9px] uppercase tracking-[0.1em] text-muted-foreground font-medium">
+        <div className="grid grid-cols-[60px_1fr_50px_80px] sm:grid-cols-[70px_80px_80px_1fr_50px_50px_100px_80px] gap-3 px-4 py-2.5 bg-[#fafafa] border-b border-[#ebebeb] text-[9px] uppercase tracking-[0.1em] text-muted-foreground font-medium">
           <span>Hora</span>
           <span className="hidden sm:block">ID</span>
           <span className="hidden sm:block">Canal</span>
@@ -88,8 +88,8 @@ export function SalesLog({ initialTransactions = [] }: SalesLogProps) {
                 key={sale.orderId + sale.time + index}
                 className={cn(
                   "grid grid-cols-[60px_1fr_50px_80px] sm:grid-cols-[70px_80px_80px_1fr_50px_50px_100px_80px] gap-3 px-4 py-2.5 transition-all duration-500",
-                  index % 2 === 0 ? "bg-muted/30" : "bg-background",
-                  "border-b border-border last:border-b-0"
+                  index % 2 === 0 ? "bg-[#fafafa]/30" : "bg-background",
+                  "border-b border-[#ebebeb] last:border-b-0"
                 )}
               >
                 <span className="text-muted-foreground tabular-nums">{sale.time}</span>

@@ -73,10 +73,10 @@ export function AccionesCrecimiento({
           {filteredActions.length} recomendaciones · {selectedCategory ?? 'todas las categorías'}
         </p>
       </div>
-      <div className="border-t border-border" />
+      <div className="border-t border-[#ebebeb]" />
 
       <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
-        <div className="divide-y divide-border/60">
+        <div className="divide-y divide-[#ebebeb]/60">
           {filteredActions.map((action, index) => {
             const TypeIcon = getTypeIcon(action.type)
             const typeColor = getTypeColor(action.type)
@@ -87,7 +87,7 @@ export function AccionesCrecimiento({
                 key={action.id}
                 role="button"
                 tabIndex={0}
-                className="px-5 py-4 hover:bg-muted/50 transition-colors group cursor-pointer"
+                className="px-5 py-4 hover:bg-[#fafafa]/50 transition-colors group cursor-pointer"
                 onClick={() => setExpandedId(isExpanded ? null : action.id)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
@@ -136,7 +136,7 @@ export function AccionesCrecimiento({
                             Impacto
                           </span>
                         </div>
-                        <p className="text-sm font-bold text-foreground">{action.impact}</p>
+                        <p className="text-sm font-semibold text-foreground">{action.impact}</p>
                       </div>
                       <div className="text-center p-2 rounded-lg bg-secondary/50">
                         <div className="flex items-center justify-center gap-1 mb-1">
@@ -145,7 +145,7 @@ export function AccionesCrecimiento({
                             Confianza
                           </span>
                         </div>
-                        <p className="text-sm font-bold text-foreground">
+                        <p className="text-sm font-semibold text-foreground">
                           {action.confidence}%
                         </p>
                       </div>
@@ -156,13 +156,13 @@ export function AccionesCrecimiento({
                             Plazo
                           </span>
                         </div>
-                        <p className="text-sm font-bold text-foreground">
+                        <p className="text-sm font-semibold text-foreground">
                           {action.timeHorizon}
                         </p>
                       </div>
                     </div>
 
-                    <div className="mt-3 pt-3 border-t border-border/50">
+                    <div className="mt-3 pt-3 border-t border-[#ebebeb]/50">
                       <div className="space-y-2 text-sm">
                         {action.details.targetStores && (
                           <div className="flex justify-between">
@@ -183,7 +183,7 @@ export function AccionesCrecimiento({
                           </div>
                         )}
                         {action.details.description && (
-                          <p className="text-xs text-muted-foreground pt-1 border-t border-border/30">
+                          <p className="text-xs text-muted-foreground pt-1 border-t border-[#ebebeb]/30">
                             {action.details.description}
                           </p>
                         )}

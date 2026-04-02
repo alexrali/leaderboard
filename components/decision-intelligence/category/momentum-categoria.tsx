@@ -42,7 +42,7 @@ const CustomTooltip = ({
 }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-card border border-border rounded-xl p-4 shadow-lg">
+      <div className="bg-card rounded-xl p-4 shadow-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px]">
         <p className="font-semibold text-foreground mb-2">{label}</p>
         <div className="space-y-1.5 text-sm">
           {payload.map((entry, index) => (
@@ -83,7 +83,7 @@ export function MomentumCategoria({
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all text-xs ${
                   selectedCategory === cat.category
                     ? "border-foreground/30 bg-secondary/50"
-                    : "border-border/50 bg-background"
+                    : "border-[#ebebeb]/50 bg-background"
                 }`}
               >
                 <div

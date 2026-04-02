@@ -29,13 +29,13 @@ function StatusCard({ status, count, percentage, color, bgColor, textColor }: St
   }
 
   return (
-    <div className="border-border/40 bg-card rounded-xl border p-5">
+    <div className="shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] bg-card rounded-lg p-5">
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-muted-foreground text-sm font-medium">{statusLabels[status]}</h3>
         <span className={`text-xs font-medium ${textColor}`}>{percentage.toFixed(0)}%</span>
       </div>
-      <div className="mb-3 text-2xl font-bold">{formatNumber(count)}</div>
-      <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full">
+      <div className="mb-3 text-2xl font-semibold">{formatNumber(count)}</div>
+      <div className="bg-[#ebebeb] h-1.5 w-full overflow-hidden rounded-full">
         <div
           className="h-full rounded-full transition-all duration-500"
           style={{ width: `${percentage}%`, backgroundColor: color }}
@@ -111,18 +111,18 @@ function RfmSegmentCard({ segment, count, percentage }: RfmSegmentCardProps) {
     Alto: { bg: "bg-status-success/10", text: "text-status-success", label: "Alto Valor" },
     Medio: { bg: "bg-status-warning/10", text: "text-status-warning", label: "Valor Medio" },
     Bajo: { bg: "bg-status-critical/10", text: "text-status-critical", label: "Bajo Valor" },
-    Perdido: { bg: "bg-neutral-100", text: "text-neutral-600", label: "Perdido" },
+    Perdido: { bg: "bg-[#ebebeb]", text: "text-[#4d4d4d]", label: "Perdido" },
   }
 
   const style = colors[segment]
 
   return (
-    <div className={`border-border/40 rounded-xl border p-4 ${style.bg}`}>
+    <div className={`shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] rounded-lg p-4 ${style.bg}`}>
       <div className="mb-2 flex items-center justify-between">
         <span className={`text-xs font-medium ${style.text}`}>{style.label}</span>
         <span className={`text-xs font-medium ${style.text}`}>{percentage.toFixed(0)}%</span>
       </div>
-      <div className={`text-lg font-bold ${style.text}`}>{formatNumber(count)}</div>
+      <div className={`text-lg font-semibold ${style.text}`}>{formatNumber(count)}</div>
     </div>
   )
 }
@@ -197,7 +197,7 @@ export function ClientesPage() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-900 border-t-transparent dark:border-neutral-50 dark:border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#171717] border-t-transparent dark:border-neutral-50 dark:border-t-transparent" />
           <span className="text-muted-foreground text-sm">Cargando datos...</span>
         </div>
       </div>
@@ -221,7 +221,7 @@ export function ClientesPage() {
       <div className="flex flex-col gap-8">
         {/* Header */}
         <div>
-          <h1 className="text-foreground text-2xl font-bold">Salud de Clientes</h1>
+          <h1 className="text-foreground text-2xl font-semibold">Salud de Clientes</h1>
           <p className="text-muted-foreground text-sm">
             Análisis de actividad, valor y segmentación RFM de clientes
           </p>
@@ -253,7 +253,7 @@ export function ClientesPage() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="border-border/40 bg-card rounded-xl border p-6"
+          className="shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] bg-card rounded-lg p-6"
         >
           <h3 className="text-muted-foreground mb-4 text-sm font-medium">Distribución por Estado</h3>
           <ClientHealthPieChart data={groupedClients.pieData} />
@@ -265,9 +265,9 @@ export function ClientesPage() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="border-border/40 bg-card rounded-xl border overflow-hidden"
+            className="shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] bg-card rounded-lg overflow-hidden"
           >
-            <div className="border-border/40 border-b px-6 py-4">
+            <div className="border-b border-[#ebebeb] px-6 py-4">
               <h3 className="text-foreground text-base font-semibold">
                 Clientes en Riesgo — Top 10 por Revenue
               </h3>

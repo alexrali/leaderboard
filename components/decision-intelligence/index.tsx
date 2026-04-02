@@ -12,7 +12,7 @@ export function DecisionIntelligencePage() {
   const [providerCode, setProviderCode] = useState("0128")
 
   return (
-    <div className="bg-muted/50 overflow-hidden -mx-4 -my-8 md:-mx-6 lg:-mx-8 lg:-my-10">
+    <div className="bg-[#fafafa]/50 overflow-hidden -mx-4 -my-8 md:-mx-6 lg:-mx-8 lg:-my-10">
       <DIHeader
         activeTab={activeTab}
         onTabChange={setActiveTab}

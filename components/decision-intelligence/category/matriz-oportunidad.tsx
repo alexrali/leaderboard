@@ -107,7 +107,7 @@ export function MatrizOportunidad({
             </thead>
             <tbody>
               {clusterData.map((cluster) => (
-                <tr key={cluster} className="border-t border-border/30">
+                <tr key={cluster} className="border-t border-[#ebebeb]/30">
                   <td className="p-2">
                     <p className="text-sm font-medium text-foreground">{cluster}</p>
                   </td>

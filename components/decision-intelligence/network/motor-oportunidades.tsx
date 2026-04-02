@@ -38,18 +38,18 @@ export function MotorOportunidades() {
           <table className="w-full border-collapse">
             <thead>
               <tr>
-                <th className="text-left text-[10px] font-semibold text-muted-foreground uppercase tracking-wider p-3 border-b border-border">
+                <th className="text-left text-[10px] font-semibold text-muted-foreground uppercase tracking-wider p-3 border-b border-[#ebebeb]">
                   Sucursal
                 </th>
                 {gapCategories.map((cat) => (
                   <th
                     key={cat}
-                    className="text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider p-3 border-b border-border"
+                    className="text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider p-3 border-b border-[#ebebeb]"
                   >
                     {cat}
                   </th>
                 ))}
-                <th className="text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider p-3 border-b border-border bg-secondary/30">
+                <th className="text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider p-3 border-b border-[#ebebeb] bg-secondary/30">
                   Gap Promedio
                 </th>
               </tr>
@@ -57,7 +57,7 @@ export function MotorOportunidades() {
             <tbody>
               {gapMatrixData.map((row, idx) => (
                 <tr key={row.storeId} className={cn(idx % 2 === 0 ? "bg-card" : "bg-secondary/20")}>
-                  <td className="p-3 border-b border-border">
+                  <td className="p-3 border-b border-[#ebebeb]">
                     <div className="flex flex-col">
                       <span className="text-sm font-medium text-foreground">{row.store}</span>
                       <span className="text-[10px] text-muted-foreground">#{row.storeId}</span>
@@ -67,7 +67,7 @@ export function MotorOportunidades() {
                     const value = row.categories[cat]
                     const highlight = isHighGap(row.store, cat)
                     return (
-                      <td key={cat} className="p-2 border-b border-border text-center">
+                      <td key={cat} className="p-2 border-b border-[#ebebeb] text-center">
                         <div
                           className={cn(
                             "inline-flex items-center justify-center min-w-[44px] h-9 rounded-lg text-sm font-semibold transition-all",
@@ -80,24 +80,24 @@ export function MotorOportunidades() {
                       </td>
                     )
                   })}
-                  <td className="p-2 border-b border-border text-center bg-secondary/30">
-                    <span className="text-sm font-bold text-foreground">{row.avgGap.toFixed(1)}</span>
+                   <td className="p-2 border-b border-[#ebebeb] text-center bg-secondary/30">
+                     <span className="text-sm font-semibold text-foreground">{row.avgGap.toFixed(1)}</span>
                   </td>
                 </tr>
               ))}
               <tr className="bg-primary/5">
-                <td className="p-3 border-t-2 border-border">
+                <td className="p-3 border-t-2 border-[#ebebeb]">
                   <span className="text-sm font-semibold text-foreground">Promedio Categoría</span>
                 </td>
                 {gapCategories.map((cat) => (
-                  <td key={cat} className="p-2 border-t-2 border-border text-center">
-                    <span className="text-sm font-bold text-foreground">
+                  <td key={cat} className="p-2 border-t-2 border-[#ebebeb] text-center">
+                    <span className="text-sm font-semibold text-foreground">
                       {categoryGaps[cat].toFixed(1)}
                     </span>
                   </td>
                 ))}
-                <td className="p-2 border-t-2 border-border text-center bg-secondary/30">
-                  <span className="text-sm font-bold text-primary">{overallAvg}</span>
+                <td className="p-2 border-t-2 border-[#ebebeb] text-center bg-secondary/30">
+                  <span className="text-sm font-semibold text-primary">{overallAvg}</span>
                 </td>
               </tr>
             </tbody>

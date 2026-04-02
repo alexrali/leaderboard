@@ -30,7 +30,7 @@ function AnimatedStat({
       <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-1.5">
         {label}
       </p>
-      <p className="text-2xl font-mono font-bold tabular-nums">
+      <p className="text-2xl font-mono font-semibold tabular-nums">
         {prefix}{displayValue}{suffix}
       </p>
       <p className="text-[10px] text-muted-foreground mt-1">{sublabel}</p>
@@ -44,9 +44,9 @@ export function MetricCards({ summary }: MetricCardsProps) {
       <div className="flex flex-wrap items-start gap-x-6 gap-y-6 sm:gap-x-10 lg:gap-x-14">
         {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="text-center">
-            <div className="h-3 w-16 bg-muted animate-pulse rounded mx-auto mb-2" />
-            <div className="h-7 w-12 bg-muted animate-pulse rounded mx-auto mb-1" />
-            <div className="h-3 w-20 bg-muted animate-pulse rounded mx-auto" />
+            <div className="h-3 w-16 bg-[#fafafa] animate-pulse rounded mx-auto mb-2" />
+            <div className="h-7 w-12 bg-[#fafafa] animate-pulse rounded mx-auto mb-1" />
+            <div className="h-3 w-20 bg-[#fafafa] animate-pulse rounded mx-auto" />
           </div>
         ))}
       </div>
@@ -96,7 +96,7 @@ export function MetricCards({ summary }: MetricCardsProps) {
       ))}
 
       {/* Divider - visible on larger screens */}
-      <div className="hidden lg:block w-px h-12 bg-border/30 self-center" />
+      <div className="hidden lg:block w-px h-12 bg-[#ebebeb]/30 self-center" />
 
       {/* Volatility Cards */}
       {volatilityCards.map((card) => (
@@ -106,7 +106,7 @@ export function MetricCards({ summary }: MetricCardsProps) {
           <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-1.5">
             {card.label}
           </p>
-          <p className="text-xl font-mono font-bold tabular-nums">{card.value}</p>
+          <p className="text-xl font-mono font-semibold tabular-nums">{card.value}</p>
           <p className="text-[10px] text-muted-foreground mt-1">{card.sublabel}</p>
         </div>
       ))}

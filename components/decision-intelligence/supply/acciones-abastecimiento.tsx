@@ -45,10 +45,10 @@ export function AccionesAbastecimiento() {
           {supplyActions.length} acciones · reasignación y reposición
         </p>
       </div>
-      <div className="border-t border-border" />
+      <div className="border-t border-[#ebebeb]" />
 
       <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
-        <div className="divide-y divide-border/60">
+        <div className="divide-y divide-[#ebebeb]/60">
           {supplyActions.map((action, index) => {
             const urgencyConfig = getUrgencyConfig(action.urgency)
             const UrgencyIcon = urgencyConfig.icon
@@ -57,7 +57,7 @@ export function AccionesAbastecimiento() {
             return (
               <div
                 key={action.rank}
-                className="px-5 py-4 hover:bg-muted/50 transition-colors group relative"
+                className="px-5 py-4 hover:bg-[#fafafa]/50 transition-colors group relative"
               >
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-[10px] font-semibold text-muted-foreground tracking-wider">
@@ -106,13 +106,13 @@ export function AccionesAbastecimiento() {
         </div>
       </div>
 
-      <div className="border-t border-border px-5 py-4">
+      <div className="border-t border-[#ebebeb] px-5 py-4">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground mb-1">
               Impacto Potencial
             </p>
-            <p className="text-lg font-mono font-bold">
+            <p className="text-lg font-mono font-semibold">
               {supplyActions.map((a) => a.impactValue).filter((v) => v.startsWith("$"))[0] ?? "—"}
             </p>
           </div>

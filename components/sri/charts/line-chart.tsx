@@ -30,12 +30,12 @@ export function TrendLineChart({
         />
         <XAxis
           dataKey="week"
-          tick={{ fontSize: 11, fill: "var(--neutral-500)" }}
+          tick={{ fontSize: 12, fill: "var(--neutral-500)", fontFamily: "var(--font-sans)" }}
           axisLine={false}
           tickLine={false}
         />
         <YAxis
-          tick={{ fontSize: 11, fill: "var(--neutral-500)" }}
+          tick={{ fontSize: 12, fill: "var(--neutral-500)", fontFamily: "var(--font-sans)" }}
           axisLine={false}
           tickLine={false}
         />
