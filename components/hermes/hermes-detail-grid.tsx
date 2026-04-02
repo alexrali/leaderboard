@@ -15,7 +15,7 @@ export function HermesDetailGrid({ title, fields }: { title: string; fields: Her
       <CardContent>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {fields.map((field) => (
-            <div key={field.label} className="space-y-1 rounded-lg border bg-muted/20 p-4">
+            <div key={field.label} className="space-y-1 rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] bg-[#fafafa] p-4">
               <div className="text-muted-foreground text-xs uppercase tracking-wide">{field.label}</div>
               <div className="text-sm font-medium break-words">{field.value}</div>
             </div>

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from "next/link"
 import { HermesReviewPanel } from "@/components/hermes/hermes-review-panel"
 import { HermesStatusBadge } from "@/components/hermes/hermes-status-badge"

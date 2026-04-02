@@ -387,7 +387,7 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
                     placeholder="soporte@tu-dominio.com"
                   />
                 </Field>
-                <Field className="flex-row items-center justify-between rounded-lg border p-4">
+                <Field className="flex-row items-center justify-between rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] p-4">
                   <div className="space-y-1">
                     <FieldLabel htmlFor="template-active">Activo</FieldLabel>
                     <FieldDescription>Los templates inactivos no se usarán en envíos ni previews asociados.</FieldDescription>
@@ -406,7 +406,7 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
           </CardHeader>
           <CardContent>
             <Tabs value={editorTab} onValueChange={setEditorTab}>
-              <TabsList className="bg-secondary/80 grid w-full grid-cols-4 rounded-full p-1">
+              <TabsList className="bg-[#fafafa] grid w-full grid-cols-4 rounded-full p-1">
                 <TabsTrigger value="html" className="data-[state=active]:bg-card rounded-full data-[state=active]:shadow-sm">HTML</TabsTrigger>
                 <TabsTrigger value="text" className="data-[state=active]:bg-card rounded-full data-[state=active]:shadow-sm">Texto</TabsTrigger>
                 <TabsTrigger value="variables" className="data-[state=active]:bg-card rounded-full data-[state=active]:shadow-sm">Variables</TabsTrigger>
@@ -495,20 +495,20 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="rounded-lg border bg-muted/20 p-4">
+            <div className="rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] bg-[#fafafa] p-4">
               <div className="text-muted-foreground mb-1 text-xs uppercase tracking-wide">Asunto renderizado</div>
               <div className="text-sm font-medium break-words">{previewState.rendered?.subject || "—"}</div>
             </div>
 
             <Tabs value={previewTab} onValueChange={setPreviewTab}>
-              <TabsList className="bg-secondary/80 grid w-full grid-cols-2 rounded-full p-1">
+              <TabsList className="bg-[#fafafa] grid w-full grid-cols-2 rounded-full p-1">
                 <TabsTrigger value="html" className="data-[state=active]:bg-card rounded-full data-[state=active]:shadow-sm">HTML</TabsTrigger>
                 <TabsTrigger value="text" className="data-[state=active]:bg-card rounded-full data-[state=active]:shadow-sm">Texto</TabsTrigger>
               </TabsList>
 
               <TabsContent value="html" className="mt-4">
                 {previewState.rendered ? (
-                  <div className="max-h-[680px] overflow-auto rounded-lg border bg-white p-4">
+                  <div className="max-h-[680px] overflow-auto rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] bg-white p-4">
                     <div dangerouslySetInnerHTML={{ __html: previewState.rendered.html }} />
                   </div>
                 ) : (
@@ -520,7 +520,7 @@ export function HermesTemplateForm({ mode, initialValue }: HermesTemplateFormPro
 
               <TabsContent value="text" className="mt-4">
                 {previewState.rendered ? (
-                  <pre className="max-h-[680px] overflow-auto rounded-lg border bg-muted/20 p-4 text-xs leading-6 whitespace-pre-wrap break-words">
+                  <pre className="max-h-[680px] overflow-auto rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] bg-[#fafafa] p-4 text-xs leading-6 whitespace-pre-wrap break-words">
                     {previewState.rendered.text}
                   </pre>
                 ) : (

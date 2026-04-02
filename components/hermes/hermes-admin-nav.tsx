@@ -33,10 +33,10 @@ export function HermesAdminNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors",
+              "inline-flex items-center gap-2 rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] px-3 py-2 text-sm font-medium transition-colors",
               isActive
-                ? "border-primary/30 bg-primary/10 text-primary"
-                : "border-border bg-background text-muted-foreground hover:text-foreground hover:bg-muted"
+                ? "bg-[#171717] text-white"
+                : "bg-background text-muted-foreground hover:text-foreground hover:bg-[#fafafa]"
             )}
           >
             <Icon className="size-4" />

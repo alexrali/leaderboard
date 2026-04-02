@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from "next/link"
 import { Activity, AlertTriangle, ArrowRight, Clock3, FileText, Send, Workflow } from "lucide-react"
 import { HermesPageHeader } from "@/components/hermes/hermes-page-header"
@@ -71,7 +73,7 @@ export default async function MessagingOverviewPage() {
       />
 
       {isFirstTimeUser && (
-        <Card className="border-primary/20 bg-primary/5">
+        <Card className="bg-[#fafafa]">
           <CardHeader>
             <CardTitle className="text-lg">Bienvenido a Hermes</CardTitle>
             <CardDescription>
@@ -81,8 +83,8 @@ export default async function MessagingOverviewPage() {
           <CardContent className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="flex items-start gap-3">
-                <div className="bg-primary/10 flex size-8 shrink-0 items-center justify-center rounded-lg">
-                  <span className="text-lg font-bold text-primary">1</span>
+                <div className="bg-[#fafafa] shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] flex size-8 shrink-0 items-center justify-center rounded-lg">
+                  <span className="text-lg font-semibold text-primary">1</span>
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-medium">Crea un template</p>
@@ -90,8 +92,8 @@ export default async function MessagingOverviewPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="bg-primary/10 flex size-8 shrink-0 items-center justify-center rounded-lg">
-                  <span className="text-lg font-bold text-primary">2</span>
+                <div className="bg-[#fafafa] shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] flex size-8 shrink-0 items-center justify-center rounded-lg">
+                  <span className="text-lg font-semibold text-primary">2</span>
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-medium">Configura una rule</p>
@@ -99,8 +101,8 @@ export default async function MessagingOverviewPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="bg-primary/10 flex size-8 shrink-0 items-center justify-center rounded-lg">
-                  <span className="text-lg font-bold text-primary">3</span>
+                <div className="bg-[#fafafa] shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] flex size-8 shrink-0 items-center justify-center rounded-lg">
+                  <span className="text-lg font-semibold text-primary">3</span>
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-medium">Prueba un evento</p>

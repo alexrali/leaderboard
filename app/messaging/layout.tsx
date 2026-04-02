@@ -12,15 +12,15 @@ export const metadata: Metadata = {
 
 export default function MessagingLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-muted/20">
+    <div className="min-h-screen bg-[#fafafa]">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-6 md:px-6 lg:px-8 lg:py-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 rounded-full border bg-background px-3 py-1 text-xs text-muted-foreground">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#ebf5ff] px-3 py-1 text-xs text-[#0068d6]">
               <Mail className="size-3.5" />
               <span>Hermes Messaging Platform</span>
             </div>
-            <h1 className="text-3xl font-semibold tracking-tight">Centro de mensajería</h1>
+            <h1 className="text-[32px] font-semibold tracking-[-0.04em]">Centro de mensajería</h1>
             <p className="text-muted-foreground text-sm">
               Administración aislada de templates, reglas, eventos, entregas y tareas programadas.
             </p>

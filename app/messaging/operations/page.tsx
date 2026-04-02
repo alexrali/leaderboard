@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from "next/link"
 import { HermesOperationsPanel } from "@/components/hermes/hermes-operations-panel"
 import { HermesPageHeader } from "@/components/hermes/hermes-page-header"
@@ -241,7 +243,7 @@ export default async function MessagingOperationsPage() {
                       )}
                     </TableCell>
                     <TableCell className="align-top">
-                      <pre className="max-w-[560px] overflow-auto rounded-lg border bg-muted/20 p-4 text-xs leading-6 whitespace-pre-wrap break-words">
+                      <pre className="max-w-[560px] overflow-auto rounded-lg bg-[#fafafa] shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] p-4 text-xs leading-6 whitespace-pre-wrap break-words">
                         {JSON.stringify(scenario.sampleEvent, null, 2)}
                       </pre>
                     </TableCell>

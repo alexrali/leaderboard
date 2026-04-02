@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from "next/link"
 import { HermesRuleForm } from "@/components/hermes/hermes-rule-form"
 import { HermesPageHeader } from "@/components/hermes/hermes-page-header"

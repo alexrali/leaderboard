@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from "next/link"
 import { Workflow } from "lucide-react"
 import { HermesPageHeader } from "@/components/hermes/hermes-page-header"

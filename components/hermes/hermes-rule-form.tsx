@@ -382,7 +382,7 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
                     {(values.recipient_type === "LOOKUP" || values.recipient_type === "GROUP") && "⚠️ No implementado aún en el runtime."}
                   </FieldDescription>
                 </Field>
-                <Field className="flex-row items-center justify-between rounded-lg border p-4">
+                <Field className="flex-row items-center justify-between rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] p-4">
                   <div className="space-y-1">
                     <FieldLabel htmlFor="rule-active">Activa</FieldLabel>
                     <FieldDescription>Solo las rules activas participan en el matching real del runtime.</FieldDescription>
@@ -401,7 +401,7 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
           </CardHeader>
           <CardContent>
             <Tabs value={configTab} onValueChange={setConfigTab}>
-              <TabsList className="bg-secondary/80 grid w-full grid-cols-3 rounded-full p-1">
+              <TabsList className="bg-[#fafafa] grid w-full grid-cols-3 rounded-full p-1">
                 <TabsTrigger value="matching" className="data-[state=active]:bg-card rounded-full data-[state=active]:shadow-sm">Matching</TabsTrigger>
                 <TabsTrigger value="schedule" className="data-[state=active]:bg-card rounded-full data-[state=active]:shadow-sm">Schedule</TabsTrigger>
                 <TabsTrigger value="recipients" className="data-[state=active]:bg-card rounded-full data-[state=active]:shadow-sm">Recipients</TabsTrigger>
@@ -464,14 +464,14 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
-            <div className="rounded-lg border bg-muted/20 p-4">
+            <div className="rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] bg-[#fafafa] p-4">
               <div className="text-muted-foreground text-xs uppercase tracking-wide">Template seleccionado</div>
               <div className="font-medium">{selectedTemplate?.name ?? "Sin template seleccionado"}</div>
               <div className="text-muted-foreground mt-1 text-xs">{selectedTemplate?.slug ?? "Selecciona un template para completar la entrega."}</div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-              <div className="rounded-lg border p-4">
+              <div className="rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] p-4">
                 <div className="text-muted-foreground text-xs uppercase tracking-wide">Schedule</div>
                 <div className="mt-1 font-medium">{values.schedule_type}</div>
                 <pre className="text-muted-foreground mt-3 overflow-auto text-xs leading-5 whitespace-pre-wrap break-words">
@@ -479,7 +479,7 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
                 </pre>
               </div>
 
-              <div className="rounded-lg border p-4">
+              <div className="rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] p-4">
                 <div className="text-muted-foreground text-xs uppercase tracking-wide">Recipient targeting</div>
                 <div className="mt-1 font-medium">{values.recipient_type}</div>
                 <pre className="text-muted-foreground mt-3 overflow-auto text-xs leading-5 whitespace-pre-wrap break-words">
@@ -495,13 +495,13 @@ export function HermesRuleForm({ mode, templates, initialValue }: HermesRuleForm
             <CardTitle>Guías rápidas</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
-            <div className="rounded-lg border p-4">
+            <div className="rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] p-4">
               <div className="font-medium">Event conditions</div>
               <pre className="text-muted-foreground mt-3 overflow-auto text-xs leading-5 whitespace-pre-wrap break-words">
                 {eventConditionExample}
               </pre>
             </div>
-            <div className="rounded-lg border p-4">
+            <div className="rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] p-4">
               <div className="font-medium">Runtime actual</div>
               <div className="text-muted-foreground mt-2 leading-6">
                 STATIC, DYNAMIC y CONDITIONAL ya tienen debugging enriquecido en review. LOOKUP y GROUP siguen siendo configurables aquí, pero el runtime aún no los resuelve.

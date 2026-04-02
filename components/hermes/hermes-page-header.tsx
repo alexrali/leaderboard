@@ -10,7 +10,7 @@ export function HermesPageHeader({ title, description, actions }: HermesPageHead
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
       <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+        <h1 className="text-[32px] font-semibold tracking-[-0.04em]">{title}</h1>
         <p className="text-muted-foreground text-sm">{description}</p>
       </div>
       {actions ? <div className="flex items-center gap-2">{actions}</div> : null}

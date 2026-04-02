@@ -65,7 +65,7 @@ export function HermesEventTimeline({ event, matchedRules, tasks, deliveries, sh
         <CardContent>
           <div className="space-y-4">
             {timelineItems.map((item) => (
-              <div key={item.id} className="flex flex-col gap-2 rounded-lg border p-4 md:flex-row md:items-center md:justify-between">
+              <div key={item.id} className="flex flex-col gap-2 rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] p-4 md:flex-row md:items-center md:justify-between">
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="outline">{item.kind}</Badge>
@@ -165,7 +165,7 @@ export function HermesEventTimeline({ event, matchedRules, tasks, deliveries, sh
                   ) : (
                     <div className="space-y-2">
                       {match.conditionResults.map((condition, index) => (
-                        <div key={`${match.ruleId}-condition-${index}`} className="rounded-lg border p-3 text-sm">
+                        <div key={`${match.ruleId}-condition-${index}`} className="rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] p-3 text-sm">
                           <div className="flex flex-wrap items-center gap-2">
                             <Badge variant={condition.passed ? "default" : "outline"}>{condition.passed ? "PASS" : "FAIL"}</Badge>
                             <span className="font-medium">{condition.field}</span>
@@ -197,7 +197,7 @@ export function HermesEventTimeline({ event, matchedRules, tasks, deliveries, sh
                   ) : (
                     <div className="space-y-2">
                       {match.recipients.map((recipient, index) => (
-                        <div key={`${match.ruleId}-recipient-${index}`} className="rounded-lg border p-3 text-sm">
+                        <div key={`${match.ruleId}-recipient-${index}`} className="rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] p-3 text-sm">
                           <div className="font-medium">{recipient.email}</div>
                           <div className="text-muted-foreground">{recipient.name ?? "Sin nombre"}</div>
                         </div>
@@ -208,7 +208,7 @@ export function HermesEventTimeline({ event, matchedRules, tasks, deliveries, sh
 
                 <div className="space-y-2">
                   <div className="text-sm font-medium">Extracted data</div>
-                  <pre className="max-h-[180px] overflow-auto rounded-lg border bg-muted/20 p-3 text-xs whitespace-pre-wrap break-words">
+                  <pre className="max-h-[180px] overflow-auto rounded-lg shadow-[rgba(0,0,0,0.08)_0px_0px_0px_1px] bg-[#fafafa] p-3 text-xs whitespace-pre-wrap break-words">
                     {JSON.stringify(match.extractedData, null, 2)}
                   </pre>
                 </div>

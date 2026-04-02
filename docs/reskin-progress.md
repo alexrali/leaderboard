@@ -28,7 +28,8 @@ Each session should cover **2 phases max** to avoid context overflow and subagen
 | **3 (done)** | Phase 3 | 3 files | Shell — sidebar, header, globals CSS rules |
 | **4 (done)** | Phase 4 | 14 files | Typography pass — font-bold→semibold, tracking, page titles |
 | **5 (done)** | Phase 5 | 46 files | Section pages (biggest session) |
-| **6 (next)** | Phase 6 + 7 + 8 | ~30 files | Hermes/messaging + auth + validation |
+| **6 (done)** | Phase 6 | 13 files | Hermes/messaging — shadow-as-border, pill badges, type hierarchy |
+| **7 (next)** | Phase 7 + 8 | ~5 files | Auth + validation |
 
 ---
 
@@ -278,18 +279,54 @@ Phase 5 complete. Session table update:
 | **3 (done)** | Phase 3 | 3 files | Shell |
 | **4 (done)** | Phase 4 | 14 files | Typography pass |
 | **5 (done)** | Phase 5 | 46 files | Section pages (biggest session) |
-| **6 (next)** | Phase 6 + 7 + 8 | ~30 files | Hermes/messaging + auth + validation |
+| **6 (done)** | Phase 6 | 13 files | Hermes/messaging pages |
+| **7 (next)** | Phase 7 + 8 | ~5 files | Auth + validation |
 
 ---
 
-## Phase 6 — Hermes / Messaging 🔲
+## Phase 6 — Hermes / Messaging ✅ DONE
 
 **Plan ref:** lines 181–198
-**Files (~25):** `app/messaging/layout.tsx`, `components/hermes/` (11 files), `app/messaging/` pages (~12)
+**Files modified (13):**
 
-### Suggestions for Phase 6
-- **Messaging pages likely inherit styling** from shared components. After updating `hermes-*` components, most pages may need zero changes.
-- **`hermes-status-badge.tsx`** — Same pill approach as Phase 2 badge changes.
+### What was done
+
+**6.1 Layout + Core Components (5 files):**
+- [x] `app/messaging/layout.tsx` — `bg-muted/20` → `bg-[#fafafa]`; platform pill: removed `border`, applied Vercel blue pill `bg-[#ebf5ff] text-[#0068d6]`; title: `text-3xl tracking-tight` → `text-[32px] tracking-[-0.04em]`
+- [x] `components/hermes/hermes-admin-nav.tsx` — Base link `border` → shadow-as-border; active: `border-primary/30 bg-primary/10 text-primary` → `bg-[#171717] text-white`; inactive: removed `border-border`, `hover:bg-muted` → `hover:bg-[#fafafa]`; added `font-medium`
+- [x] `components/hermes/hermes-page-header.tsx` — Title: `text-2xl tracking-tight` → `text-[32px] tracking-[-0.04em]`
+- [x] `components/hermes/hermes-status-badge.tsx` — Removed all 13 `border-*` classes from statusStyles; fallback: `border-border bg-background` → `bg-[#fafafa] text-[#171717]`
+- [x] `components/hermes/hermes-filter-links.tsx` — No changes needed (uses buttonVariants)
+
+**6.2 Form Components (2 files):**
+- [x] `components/hermes/hermes-rule-form.tsx` — 5× `rounded-lg border` → shadow-as-border; `bg-muted/20` → `bg-[#fafafa]`; TabsList `bg-secondary/80` → `bg-[#fafafa]`
+- [x] `components/hermes/hermes-template-form.tsx` — 4× `border` → shadow-as-border (dashed borders preserved); 2× `bg-muted/20` → `bg-[#fafafa]`; 2× TabsList `bg-secondary/80` → `bg-[#fafafa]`
+
+**6.3 Panel + Display Components (5 files):**
+- [x] `components/hermes/hermes-operations-panel.tsx` — `<pre>` `border bg-muted/20` → shadow-as-border + `bg-[#fafafa]`
+- [x] `components/hermes/hermes-review-panel.tsx` — No changes needed (uses Card/Field/Button primitives only)
+- [x] `components/hermes/hermes-event-timeline.tsx` — 3× timeline/condition/recipient divs `border` → shadow-as-border; `<pre>` `border bg-muted/20` → shadow-as-border + `bg-[#fafafa]`
+- [x] `components/hermes/hermes-detail-grid.tsx` — Field div `border bg-muted/20` → shadow-as-border + `bg-[#fafafa]`
+- [x] `components/hermes/hermes-json-panel.tsx` — `<pre>` `border bg-muted/20` → shadow-as-border + `bg-[#fafafa]`
+
+**6.4 Messaging Pages (2 of 19 files changed):**
+- [x] `app/messaging/page.tsx` — Welcome Card: removed `border-primary/20`, `bg-primary/5` → `bg-[#fafafa]`; step circles: `bg-primary/10` → `bg-[#fafafa]` + shadow-as-border; 3× `font-bold` → `font-semibold`
+- [x] `app/messaging/operations/page.tsx` — `<pre>` `border bg-muted/20` → shadow-as-border + `bg-[#fafafa]`
+- [x] 17 remaining pages — No changes needed (inherit styling from shared components)
+
+### Decisions made
+1. **Status badge borders removed entirely** — Phase 2 updated Badge outline variant to use shadow-as-border; the `border-*` color classes on each status were redundant visual noise
+2. **Dashed borders preserved in template-form** — `border border-dashed` on placeholder/empty states is a functional indicator, not decorative card borders
+3. **Active nav pills use dark inverted state** — `bg-[#171717] text-white` matches Phase 3 toggle pill pattern
+4. **17 of 19 messaging pages needed zero changes** — Validated by grep across all files
+5. **`border-primary/20` on welcome Card removed** — The Card component gets shadow-as-border from global `[data-slot="card"]` CSS rule
+
+### Validation
+- `npx next build` — ✅ compiled successfully, all pages generated
+- Zero `font-bold` in all Phase 6 files (hermes/ + messaging/)
+- Zero `bg-muted` in all Phase 6 files
+- Zero `border-border` in all Phase 6 files
+- Zero `dark:` classes in all Phase 6 files
 
 ---
 

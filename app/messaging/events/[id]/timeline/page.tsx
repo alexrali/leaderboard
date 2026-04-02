@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { HermesEventTimeline } from "@/components/hermes/hermes-event-timeline"
